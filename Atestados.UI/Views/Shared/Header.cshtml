@@ -1,0 +1,40 @@
+﻿
+<style>
+    .logo {
+        margin-top: 5px;
+        height: 25px;
+        width: auto;
+    }
+</style>
+<nav id="navHeader" class="navbar navbar-fixed-top" role="navigation">
+    <div class="Cabeceraheader">
+        <div class="container">
+            <!-- Logo TEC -->
+            <a class="navbar-left logo" href="#">
+                <img src="~/Content/img/logotec_blanco.png" alt="">
+                <span style="margin:10px"></span>
+                <img class="logo" src="~/Content/img/SIRA.svg" alt="">
+            </a>
+            <!-- Fin Logo TEC -->
+
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav navbar-right" style="height:40px">
+
+                    <div class="PosicionImagenUsuario" style="position: relative">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="~/Content/img/perfil.png" class="ImagenUsuario" /></a>
+                        <div class="dropdown-menu CuadroPerfil centerNoBlock">
+
+                            <div><a id="aPerfil" href="~/Home/Perfil"><img class="img-responsive" style="margin: auto;" src="~/Content/img/perfil.png" /></a></div>
+                            @*<a href="~/Home/Perfil" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></span> Editar mi perfil</a>*@
+                            <label class="NombreUsuario">@ViewBag.NombreCompleto</label>
+                            <a href="@Url.Action("CerrarSesion","Login")" class="btn btn-sm btn-default btn_Perfil"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin container de navegación -->
+</nav>
+

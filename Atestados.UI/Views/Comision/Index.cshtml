@@ -1,0 +1,73 @@
+﻿@model  List<Atestados.Objetos.Dtos.EnviadoDTO>
+
+@using Atestados.Objetos.Dtos;
+@{ ViewBag.Title = "Principal";
+    Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
+}
+
+<style>
+    .table-wraper {
+        display: block;
+    }
+
+    .scrollbar {
+        position: relative;
+        height: 400px;
+        overflow: auto;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Comisión</h2>
+        <hr />
+    </div>
+    <div class="row">
+        <h4>Atestados por descargar</h4>
+    </div>
+    <div class="row table-wraper scrollbar">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Primer Apellido
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Cantidad de atestados
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (EnviadoDTO enviado in Model)
+                {
+                <tr>
+                    <td scope="col">
+                        @enviado.Persona.Nombre
+                    </td>
+                    <td scope="col">
+                        @enviado.Persona.PrimerApellido
+                    </td>
+                    <td scope="col">
+                        @enviado.Persona.Email
+                    </td>
+                    <td scope="col">
+                        @enviado.Atestados.Count
+                    </td>
+                    <td>
+                        @Html.ActionLink("Descargar Excel", "GenerarExcel", new { id = enviado.PersonaID }) |
+                        @Html.ActionLink("Descargar Archivos", "Descarga", new { id = enviado.PersonaID })
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,270 @@
+﻿@model Atestados.Objetos.Dtos.AtestadoDTO
+
+@{
+    ViewBag.Title = "Crear";
+    Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
+}
+
+@using Atestados.Objetos.Dtos;
+
+<link href="~/Views/css/Atestado.css" rel="stylesheet" type="text/css" />
+
+<style>
+    textarea {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 10vh;
+    }
+
+    .table-wraper {
+        display: block;
+    }
+
+    .scrollbar-atestados {
+        position: relative;
+        height: 250px;
+        overflow: auto;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Obra administrativa de desarrollo</h2>
+        <hr />
+    </div>
+    <div class="row w-100">
+        <div class="col-lg-6">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <b class="control-label col-md-2">Número de autores</b>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NumeroAutores, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NumeroAutores, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Enlace, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Enlace, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Enlace, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <b class="control-label col-md-2">Fecha</b>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.FechaFinal, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <b class="control-label col-md-2">Proceso</b>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CatalogoTipo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CatalogoTipo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Observaciones, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <div class="btn btn-default" onclick="AbrirModal()">Agregar Autores</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Crear" class="btn btn-default" id="submit" />
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+        <div class="col-lg-4">
+            <div class="form-horizontal">
+                <form id="subirArchivo">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="file" name="archivo" class="btn btn-default" id="archivo" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" class="btn btn-default" value="Subir Archivo" form="subirArchivo" />
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaArchivos"> </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row table-wraper scrollbar-atestados">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Obras docentes agregadas
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AtestadoDTO item in ViewBag.Atestados)
+                {
+                    <tr>
+                        <td>
+                            @item.Nombre
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Editar", new { id = item.AtestadoID }) |
+                            @Html.ActionLink("Ver", "Ver", new { id = item.AtestadoID }) |
+                            @Html.ActionLink("Borrar", "Borrar", new { id = item.AtestadoID })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="autoresModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Agregar Autores</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Porcentaje</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAutores">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <table class="table">
+                    <tr>
+                        <td><input type="text" placeholder="Nombre" id="nombre" /></td>
+                        <td><input type="text" placeholder="Primer apellido" id="apellido1" /></td>
+                        <td><input type="text" placeholder="Segundo apellido" id="apellido2" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Email" id="email" /></td>
+                        <td><input type="number" placeholder="Porcentaje" id="porcentaje" /></td>
+                        <td><button type="button" class="btn btn-default" id="autorAgregar">Agregar</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function AbrirModal() {
+        $("#autoresModal").modal()
+    }
+
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,6})+$/;
+        return regex.test(email);
+    }
+
+    var per = 100;
+
+    function validPercentage(percentage) {
+        return (per - percentage) >= 0 && percentage >= 0;
+    }
+
+    $('#autorAgregar').click(function () {
+        var autor = new Object()
+        autor.Nombre = $('#nombre').val()
+        autor.PrimerApellido = $('#apellido1').val()
+        autor.SegundoApellido = $('#apellido2').val()
+        autor.Email = $('#email').val()
+        autor.Porcentaje = $('#porcentaje').val()
+
+        if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
+            $.ajax({
+                type: 'POST',
+                url: '/Articulo/AgregarAutor',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(autor),
+                success: function (response) {
+                    var autores = JSON.parse(response.personaJson)
+                    if (response != null) {
+                        per -= parseInt(autor.Porcentaje);
+                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td><td><a>Borrar</a></td></td></tr>')
+                    }
+                }
+            })
+        }
+    })
+
+    $('#subirArchivo').submit(function (e) {
+        e.preventDefault();
+        var data = new FormData(this);
+        if (jQuery('#archivo').val().length != '') {
+            $('#archivo').val('');
+            $.ajax({
+                url: '/ObraAdministrativa/Cargar',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    var archivo = JSON.parse(data.archivoJson)
+                    if (data != null) {
+                        $("#tablaArchivos").append('<tr><td>' + archivo.Nombre + '</td><td><a>Descargar</a> | <a>Borrar</a></td></tr>')
+                    }
+                }
+            })
+        }
+    })
+
+</script>

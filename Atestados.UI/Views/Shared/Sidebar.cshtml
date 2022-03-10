@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Sidebar";
+}
+
+<style>
+    .sidebar {
+        width: 15vw;
+        height: 100%;
+        margin-right: 2vw;
+        margin-top: 2vh;
+        padding: 0;
+    }
+</style>
+
+<div class="list-group sidebar">
+    <ul>
+        @if ((int)Session["TipoUsuario"] == 1)
+        {
+            <li class="list-group-item" id="Administrador">@Html.RouteLink("Administración", new { action = "Index", controller = "Administrador" })</li>
+
+        }
+
+        @if ((int)Session["TipoUsuario"] == 1 || (int)Session["TipoUsuario"] == 2)
+        {
+            <li class="list-group-item" id="Administrador">@Html.RouteLink("Comisión", new { action = "Index", controller = "Comision" })</li>
+
+        }
+        <li class="list-group-item" id="Funcionario">@Html.RouteLink("Funcionario", new { action = "Index", controller = "Funcionario" })</li>
+        <hr />
+        <h4>Agregar</h4>
+        <hr />
+        <li class="list-group-item" id="Libro">@Html.RouteLink("Libro", new { action = "Crear", controller = "Libro" })</li>
+        <li class="list-group-item" id="Articulo">@Html.RouteLink("Artículo", new { action = "Crear", controller = "Articulo" })</li>
+        <li class="list-group-item" id="Capacitacion">@Html.RouteLink("Capacitación", new { action = "Crear", controller = "Capacitacion" })</li>
+        <li class="list-group-item" id="Idioma">@Html.RouteLink("Idioma", new { action = "Crear", controller = "Idioma" })</li>
+        <li class="list-group-item" id="Certificado">@Html.RouteLink("Título universitario", new { action = "Crear", controller = "Certificado" })</li>
+        <li class="list-group-item" id="Proyecto">@Html.RouteLink("Proyecto de investigación/extensión", new { action = "Crear", controller = "Proyecto" })</li>
+        <li class="list-group-item" id="Ponencia">@Html.RouteLink("Ponencia", new { action = "Crear", controller = "Ponencia" })</li>
+        <li class="list-group-item" id="ObrasDocentes">@Html.RouteLink("Obra didáctica", new { action = "Crear", controller = "ObraDidactica" })</li>
+        <li class="list-group-item" id="ObrasDocentes">@Html.RouteLink("Obra administrativa de desarrollo", new { action = "Crear", controller = "ObraAdministrativa" })</li>
+        <li class="list-group-item" id="Atestados">@Html.RouteLink("Otros rubros", new { action = "Crear", controller = "Atestados" })</li>
+    </ul>
+</div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var controller = '@ViewContext.RouteData.Values["controller"].ToString()';
+        if(controller != "Funcionario" && controller != "Administrador" && controller != "Comision")
+            $('#' + controller).addClass("active");
+    });
+</script>
