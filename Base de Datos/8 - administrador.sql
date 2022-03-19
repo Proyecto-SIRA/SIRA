@@ -8,7 +8,11 @@
 	en el panel de administración cambiar el tipo de usuario a administrador o 1
 
 */
-INSERT INTO Persona VALUES ('Administrador', 'Admin', 'Admin', 'admin@mail.com', 0, 1, 00000000); /* Crear Persona Primero */
+Use Atestados;
+INSERT INTO Persona VALUES ('Administrador', 'Admin', 'Admin', 'admin@mail.com', 1, 1, 00000000); /* Crear Persona Primero */
 
 /* Crear Usuario Segundo, el primer valor es el ID de Persona, sino es 1, cambiar por el correcto */
 INSERT INTO Usuario VALUES (1, 'admin@mail.com', '$2a$11$NgjqSiLeSzWHFQWiLaMSbOARNgwS0dAakduZCckAcfPmBMPzjEKoC')  
+
+-- SELECT TOP (1000) [TipoCategoriaID] ,[Nombre] FROM [Atestados].[dbo].[TipoCategoria]
+-- SELECT TOP (1000) [TipoUsuarioID] ,[Nombre] FROM [Atestados].[dbo].[TipoUsuario]

@@ -11,6 +11,7 @@ GO
 INSERT INTO [dbo].[TipoCategoria]
            ([Nombre])
      VALUES
+           ('Sin Categoría'),
            ('Primera'),
 		   ('Segunda'),
 		   ('Tercera'),
