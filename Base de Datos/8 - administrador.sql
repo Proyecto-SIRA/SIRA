@@ -1,11 +1,11 @@
 /* 
 	Para loguearse al sistema como administrador
 	Usuario = admin@mail.com
-	Contrase�a = admin
+	Contraseña = admin
 
-	Despues de esto se puede crear un usuario de administracion con una contrase�a apropiada y cambiar el tipo de usuario de esta cuenta
+	Despues de esto se puede crear un usuario de administracion con una contraseña apropiada y cambiar el tipo de usuario de esta cuenta
 	Para crear otro usuario administrador solo debe registrar una cuenta nueva, luego tiene que ingresar con la cuenta admin@mail.com y
-	en el panel de administraci�n cambiar el tipo de usuario a administrador o 1
+	en el panel de administración cambiar el tipo de usuario a administrador o 1
 
 */
 INSERT INTO Persona VALUES ('Administrador', 'Admin', 'Admin', 'admin@mail.com', 0, 1, 00000000); /* Crear Persona Primero */

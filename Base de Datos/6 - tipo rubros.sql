@@ -1,5 +1,5 @@
 Use Atestados;
 INSERT INTO TipoRubro VALUES
-('Producción universitaria'),
-('Proyeccción universitaria'),
-('Formación Universitaria');
+('ProducciÃ³n universitaria'),
+('ProyeccciÃ³n universitaria'),
+('FormaciÃ³n Universitaria');
