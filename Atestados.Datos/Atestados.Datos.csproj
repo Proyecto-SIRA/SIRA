@@ -101,6 +101,9 @@
     <Compile Include="Modelo\DominioIdioma.cs">
       <DependentUpon>Atestados.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\EvaluaciónXAtestado.cs">
+      <DependentUpon>Atestados.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\Fecha.cs">
       <DependentUpon>Atestados.tt</DependentUpon>
     </Compile>
@@ -119,7 +122,13 @@
     <Compile Include="Modelo\Rubro.cs">
       <DependentUpon>Atestados.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\TipoCategoria.cs">
+      <DependentUpon>Atestados.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\TipoRubro.cs">
+      <DependentUpon>Atestados.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\TipoUsuario.cs">
       <DependentUpon>Atestados.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\Usuario.cs">

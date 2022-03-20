@@ -113,6 +113,8 @@ namespace Atestados.Negocios.Negocios
 
         public void CrearUsuario(UsuarioDTO usuario)
         {
+            TipoCategoriaDTO tipoCategoriaDTO = new TipoCategoriaDTO();
+
             Usuario u = Mapper.Map<UsuarioDTO, Usuario>(usuario);
             u.Contrasena = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasena);
             Persona persona = Mapper.Map<UsuarioDTO, Persona>(usuario);

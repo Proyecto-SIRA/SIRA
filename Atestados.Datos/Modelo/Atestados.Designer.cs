@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Andres\Desktop\proyecto software\SIRA\development\Atestados.Datos\Modelo\Atestados.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Andres\Desktop\SIRA\Atestados.Datos\Modelo\Atestados.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
