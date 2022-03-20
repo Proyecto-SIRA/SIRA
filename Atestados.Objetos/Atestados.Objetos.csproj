@@ -73,6 +73,7 @@
     <Compile Include="Dtos\PaisDTO.cs" />
     <Compile Include="Dtos\PersonaDTO.cs" />
     <Compile Include="Dtos\RubroDTO.cs" />
+    <Compile Include="Dtos\TipoCategoriaDTO.cs" />
     <Compile Include="Dtos\TipoRubroDTO.cs" />
     <Compile Include="Dtos\UsuarioDTO.cs" />
     <Compile Include="MappingConfig.cs" />
