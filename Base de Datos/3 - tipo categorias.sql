@@ -9,11 +9,14 @@ USE [Atestados]
 GO
 
 INSERT INTO [dbo].[TipoCategoria]
-           ([Nombre])
+           ([Nombre]
+           ,[Academicos]
+           ,[Administrativos])
      VALUES
-           ('Sin Categoría'),
-           ('Primera'),
-		   ('Segunda'),
-		   ('Tercera'),
-		   ('Cuarta')
+           ('Sin Categoría', '-', '-'),
+           ('Primera', 'Instructor/a', 'Profesional 1'),
+		   ('Segunda', 'Profesor/a Adjunto/a', 'Profesional 2'),
+		   ('Tercera', 'Profesor/a Asociado/a', 'Profesional 3'),
+		   ('Cuarta', 'Catedrático/a', 'Profesional 4')
 GO
+
