@@ -20,6 +20,7 @@ namespace Atestados.Objetos.Dtos
         public int TipoUsuario { get; set; }
         public int Telefono { get; set; }
         public List<AtestadoDTO> PorEnviar { get; set; }
+        public bool esActivo { get; set; }
     }
 
 }

@@ -6,12 +6,9 @@
     Layout = "~/Views/Shared/_LayoutGeneral.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Lista de usuarios</h2>
 <hr />
 
-@{ 
-    string[] tipos = { "Funcionario", "Administrador", "Comisión", "RRHH", "VIE" };
-}
 <table class="table table-striped">
     <thead>
         <tr>
@@ -19,7 +16,7 @@
                 Nombre
             </th>
             <th>
-                Email
+                Correo electrónico
             </th>
             <th>
                 Tipo de usuario
@@ -38,7 +35,7 @@
                     @Model[i].Email
                 </td>
                 <td>
-                    @tipos[Model[i].TipoUsuario]
+                    @Model[i].TipoUsuarioNombre
                 </td>
                 <td>
                     @Html.ActionLink("Editar", "Editar", new

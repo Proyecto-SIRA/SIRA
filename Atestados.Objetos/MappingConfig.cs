@@ -1,4 +1,5 @@
 ﻿using Atestados.Datos.Modelo;
+using Atestados.Objectos;
 using Atestados.Objetos.Dtos;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,9 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.CategoriaActual,
                     opt => opt.MapFrom(src => src.CategoriaActual))
                 .ForMember(dest => dest.TipoUsuario,
-                    opt => opt.MapFrom(src => src.TipoUsuario));
+                    opt => opt.MapFrom(src => src.TipoUsuario))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 config.CreateMap<Persona, UsuarioDTO>()
                 .ForMember(dest => dest.UsuarioID,
@@ -49,7 +52,13 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.CategoriaActual,
                     opt => opt.MapFrom(src => src.CategoriaActual))
                 .ForMember(dest => dest.TipoUsuario,
-                    opt => opt.MapFrom(src => src.TipoUsuario));
+                    opt => opt.MapFrom(src => src.TipoUsuario))
+                .ForMember(dest => dest.TipoUsuarioNombre,
+                    opt => opt.MapFrom(src => TiposHelper.ObtenerTipoUsuarioNombre(src.TipoUsuario)))
+                .ForMember(dest => dest.CategoriaActualNombre,
+                    opt => opt.MapFrom(src => TiposHelper.ObtenerTipoCategoriaNombre(src.CategoriaActual)))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 config.CreateMap<UsuarioDTO, Persona>()
                 .ForMember(dest => dest.PersonaID,
@@ -67,7 +76,9 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.CategoriaActual,
                     opt => opt.MapFrom(src => src.CategoriaActual))
                 .ForMember(dest => dest.TipoUsuario,
-                    opt => opt.MapFrom(src => src.TipoUsuario));
+                    opt => opt.MapFrom(src => src.TipoUsuario))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 config.CreateMap<Usuario, UsuarioDTO>()
                 .ForMember(dest => dest.UsuarioID,
@@ -75,7 +86,9 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.Contrasena,
                     opt => opt.MapFrom(src => src.Contrasena))
                 .ForMember(dest => dest.Email,
-                    opt => opt.MapFrom(src => src.Email));
+                    opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 config.CreateMap<UsuarioDTO, Usuario>()
                 .ForMember(dest => dest.UsuarioID,
@@ -83,7 +96,9 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.Contrasena,
                     opt => opt.MapFrom(src => src.Contrasena))
                 .ForMember(dest => dest.Email,
-                    opt => opt.MapFrom(src => src.Email));
+                    opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 config.CreateMap<UsuarioDTO, UsuarioDTO>()
                 .ForMember(dest => dest.UsuarioID,
@@ -103,7 +118,9 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.TipoUsuario,
                     opt => opt.MapFrom(src => src.TipoUsuario))
                 .ForMember(dest => dest.Telefono,
-                    opt => opt.MapFrom(src => src.Telefono));
+                    opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.esActivo,
+                    opt => opt.MapFrom(src => src.esActivo));
 
                 #endregion
 

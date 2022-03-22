@@ -17,6 +17,7 @@ namespace Atestados.Datos.Modelo
         public int UsuarioID { get; set; }
         public string Email { get; set; }
         public string Contrasena { get; set; }
+        public bool esActivo { get; set; }
     
         public virtual Persona Persona { get; set; }
     }
