@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Atestados.Objetos.Dtos
 {
-    public class TipoCategoriaDTO
+    public class TipoUsuarioDTO
     {
-        public int TipoCategoriaID { get; set; }
+        public int TipoUsuarioID { get; set; }
         public string Nombre { get; set; }
-        public string Academicos { get; set; }
-        public string Administrativos { get; set; }
     }
 }

@@ -113,6 +113,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Property Name="CategoriaActual" Type="int" Nullable="false" />
           <Property Name="TipoUsuario" Type="int" Nullable="false" />
           <Property Name="Telefono" Type="int" />
+          <Property Name="esActivo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Rubro">
           <Key>
@@ -129,6 +130,8 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           </Key>
           <Property Name="TipoCategoriaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Academicos" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Administrativos" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="TipoRubro">
           <Key>
@@ -151,8 +154,9 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Property Name="UsuarioID" Type="int" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Contrasena" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="esActivo" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Atestado__PaisID__5165187F">
+        <Association Name="FK__Atestado__PaisID__534D60F1">
           <End Role="Pais" Type="Self.Pais" Multiplicity="1" />
           <End Role="Atestado" Type="Self.Atestado" Multiplicity="*" />
           <ReferentialConstraint>
@@ -176,7 +180,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Atestado__RubroI__534D60F1">
+        <Association Name="FK__Atestado__RubroI__5535A963">
           <End Role="Rubro" Type="Self.Rubro" Multiplicity="1" />
           <End Role="Atestado" Type="Self.Atestado" Multiplicity="*" />
           <ReferentialConstraint>
@@ -188,7 +192,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DominioId__Idiom__5629CD9C">
+        <Association Name="FK__DominioId__Idiom__5812160E">
           <End Role="Idioma" Type="Self.Idioma" Multiplicity="0..1" />
           <End Role="DominioIdioma" Type="Self.DominioIdioma" Multiplicity="*" />
           <ReferentialConstraint>
@@ -379,7 +383,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
     [EvaluaciónXAtestado].[Observaciones] AS [Observaciones]
     FROM [dbo].[EvaluaciónXAtestado] AS [EvaluaciónXAtestado]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__Atestado__PaisID__5165187F" Association="Self.FK__Atestado__PaisID__5165187F">
+          <AssociationSet Name="FK__Atestado__PaisID__534D60F1" Association="Self.FK__Atestado__PaisID__534D60F1">
             <End Role="Pais" EntitySet="Pais" />
             <End Role="Atestado" EntitySet="Atestado" />
           </AssociationSet>
@@ -387,11 +391,11 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
             <End Role="Persona" EntitySet="Persona" />
             <End Role="Atestado" EntitySet="Atestado" />
           </AssociationSet>
-          <AssociationSet Name="FK__Atestado__RubroI__534D60F1" Association="Self.FK__Atestado__RubroI__534D60F1">
+          <AssociationSet Name="FK__Atestado__RubroI__5535A963" Association="Self.FK__Atestado__RubroI__5535A963">
             <End Role="Rubro" EntitySet="Rubro" />
             <End Role="Atestado" EntitySet="Atestado" />
           </AssociationSet>
-          <AssociationSet Name="FK__DominioId__Idiom__5629CD9C" Association="Self.FK__DominioId__Idiom__5629CD9C">
+          <AssociationSet Name="FK__DominioId__Idiom__5812160E" Association="Self.FK__DominioId__Idiom__5812160E">
             <End Role="Idioma" EntitySet="Idioma" />
             <End Role="DominioIdioma" EntitySet="DominioIdioma" />
           </AssociationSet>
@@ -566,6 +570,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <NavigationProperty Name="EvaluaciónXAtestado" Relationship="AtestadosModel.FK_EvaluaciónXAtestado_Persona" FromRole="Persona" ToRole="EvaluaciónXAtestado" />
           <NavigationProperty Name="TipoCategoria" Relationship="AtestadosModel.FK_Persona_TipoCategoria" FromRole="Persona" ToRole="TipoCategoria" />
           <NavigationProperty Name="TipoUsuario1" Relationship="AtestadosModel.FK_Persona_TipoUsuario" FromRole="Persona" ToRole="TipoUsuario" />
+          <Property Name="esActivo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Rubro">
           <Key>
@@ -594,6 +599,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Contrasena" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Persona" Relationship="Self.FK__Usuario__Usuario__38996AB5" FromRole="Usuario" ToRole="Persona" />
+          <Property Name="esActivo" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_Archivo_AtestadoID">
           <End Role="Atestado" Type="Self.Atestado" Multiplicity="1">
@@ -839,6 +845,8 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Property Name="TipoCategoriaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Persona" Relationship="AtestadosModel.FK_Persona_TipoCategoria" FromRole="TipoCategoria" ToRole="Persona" />
+          <Property Name="Academicos" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Administrativos" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TipoUsuario">
           <Key>
@@ -1008,6 +1016,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <EntitySetMapping Name="Persona">
             <EntityTypeMapping TypeName="AtestadosModel.Persona">
               <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="esActivo" ColumnName="esActivo" />
                 <ScalarProperty Name="PersonaID" ColumnName="PersonaID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="PrimerApellido" ColumnName="PrimerApellido" />
@@ -1040,6 +1049,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <EntitySetMapping Name="Usuario">
             <EntityTypeMapping TypeName="AtestadosModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="esActivo" ColumnName="esActivo" />
                 <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
@@ -1049,6 +1059,8 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <EntitySetMapping Name="TipoCategoria">
             <EntityTypeMapping TypeName="AtestadosModel.TipoCategoria">
               <MappingFragment StoreEntitySet="TipoCategoria">
+                <ScalarProperty Name="Administrativos" ColumnName="Administrativos" />
+                <ScalarProperty Name="Academicos" ColumnName="Academicos" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="TipoCategoriaID" ColumnName="TipoCategoriaID" />
               </MappingFragment>

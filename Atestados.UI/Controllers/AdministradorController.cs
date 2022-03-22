@@ -7,16 +7,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Atestados.Objectos;
 
 namespace Atestados.UI.Controllers
 {
     public class AdministradorController : Controller
     {
+        public AdministradorController()
+        {
+                var tiposUsuario = TiposHelper.ObtenerTiposUsuario();
+                var tiposCategoria = TiposHelper.ObtenerTiposCategoria();
+                ViewData["tiposUsuario"] = tiposUsuario;
+                ViewData["tiposCategoria"] = tiposCategoria;
+        }
+
         InformacionGeneral info = new InformacionGeneral();
         // GET: Administrador
         public ActionResult Index()
         {
-            if(Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1) // Si es administrador
+            int adminID = TiposHelper.ObtenerTipoUsuarioID("Admin");
+
+            if(Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == adminID) // Si es administrador
             {
                 List<UsuarioDTO> usuario = info.ObtenerUsuarios((int)Session["UsuarioID"]);
                 return View(usuario);
@@ -44,6 +55,7 @@ namespace Atestados.UI.Controllers
         [HttpPost]
         public ActionResult Editar(Persona persona)
         {
+            persona.esActivo = true; //Asegurar que el usuario sigue activo.
             info.EditarPersona(persona);
             return RedirectToAction("Index");
         }

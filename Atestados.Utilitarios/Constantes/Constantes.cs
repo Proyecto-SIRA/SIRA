@@ -9,9 +9,19 @@ namespace Atestados.Utilitarios.Constantes
     public static class Constantes
     {
 
-        public enum Tipo
+        public enum TIPO_USUARIO 
         {
-            Funcionario, Administrador, Comision, RRHH, VIE
+            Admin, Revisor, Docente
+        }
+
+        public struct TIPO_CATEGORIA
+        {
+            public const string
+                sin = "Sin Categoría",
+                primera = "Primera",
+                segunda = "Segunda",
+                tercera = "Tercera",
+                cuarta = "Cuarta";
         }
 
         public struct Configuraciones
