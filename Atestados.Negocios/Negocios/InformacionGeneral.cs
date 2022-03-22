@@ -72,7 +72,7 @@ namespace Atestados.Negocios.Negocios
 
         public void EditarPersona(Persona persona)
         {
-            Usuario usuario = db.Usuario.Where(x => x.UsuarioID == persona.PersonaID).FirstOrDefault();
+            Usuario usuario = db.Usuario.Find(persona.PersonaID);
             usuario.Email = persona.Email; //Asegurar que los correos son iguales.
             db.Entry(usuario).State = EntityState.Modified;
             db.Entry(persona).State = EntityState.Modified;
@@ -82,12 +82,17 @@ namespace Atestados.Negocios.Negocios
         public void BorrarPersona(int id)
         {
             Persona persona = db.Persona.Find(id);
+            Usuario usuario = db.Usuario.Find(id);
 
-            // TODO revisar integridad referencial en <1 - base.sql> 
-            // Actualmente no hay acción para ON DELETE, eso previene que las entidades se puedan borrar
+            //Borrado lógico de la persona y el usuario.
+            persona.Nombre = "BORRADO-" + persona.Nombre;
+            persona.esActivo = false;
 
-            //db.Persona.Remove(persona);
-            //db.SaveChanges();
+            usuario.esActivo = false;
+
+            db.Entry(usuario).State = EntityState.Modified;
+            db.Entry(persona).State = EntityState.Modified;
+            db.SaveChanges();
         }
         #endregion
 
