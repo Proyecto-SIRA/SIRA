@@ -27,7 +27,7 @@ namespace Atestados.Objetos.Dtos
         public string Enlace { get; set; }
         [Url]
         [StringLength(250)]
-        [Required(ErrorMessage = "Este es un campo requerido")]
+        //[Required(ErrorMessage = "Este es un campo requerido")]
         public string Website { get; set; }
         [StringLength(100)]
         [Required(ErrorMessage = "Este es un campo requerido")]

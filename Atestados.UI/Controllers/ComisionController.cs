@@ -16,6 +16,7 @@ namespace Atestados.UI.Controllers
     public class ComisionController : Controller
     {
         private readonly InformacionAtestado infoAtestado = new InformacionAtestado();
+        private readonly InformacionGeneral infoGeneral = new InformacionGeneral();
 
         public ActionResult Index()
         {
@@ -75,5 +76,18 @@ namespace Atestados.UI.Controllers
 
             return archiveFile;
         }
+
+        // GET: Comision/Ver
+        public ActionResult Ver(int id)
+        {
+            PersonaDTO funcionario = infoGeneral.PersonaPorId(id);
+            if (funcionario == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(funcionario);
+        }
+
     }
 }

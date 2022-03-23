@@ -375,6 +375,7 @@
     <Content Include="Views\Shared\SidebarGeneral.cshtml" />
     <Content Include="Views\Administrador\Editar.cshtml" />
     <Content Include="Views\Administrador\Eliminar.cshtml" />
+    <Content Include="Views\Comision\Ver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

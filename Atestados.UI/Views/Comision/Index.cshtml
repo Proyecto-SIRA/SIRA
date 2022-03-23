@@ -63,7 +63,8 @@
                     </td>
                     <td>
                         @Html.ActionLink("Descargar Excel", "GenerarExcel", new { id = enviado.PersonaID }) |
-                        @Html.ActionLink("Descargar Archivos", "Descarga", new { id = enviado.PersonaID })
+                        @Html.ActionLink("Descargar Archivos", "Descarga", new { id = enviado.PersonaID }) |
+                        @Html.ActionLink("Ver", "Ver", new { id = enviado.PersonaID })
                     </td>
                 </tr>
                 }
