@@ -78,7 +78,22 @@ namespace Atestados.UI.Controllers
             {
                 return HttpNotFound();
             }
-            
+
+            ViewBag.Enviados = infoAtestado.CargarAtestadosDePersonaEnviados(id, 1);
+            ViewBag.Rubros = new Dictionary<int, string>()
+                {
+                    { infoAtestado.ObtenerIDdeRubro("Artículo"), "Articulo"},
+                    { infoAtestado.ObtenerIDdeRubro(""), "Atestados"},
+                    { infoAtestado.ObtenerIDdeRubro("Capacitación profesional"), "Capacitacion"},
+                    { infoAtestado.ObtenerIDdeRubro("Grados académicos"), "Certificado"},
+                    { infoAtestado.ObtenerIDdeRubro("Idiomas"), "Idioma"},
+                    { infoAtestado.ObtenerIDdeRubro("libro"), "Libro"},
+                    { infoAtestado.ObtenerIDdeRubro("Obra administrativa de desarrollo"), "ObraAdministrativa"},
+                    { infoAtestado.ObtenerIDdeRubro("Obra didáctica"), "ObraDidactica"},
+                    { infoAtestado.ObtenerIDdeRubro("Ponencia"), "Ponencia"},
+                    { infoAtestado.ObtenerIDdeRubro("Proyectos de investigación y extensión"), "Proyecto"},
+                };
+
             return View(funcionario);
         }
 

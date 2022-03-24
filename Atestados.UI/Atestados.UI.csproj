@@ -375,7 +375,7 @@
     <Content Include="Views\Shared\SidebarGeneral.cshtml" />
     <Content Include="Views\Administrador\Editar.cshtml" />
     <Content Include="Views\Administrador\Eliminar.cshtml" />
-    <Content Include="Views\Comision\VerFuncionario.cshtml" />
+    <Content Include="Views\Funcionario\Ver.cshtml" />
     <Content Include="Views\Comision\VerAtestado.cshtml" />
   </ItemGroup>
   <ItemGroup>

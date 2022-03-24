@@ -77,8 +77,8 @@ namespace Atestados.UI.Controllers
             return archiveFile;
         }
 
-        // GET: Comision/Ver
-        public ActionResult Ver(int id)
+        // GET: Comision/VerFuncionario
+        public ActionResult VerFuncionario(int id)
         {
             PersonaDTO funcionario = infoGeneral.PersonaPorId(id);
             if (funcionario == null)
