@@ -120,6 +120,18 @@ namespace Atestados.Negocios.Negocios
             return null;
         }
 
+        public PersonaDTO PersonaPorId(int id)
+        {
+            Persona persona = db.Persona.Where(x => x.PersonaID == id).FirstOrDefault();
+            if (persona != null)
+            {
+                PersonaDTO personaDTO = AutoMapper.Mapper.Map<Persona, PersonaDTO>(persona);
+                return AutoMapper.Mapper.Map(persona, personaDTO);
+                //return persona;
+            }
+            return null;
+        }
+
         public void CrearUsuario(UsuarioDTO usuario)
         {
             // Se consigue la categoría por defecto para todas las personas. (Sin Categoría)
