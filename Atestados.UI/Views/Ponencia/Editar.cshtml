@@ -172,7 +172,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/Ponencia/Cargar',
+                url: '@Variables.BaseUrl/Ponencia/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,

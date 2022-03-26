@@ -255,7 +255,7 @@
         if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
             $.ajax({
                 type: 'POST',
-                url: '/Articulo/AgregarAutor',
+                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 data: JSON.stringify(autor),
@@ -276,7 +276,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/ObraDidactica/Cargar',
+                url: @Variables.BaseUrl + '/ObraDidactica/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,

@@ -165,7 +165,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/Atestados/Cargar',
+                url: '@Variables.BaseUrl/Atestados/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,

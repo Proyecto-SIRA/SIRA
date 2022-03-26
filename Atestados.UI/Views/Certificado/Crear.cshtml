@@ -166,7 +166,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/Certificado/Cargar',
+                url: '@Variables.BaseUrl/Certificado/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,
