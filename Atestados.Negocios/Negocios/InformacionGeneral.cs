@@ -10,6 +10,7 @@ using Atestados.Objetos;
 using Atestados.Objetos.Dtos;
 using AutoMapper;
 using BCrypt;
+using static Atestados.Utilitarios.Constantes.Constantes;
 
 namespace Atestados.Negocios.Negocios
 {
@@ -154,16 +155,24 @@ namespace Atestados.Negocios.Negocios
             db.SaveChanges();
         }
 
-        public bool ValidarUsuario(string email, string contrasena)
+        public RESULTADO_LOGIN ValidarUsuario(string email, string contrasena)
         {
             Persona persona = db.Persona.Where(x => x.Email == email && x.Usuario != null).FirstOrDefault();
-            if (persona != null)
-                return BCrypt.Net.BCrypt.Verify(contrasena, persona.Usuario.Contrasena);
+            if (persona != null) {
+                if (BCrypt.Net.BCrypt.Verify(contrasena, persona.Usuario.Contrasena))
+                {
+                    return RESULTADO_LOGIN.Exito;
+                }
+                else
+                {
+                    return RESULTADO_LOGIN.ContrasenaIncorrecta;
+                }
+            }
             else
-                return false;
+            {
+                return RESULTADO_LOGIN.UsuarioNoExiste;
+            }
         }
-
-        #endregion
-
+            #endregion
     }
 }
