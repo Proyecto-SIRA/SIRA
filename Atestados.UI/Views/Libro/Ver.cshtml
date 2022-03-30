@@ -166,15 +166,19 @@
                             </tr>
                         }
                     </tbody>
+                    
                 </table>
             </div>
         </div>
     </div>
+
+
     <div class="row">
         <p>
             @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }) |
             @Html.ActionLink("Regresar", "Crear")
         </p>
     </div>
-</div>
+                @RenderPage("~/Views/Shared/Evaluar.cshtml")
 
+</div>
