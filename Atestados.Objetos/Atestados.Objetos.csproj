@@ -72,6 +72,7 @@
     <Compile Include="Dtos\Atestados\ProyectoDTO.cs" />
     <Compile Include="Dtos\AtestadoXPersonaDTO.cs" />
     <Compile Include="Dtos\AutorDTO.cs" />
+    <Compile Include="Dtos\EvaluacionXAtestadoDTO.cs" />
     <Compile Include="Dtos\DominioIdiomaDTO.cs" />
     <Compile Include="Dtos\FechaDTO.cs" />
     <Compile Include="Dtos\IdiomaDTO.cs" />

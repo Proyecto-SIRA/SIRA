@@ -318,7 +318,8 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.Codigo,
                     opt => opt.MapFrom(src => src.Codigo))
                 .ForMember(dest => dest.PersonaID,
-                    opt => opt.MapFrom(src => src.PersonaID));
+                    opt => opt.MapFrom(src => src.PersonaID))
+                .ForAllOtherMembers(x => x.Ignore());
 
                 config.CreateMap<Atestado, Atestado>()
                 .ForMember(dest => dest.AtestadoID,
@@ -347,6 +348,27 @@ namespace Atestados.Objetos
                     opt => opt.MapFrom(src => src.FechaInicio))
                 .ForMember(dest => dest.FechaFinal,
                     opt => opt.MapFrom(src => src.FechaFinal));
+
+                config.CreateMap<EvaluacionXAtestadoDTO, EvaluaciónXAtestado>()
+                .ForMember(dest => dest.AtestadoID,
+                    opt => opt.MapFrom(src => src.AtestadoID))
+                .ForMember(dest => dest.PersonaID,
+                    opt => opt.MapFrom(src => src.PersonaID))
+                .ForMember(dest => dest.PorcentajeObtenido,
+                    opt => opt.MapFrom(src => src.PorcentajeObtenido))
+                .ForMember(dest => dest.Observaciones,
+                    opt => opt.MapFrom(src => src.Observaciones));
+
+                config.CreateMap<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>()
+                .ForMember(dest => dest.AtestadoID,
+                    opt => opt.MapFrom(src => src.AtestadoID))
+                .ForMember(dest => dest.PersonaID,
+                    opt => opt.MapFrom(src => src.PersonaID))
+                .ForMember(dest => dest.PorcentajeObtenido,
+                    opt => opt.MapFrom(src => src.PorcentajeObtenido))
+                .ForMember(dest => dest.Observaciones,
+                    opt => opt.MapFrom(src => src.Observaciones));
+
                 #endregion
 
                 #region LibroArticulo
@@ -559,6 +581,7 @@ namespace Atestados.Objetos
                 .ForMember(dest => dest.FechaFinal,
                     opt => opt.MapFrom(src => src.FechaInicio));
                 #endregion
+
             });
         }
     }

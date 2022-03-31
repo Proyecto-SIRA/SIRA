@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using IronXL;
 using System.Text;
+using AutoMapper;
 
 namespace Atestados.UI.Controllers
 {
@@ -17,6 +18,7 @@ namespace Atestados.UI.Controllers
     {
         private readonly InformacionAtestado infoAtestado = new InformacionAtestado();
         private readonly InformacionGeneral infoGeneral = new InformacionGeneral();
+        private AtestadosEntities db = new AtestadosEntities();
 
         public ActionResult Index()
         {
@@ -77,7 +79,39 @@ namespace Atestados.UI.Controllers
             return archiveFile;
         }
 
+        public void EvaluarAtestado(float nota, int idAtestado, int idRevisor, string Observaciones)
+        {
+            EvaluacionXAtestadoDTO evaluacion = new EvaluacionXAtestadoDTO();
+            evaluacion.AtestadoID = idAtestado;
+            evaluacion.PersonaID = idRevisor;
+            evaluacion.Observaciones = Observaciones;
 
+            EvaluaciónXAtestado e = Mapper.Map<EvaluacionXAtestadoDTO, EvaluaciónXAtestado>(evaluacion);
+
+            db.EvaluaciónXAtestado.Add(e);
+            db.SaveChanges();
+
+        }
+
+        // POST: Atestado
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Evaluar([Bind(Include = "PorcentajeObtenido, Observaciones")] EvaluacionXAtestadoDTO evaluacion)
+        {
+            evaluacion.AtestadoID = (int)Session["idAtestado"];
+            evaluacion.PersonaID = (int)Session["UsuarioID"];
+            evaluacion.Observaciones = (string)Session["observaciones"];
+            evaluacion.PorcentajeObtenido = (float)Session["nota"];
+
+            EvaluaciónXAtestado e = Mapper.Map<EvaluacionXAtestadoDTO, EvaluaciónXAtestado>(evaluacion);
+
+            db.EvaluaciónXAtestado.Add(e);
+            db.SaveChanges();
+
+            AtestadoDTO atestado = infoAtestado.CargarAtestado((int)Session["idAtestado"]);
+
+            return View(atestado);
+        }
 
     }
 }
