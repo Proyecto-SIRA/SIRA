@@ -1,11 +1,16 @@
-﻿using Atestados.Datos.Modelo;
-using Atestados.Negocios.Negocios;
-using Atestados.Objetos.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Atestados.Datos.Modelo;
+using Atestados.Negocios.Negocios;
+using Atestados.Objetos.Dtos;
+using Newtonsoft.Json;
 
 namespace Atestados.UI.Controllers
 {
@@ -63,5 +68,34 @@ namespace Atestados.UI.Controllers
                 };
             return persona;
         }
+
+
+        // GET: Funcionario/Ver
+        public ActionResult Ver(int id)
+        {
+            PersonaDTO funcionario = infoGeneral.PersonaPorId(id);
+            if (funcionario == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Enviados = infoAtestado.CargarAtestadosDePersonaEnviados(id, 1);
+            ViewBag.Rubros = new Dictionary<int, string>()
+                {
+                    { infoAtestado.ObtenerIDdeRubro("Artículo"), "Articulo"},
+                    { infoAtestado.ObtenerIDdeRubro(""), "Atestados"},
+                    { infoAtestado.ObtenerIDdeRubro("Capacitación profesional"), "Capacitacion"},
+                    { infoAtestado.ObtenerIDdeRubro("Grados académicos"), "Certificado"},
+                    { infoAtestado.ObtenerIDdeRubro("Idiomas"), "Idioma"},
+                    { infoAtestado.ObtenerIDdeRubro("libro"), "Libro"},
+                    { infoAtestado.ObtenerIDdeRubro("Obra administrativa de desarrollo"), "ObraAdministrativa"},
+                    { infoAtestado.ObtenerIDdeRubro("Obra didáctica"), "ObraDidactica"},
+                    { infoAtestado.ObtenerIDdeRubro("Ponencia"), "Ponencia"},
+                    { infoAtestado.ObtenerIDdeRubro("Proyectos de investigación y extensión"), "Proyecto"},
+                };
+
+            return View(funcionario);
+        }
+
     }
 }

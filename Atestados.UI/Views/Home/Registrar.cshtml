@@ -25,57 +25,57 @@
                             {
                                 @Html.AntiForgeryToken()
 
-                        <form role="form">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <form role="form">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { placeholder = "Nombre", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-person-square"></i></span>
+                                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { placeholder = "Nombre", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                @Html.EditorFor(model => model.PrimerApellido, new { htmlAttributes = new { placeholder = "Primer apellido", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.PrimerApellido, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-person-lines-fill"></i></span>
+                                        @Html.EditorFor(model => model.PrimerApellido, new { htmlAttributes = new { placeholder = "Primer apellido", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PrimerApellido, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                @Html.EditorFor(model => model.SegundoApellido, new { htmlAttributes = new { placeholder = "Segundo apellido", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.SegundoApellido, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-person-lines-fill"></i></span>
+                                        @Html.EditorFor(model => model.SegundoApellido, new { htmlAttributes = new { placeholder = "Segundo apellido", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.SegundoApellido, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { placeholder = "Email", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-envelope-fill"></i></span>
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { placeholder = "Correo electrónico", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { placeholder = "Teléfono", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-telephone-fill"></i></span>
+                                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { placeholder = "Teléfono", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                @Html.EditorFor(model => model.Contrasena, new { htmlAttributes = new { type="password", placeholder = "Contraseña", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-lock-fill"></i></span>
+                                        @Html.EditorFor(model => model.Contrasena, new { htmlAttributes = new { type = "password", placeholder = "Contraseña", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div style="margin-bottom: 15px; margin-top: 10px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                @Html.EditorFor(model => model.ConfirmarContrasena, new { htmlAttributes = new { type = "password", placeholder = "Repetir contraseña", @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.ConfirmarContrasena, "", new { @class = "text-danger" })
-                            </div>
+                                    <div class="input-group my-3 input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi-lock-fill"></i></span>
+                                        @Html.EditorFor(model => model.ConfirmarContrasena, new { htmlAttributes = new { type = "password", placeholder = "Confirmar contraseña", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ConfirmarContrasena, "", new { @class = "text-danger" })
+                                    </div>
 
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Crear Cuenta" class="btn btn-default" id="submit" />
-                                </div>
-                            </div>
-                        </form>
+                                    <div class="form-group mt-4">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Crear Cuenta" class="btn btn-outline-primary" id="submit" />
+                                        </div>
+                                    </div>
+                                </form>
 
 
                             }

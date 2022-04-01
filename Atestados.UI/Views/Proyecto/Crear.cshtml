@@ -165,7 +165,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/Proyecto/Cargar',
+                url: '@Variables.BaseUrl/Proyecto/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,

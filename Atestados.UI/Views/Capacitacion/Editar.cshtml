@@ -190,7 +190,7 @@
         if (jQuery('#archivo').val().length != '') {
             $('#archivo').val('');
             $.ajax({
-                url: '/Capacitacion/Cargar',
+                url: '@Variables.BaseUrl/Capacitacion/Cargar',
                 data: data,
                 cache: false,
                 contentType: false,

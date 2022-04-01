@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using static Atestados.Utilitarios.Constantes.Constantes;
 
 namespace Atestados.UI.Controllers
 {
@@ -46,7 +47,8 @@ namespace Atestados.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (info.ValidarUsuario(email, contrasena)) {
+                RESULTADO_LOGIN validacion = info.ValidarUsuario(email, contrasena);
+                if (validacion == RESULTADO_LOGIN.Exito) {
                     UsuarioDTO usuario = info.UsuarioPorEmail(email);
                     Session["Usuario"] = usuario;
                     ViewBag.NombreUsuario = usuario.Email;
@@ -54,7 +56,15 @@ namespace Atestados.UI.Controllers
                     Session["UsuarioID"] = usuario.UsuarioID;
                     Session["TipoUsuario"] = usuario.TipoUsuario;
                     return RedirectToAction("Index", "Funcionario");
-                } 
+                }
+                else if(validacion == RESULTADO_LOGIN.UsuarioNoExiste)
+                {
+                    ViewBag.Error = "El usuario no existe en el sistema";
+                }
+                else if (validacion == RESULTADO_LOGIN.ContrasenaIncorrecta)
+                {
+                    ViewBag.Error = "La contraseña ingresada es incorrecta";
+                }
                 return View();
             }
             else

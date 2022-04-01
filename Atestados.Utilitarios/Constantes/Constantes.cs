@@ -14,6 +14,11 @@ namespace Atestados.Utilitarios.Constantes
             Admin, Revisor, Docente
         }
 
+        public enum RESULTADO_LOGIN
+        {
+            Exito, ContrasenaIncorrecta, UsuarioNoExiste
+        }
+
         public struct TIPO_CATEGORIA
         {
             public const string
