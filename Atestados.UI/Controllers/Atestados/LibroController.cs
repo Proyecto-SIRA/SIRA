@@ -312,16 +312,29 @@ namespace Atestados.UI.Controllers.Atestados
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
+            Session["TipoUsuario"] = usuario.TipoUsuario;
+            Session["idAtestado"] = id;
+            Session["idUsuario"] = usuario.UsuarioID;
+
+            EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
+            
+            ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
+            ViewBag.Atestado = infoAtestado.CargarAtestado(id);
+
+            if (e != null)
+            {
+                EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
+                ViewBag.Evaluacion = edto;
+                return View(edto);
+            }
+
             AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
             if (atestado == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Autores = infoAtestado.CargarAutoresAtestado(id);
-            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
-            Session["TipoUsuario"] = usuario.TipoUsuario;
-            Session["idAtestado"] = id;
-            Session["idUsuario"] = usuario.UsuarioID;
             EvaluacionXAtestadoDTO evaluacion = new EvaluacionXAtestadoDTO();
             return View(evaluacion);
         }
@@ -355,8 +368,15 @@ namespace Atestados.UI.Controllers.Atestados
                     PorcentajeObtenido = (float)evaluacion.PorcentajeObtenido,
                     Observaciones = evaluacion.Observaciones
                 };
-                
 
+
+                EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
+
+                if (evaluacionActual != null)
+                {
+                    //db.EvaluaciónXAtestado.Remove(evaluacionActual);
+                    infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
+                }
 
                 db.EvaluaciónXAtestado.Add(e);
 
