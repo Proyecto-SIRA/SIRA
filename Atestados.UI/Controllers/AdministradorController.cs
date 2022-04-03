@@ -15,23 +15,26 @@ namespace Atestados.UI.Controllers
     {
         public AdministradorController()
         {
-                var tiposUsuario = TiposHelper.ObtenerTiposUsuario();
-                var tiposCategoria = TiposHelper.ObtenerTiposCategoria();
-                ViewData["tiposUsuario"] = tiposUsuario;
-                ViewData["tiposCategoria"] = tiposCategoria;
+            var tiposUsuario = TiposHelper.ObtenerTiposUsuario();
+            var tiposCategoria = TiposHelper.ObtenerTiposCategoria();
+            ViewData["tiposUsuario"] = tiposUsuario;
+            ViewData["tiposCategoria"] = tiposCategoria;
         }
 
         InformacionGeneral info = new InformacionGeneral();
         // GET: Administrador
         public ActionResult Index()
         {
+            Session["TipoUsuarioNombre"] = "Admin";
+
             int adminID = TiposHelper.ObtenerTipoUsuarioID("Admin");
 
-            if(Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == adminID) // Si es administrador
+            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == adminID) // Si es administrador
             {
                 List<UsuarioDTO> usuario = info.ObtenerUsuarios((int)Session["UsuarioID"]);
                 return View(usuario);
-            } else
+            }
+            else
             {
                 return RedirectToAction("Denegado");
             }

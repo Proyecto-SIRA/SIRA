@@ -24,8 +24,8 @@ namespace Atestados.UI.Controllers
 
         //Debido que el usuario aun no está logueado, se usa un dummy inicial al logueo.
         //Luego de loguearse, cambia los datos al usuario que se encuentra logueado.
-        int idUsuarioLogueado = 1;
-        string usuarioLogueado = "sistemaLogueo@itcr.ac.cr";
+        //int idUsuarioLogueado = 1;
+        //string usuarioLogueado = "sistemaLogueo@itcr.ac.cr";
         public string sessionId = ConfigurationManager.AppSettings["SessionID"];
         private InformacionGeneral info = new InformacionGeneral();
 
@@ -48,16 +48,21 @@ namespace Atestados.UI.Controllers
             if (ModelState.IsValid)
             {
                 RESULTADO_LOGIN validacion = info.ValidarUsuario(email, contrasena);
-                if (validacion == RESULTADO_LOGIN.Exito) {
+                if (validacion == RESULTADO_LOGIN.Exito)
+                {
                     UsuarioDTO usuario = info.UsuarioPorEmail(email);
                     Session["Usuario"] = usuario;
-                    ViewBag.NombreUsuario = usuario.Email;
-                    ViewBag.NombreCompleto = usuario.NombreCompleto();
+                    Session["NombreCorto"] = usuario.NombreCorto();
+                    Session["NombreCompleto"] = usuario.NombreCompleto();
+                    Session["NombreUsuario"] = usuario.Email;
                     Session["UsuarioID"] = usuario.UsuarioID;
                     Session["TipoUsuario"] = usuario.TipoUsuario;
+                    Session["TipoUsuarioNombre"] = usuario.TipoUsuarioToStr();
+                    ViewBag.NombreUsuario = usuario.Email;
+                    ViewBag.NombreCompleto = usuario.NombreCompleto();
                     return RedirectToAction("Index", "Funcionario");
                 }
-                else if(validacion == RESULTADO_LOGIN.UsuarioNoExiste)
+                else if (validacion == RESULTADO_LOGIN.UsuarioNoExiste)
                 {
                     ViewBag.Error = "El usuario no existe en el sistema";
                 }

@@ -22,6 +22,8 @@ namespace Atestados.UI.Controllers
         // GET: Funcionario
         public ActionResult Index()
         {
+            Session["TipoUsuarioNombre"] = "Docente";
+
             if (Session["Usuario"] != null)
             {
                 return View(ObtenerPersona());

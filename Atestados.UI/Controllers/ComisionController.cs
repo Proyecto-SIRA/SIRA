@@ -20,6 +20,8 @@ namespace Atestados.UI.Controllers
 
         public ActionResult Index()
         {
+            Session["TipoUsuarioNombre"] = "Revisor";
+
             List<EnviadoDTO> enviados = infoAtestado.PersonasEntregaron();
             return View(enviados);
         }

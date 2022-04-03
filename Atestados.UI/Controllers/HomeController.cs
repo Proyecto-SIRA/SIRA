@@ -44,6 +44,9 @@ namespace Atestados.UI.Controllers
                 UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
                 ViewBag.NombreUsuario = usuario.Email;
                 ViewBag.NombreCompleto = usuario.NombreCompleto();
+                Session["NombreCorto"] = usuario.NombreCorto();
+                Session["NombreCompleto"] = usuario.NombreCompleto();
+                Session["NombreUsuario"] = usuario.Email;
                 Session["UsuarioID"] = usuario.UsuarioID;
                 Session["TipoUsuario"] = usuario.TipoUsuario;
                 return RedirectToAction("Index", "Funcionario");
@@ -51,7 +54,6 @@ namespace Atestados.UI.Controllers
             else
             {
                 return RedirectToAction("Index", "Login");
-                
             }
         }
 
