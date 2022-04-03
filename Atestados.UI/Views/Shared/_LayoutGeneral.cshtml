@@ -14,24 +14,14 @@
     <div class="container">
     </div>
     <div id="main">
-        <!--Navegacion-->
+        <!--Cabecera-->
         @RenderPage("~/Views/Shared/Header.cshtml")
-        <table>
-            <tr style="padding: 0">
-                <td style="padding: 0">
-                    @RenderPage("~/Views/Shared/SidebarGeneral.cshtml")
-                </td>
-                <td style="width:82%">
-                    @RenderBody()
-                </td>
-            </tr>
-        </table>
+        <!--Cuerpo-->
+        @RenderBody()
         <!--Footer-->
-        @RenderPage("~/Views/Shared/Footer.cshtml")
-        <!--Fin Footer-->
+        @*@RenderPage("~/Views/Shared/Footer.cshtml")*@
         <!--Popups-->
         @RenderPage("~/Views/Shared/Popups.cshtml")
-        <!--Fin Popus-->
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
