@@ -1,26 +1,14 @@
 ﻿<!DOCTYPE html>
 
-<html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIRA</title>
-
-    <!-- Bootstrap Core CSS esencial para estructar pantalla de logueo-->
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <!-- Hoja de estilos para el proyecto SIRA en específico.-->
-    <link href="~/Content/style.css" rel="stylesheet" />
-    <!-- Custom CSS esencial para estructar pantalla de logueo-->
-    <link href="~/Content/Site.css" rel="stylesheet" />
-    <link href="~/Content/icons.css" rel="stylesheet" />
-    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
 
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/tec-css")
+
+    <title>SIRA</title>
 
 </head>
 <body class="bgLogin">
@@ -31,7 +19,7 @@
                 <!-- Logo TEC -->
                 <div class="navbar-header px-3">
                     <a class="navbar-brand img-responsive" href="@Url.Action("Index", "Login")">
-                        <img src="~/Content/img/logotec_blanco.png" alt="">
+                        <img src="~/Content/img/logotec_blanco.png" alt="Logo ITCR">
                     </a>
                 </div>
                 <!-- Fin Logo TEC -->
@@ -47,12 +35,15 @@
         <!--Fin Footer-->
 
     </div>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+
     <script type="text/javascript">
         var rootDir = "";
         var rootDirImage = "@Url.Content("~/")";
     </script>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
 
     <script src="~/Scripts/Utilitarios/Mensajes.js"></script>
     <script src="~/Scripts/Utilitarios/loadingoverlay.min.js"></script>
@@ -63,5 +54,4 @@
     <input type="hidden" id="contAutenticarUsuario" value="@Url.Action("PaginaInvalida", "Login")">
     @*@Html.Hidden("RedirectTo", Url.Action("Index", "Home"))*@
 </body>
-
 </html>

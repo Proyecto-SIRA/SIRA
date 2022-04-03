@@ -34,5 +34,21 @@ namespace Atestados.Objetos.Dtos
         {
             return $"{Nombre} {PrimerApellido} {SegundoApellido}";
         }
+        public string NombreCorto()
+        {
+            return $"{Nombre} {PrimerApellido}";
+        }
+
+        public string TipoUsuarioToStr()
+        {
+            if (TipoUsuario == 1)
+                return "Admin";
+            if (TipoUsuario == 2)
+                return "Revisor";
+            if (TipoUsuario == 3)
+                return "Docente";
+            else
+                return "Tipo usuario inválido.";
+        }
     }
 }

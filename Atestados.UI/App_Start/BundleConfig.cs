@@ -20,13 +20,16 @@ namespace Atestados.UI
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.bundle.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/Site.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/style.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/tec-css").Include(
+                      "~/Content/Site.css"
                       ));
         }
     }

@@ -24,8 +24,8 @@ namespace Atestados.UI.Controllers
 
         //Debido que el usuario aun no está logueado, se usa un dummy inicial al logueo.
         //Luego de loguearse, cambia los datos al usuario que se encuentra logueado.
-        int idUsuarioLogueado = 1;
-        string usuarioLogueado = "sistemaLogueo@itcr.ac.cr";
+        //int idUsuarioLogueado = 1;
+        //string usuarioLogueado = "sistemaLogueo@itcr.ac.cr";
         public string sessionId = ConfigurationManager.AppSettings["SessionID"];
         private InformacionGeneral info = new InformacionGeneral();
 
@@ -48,16 +48,20 @@ namespace Atestados.UI.Controllers
             if (ModelState.IsValid)
             {
                 RESULTADO_LOGIN validacion = info.ValidarUsuario(email, contrasena);
-                if (validacion == RESULTADO_LOGIN.Exito) {
+                if (validacion == RESULTADO_LOGIN.Exito)
+                {
+                    // Obtener el usuario y crear su sesión.
                     UsuarioDTO usuario = info.UsuarioPorEmail(email);
-                    Session["Usuario"] = usuario;
-                    ViewBag.NombreUsuario = usuario.Email;
-                    ViewBag.NombreCompleto = usuario.NombreCompleto();
-                    Session["UsuarioID"] = usuario.UsuarioID;
-                    Session["TipoUsuario"] = usuario.TipoUsuario;
-                    return RedirectToAction("Index", "Funcionario");
+                    CrearSesion(usuario);
+                    // Llevar al usuario a su panel principal según su tipo.
+                    if (usuario.UsuarioID == 1)
+                        return RedirectToAction("Index", "Administrador");
+                    if (usuario.UsuarioID == 2)
+                        return RedirectToAction("Index", "Comision");
+                    else
+                        return RedirectToAction("Index", "Funcionario");
                 }
-                else if(validacion == RESULTADO_LOGIN.UsuarioNoExiste)
+                else if (validacion == RESULTADO_LOGIN.UsuarioNoExiste)
                 {
                     ViewBag.Error = "El usuario no existe en el sistema";
                 }
@@ -73,6 +77,17 @@ namespace Atestados.UI.Controllers
             }
         }
 
+        public void CrearSesion(UsuarioDTO usuario)
+        {
+            Session["Usuario"] = usuario;
+            Session["NombreCorto"] = usuario.NombreCorto();
+            Session["NombreCompleto"] = usuario.NombreCompleto();
+            Session["NombreUsuario"] = usuario.Email;
+            Session["UsuarioID"] = usuario.UsuarioID;
+            Session["TipoUsuario"] = usuario.TipoUsuario;
+            Session["TipoUsuarioNombre"] = usuario.TipoUsuarioToStr();
+        }
+
         public ActionResult PaginaInvalida()
         {
             return View();
@@ -86,8 +101,6 @@ namespace Atestados.UI.Controllers
             {
                 // ServiciosSeguridad.InsertarBitacoraSistema("Cierre de sesión Usuario : " + Session[ConfigurationManager.AppSettings["UsuarioLogueado"]].ToString(), Constantes.CodigosBitacora.INACTIVAR, "LoginController - Interno", "CerrarSesion", false, Convert.ToInt32(Session[ConfigurationManager.AppSettings["CodigoUsuarioLogueado"]]), Session[ConfigurationManager.AppSettings["UsuarioLogueado"]].ToString(), Utilitarios.Clases.Utilitarios.GetIpAddress(), Session[sessionId].ToString(), null);
             }
-
-
 
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
