@@ -17,9 +17,29 @@
     font-family: helvetica;
 }
 
+.sidebar-tec {
+    background: #002855;
+    min-height: 100vh;
+}
+
+/*Padding para espaciar el cuerpo del navbar.*/
+.nav-padding{
+    padding-top: 5rem;
+}
+
+.white-hr{
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid white;
+    margin: 1em 0;
+    padding: 0;
+}
+
 .navbar-tec {
-    height: 5rem;
-    background: linear-gradient(90deg, #002855, #005085)
+    /*height: 5rem;*/
+    background: #002855;
+    /*background: linear-gradient(90deg, #002855, #005085);*/
 }
 
     .navbar-tec .navbar-brand,

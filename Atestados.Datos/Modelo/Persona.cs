@@ -30,6 +30,8 @@ namespace Atestados.Datos.Modelo
         public int CategoriaActual { get; set; }
         public int TipoUsuario { get; set; }
         public Nullable<int> Telefono { get; set; }
+
+        public int TiempoServido { get; set; }
         public bool esActivo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
