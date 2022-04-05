@@ -85,7 +85,7 @@
             <div class="row">
                 <div class="form-group">
                     <div class="col-md-10">
-                        <input type="submit" value="Enviar" class="btn btn-default" id="submit" />
+                        <input type="submit" value="Enviar" class="btn btn-outline-primary" id="submit" />
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                         Nombre
                     </th>
                     <th scope="col">
-
+                        Visualización
                     </th>
                 </tr>
             </thead>
@@ -120,24 +120,18 @@
                             @item.Nombre
                         </td>
 
-                        <td scope="col">
-                            <a rubro="@item.RubroID" atestado="@item.AtestadoID" action="Ver">Ver</a>
+                        <td>
+                            <a href="@Url.Action("Ver", "Libro", new { id = item.AtestadoID})" class="btn btn-primary btn-sm">Ver</a>
                         </td>
-
-                        <!--
-                            <td>
-                                @Html.ActionLink("Ver", "VerAtestado", new { id = item.AtestadoID})
-                            </td>
-                        -->
                     </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
 @{InformacionAtestado infoAtestado = new InformacionAtestado();}
         /**/
 @{string host = HttpContext.Current.Request.Url.Host;}
@@ -228,5 +222,5 @@
         console.log("borrar")
 
 });
-    </script>
+</script>
 
