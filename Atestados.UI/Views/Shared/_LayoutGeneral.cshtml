@@ -12,6 +12,11 @@
 
 </head>
 <body class="nav-padding">
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+
+
     <div id="main">
         <!--Cabecera-->
         @RenderPage("~/Views/Shared/Header.cshtml")
@@ -23,9 +28,6 @@
         @RenderPage("~/Views/Shared/Popups.cshtml")
     </div>
 
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
 
     <script type="text/javascript">
         var rootDir = "";
