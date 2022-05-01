@@ -22,7 +22,10 @@
         </div>
         <div class="container-fluid">
             <div class="row flex-nowrap">
-                @RenderPage("~/Views/Shared/Sidebar.cshtml")
+                @if ((string)Session["TipoUsuarioNombre"] == "Docente")
+                {
+                    @RenderPage("~/Views/Shared/Sidebar.cshtml");
+                }
                 <div class="col nav-padding">
                     @RenderBody()
                 </div>
