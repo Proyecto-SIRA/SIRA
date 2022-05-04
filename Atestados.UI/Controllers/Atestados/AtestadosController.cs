@@ -257,6 +257,7 @@ namespace Atestados.UI.Controllers
                 return HttpNotFound();
             }
             EvaluacionXAtestadoDTO evaluacion = new EvaluacionXAtestadoDTO();
+            evaluacion.Atestado = atestado;
             return View(evaluacion);
         }
 
