@@ -185,17 +185,16 @@
 
     <div class="row">
         <p>
-            @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }) |
+            @Html.ActionLink("Editar", "Editar", "Atestado", new { id = Model.AtestadoID }) |
             @Html.ActionLink("Regresar", "Regresar")
+            @if ((int)Session["TipoUsuario"] == 1 || (int)Session["TipoUsuario"] == 2)
+            {
+                @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, null)
+            }
         </p>
     </div>
 
-    @if ((int)Session["TipoUsuario"] == 2)
-    {
-        @Html.ActionLink("Evaluar", "Evaluar", new {id = Model.AtestadoID})
-        //<button name="a" id="@item.AtestadoID" action="Ver">Ver</button>
-        //<a id="@enviado.PersonaID" action="Ver">Ver</a>
-    }
+
 
 </div>
 

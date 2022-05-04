@@ -18,6 +18,7 @@ namespace Atestados.UI.Controllers
     {
         private AtestadosEntities db = new AtestadosEntities();
         private InformacionAtestado infoAtestado = new InformacionAtestado();
+        private InformacionGeneral infoGeneral = new InformacionGeneral();
 
         // GET: Atestados
         public ActionResult Index()
@@ -223,6 +224,83 @@ namespace Atestados.UI.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // GET: Atestados/Evaluar
+        public ActionResult Evaluar(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
+            Session["TipoUsuario"] = usuario.TipoUsuario;
+            Session["idAtestado"] = id;
+            Session["idUsuario"] = usuario.UsuarioID;
+
+            EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
+
+            ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
+            ViewBag.Atestado = infoAtestado.CargarAtestado(id);
+
+            if (e != null)
+            {
+                EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
+                ViewBag.Evaluacion = edto;
+                return View(edto);
+            }
+
+            AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
+            if (atestado == null)
+            {
+                return HttpNotFound();
+            }
+            EvaluacionXAtestadoDTO evaluacion = new EvaluacionXAtestadoDTO();
+            return View(evaluacion);
+        }
+
+        // evaluar
+        // POST: Atestados/Evaluar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Evaluar([Bind(Include = "PorcentajeObtenido, Observaciones")] EvaluacionXAtestadoDTO evaluacion)
+        {
+            if (ModelState.IsValid)
+            {
+                if (evaluacion.Observaciones == null) evaluacion.Observaciones = "N/A";
+
+                evaluacion.AtestadoID = (int)Session["idAtestado"];
+                evaluacion.PersonaID = (int)Session["idUsuario"];
+
+                EvaluaciónXAtestado e = new EvaluaciónXAtestado()
+                {
+                    AtestadoID = evaluacion.AtestadoID,
+                    PersonaID = evaluacion.PersonaID,
+                    PorcentajeObtenido = (float)evaluacion.PorcentajeObtenido,
+                    Observaciones = evaluacion.Observaciones
+                };
+
+
+                EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
+
+                if (evaluacionActual != null)
+                {
+                    infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
+                }
+
+                db.EvaluaciónXAtestado.Add(e);
+
+
+                db.SaveChanges();
+
+
+
+                AtestadoDTO atestado = infoAtestado.CargarAtestado((int)Session["idAtestado"]);
+
+                return RedirectToAction("Ver", new { id = (int)Session["idAtestado"] });
+            }
+            return View(evaluacion);
         }
     }
 }
