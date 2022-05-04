@@ -13,5 +13,8 @@ namespace Atestados.Objetos.Dtos
         public float PorcentajeObtenido { get; set; }
         public string Observaciones { get; set; }
 
+        public AtestadoDTO Atestado { get; set; }
+        public PersonaDTO Persona { get; set; }
+
     }
 }

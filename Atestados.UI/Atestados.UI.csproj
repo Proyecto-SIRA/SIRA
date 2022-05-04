@@ -422,7 +422,8 @@
     <Content Include="Views\Administrador\Eliminar.cshtml" />
     <Content Include="Views\Funcionario\Ver.cshtml" />
     <Content Include="Views\Comision\VerAtestado.cshtml" />
-    <Content Include="Views\Libro\Evaluar.cshtml" />
+    <Content Include="Views\Atestados\Evaluar.cshtml" />
+    <Content Include="Views\Shared\Links.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
