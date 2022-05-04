@@ -377,8 +377,6 @@ namespace Atestados.Objetos
                    opt => opt.MapFrom(src => src.Nombre))
                .ForMember(dest => dest.Nombre,
                    opt => opt.MapFrom(src => src.Nombre))
-               .ForMember(dest => dest.NumeroAutores,
-                   opt => opt.MapFrom(src => src.NumeroAutores))
                .ForMember(dest => dest.HoraCreacion,
                    opt => opt.MapFrom(src => DateTime.Now))
                .ForMember(dest => dest.Enlace,

@@ -12,5 +12,6 @@ INSERT INTO [dbo].[TipoUsuario]
      VALUES
            ('Admin'),
 		   ('Revisor'),
-		   ('Docente')
+		   ('Docente'),
+		   ('No registrado')
 GO

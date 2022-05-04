@@ -48,7 +48,7 @@ namespace Atestados.Objetos.Dtos
             if (TipoUsuario == 2)
                 return "Revisor";
             if (TipoUsuario == 3)
-                return "Docente";
+                return "Funcionario";
             else
                 return "Tipo usuario inválido.";
         }

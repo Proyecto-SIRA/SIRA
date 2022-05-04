@@ -22,7 +22,7 @@ namespace Atestados.UI.Controllers
         // GET: Funcionario
         public ActionResult Index()
         {
-            Session["TipoUsuarioNombre"] = "Docente";
+            Session["TipoUsuarioNombre"] = "Funcionario";
 
             if (Session["Usuario"] != null)
             {
