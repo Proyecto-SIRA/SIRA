@@ -299,7 +299,16 @@ namespace Atestados.UI.Controllers
 
                 AtestadoDTO atestado = infoAtestado.CargarAtestado((int)Session["idAtestado"]);
 
-                return RedirectToAction("Ver", new { id = (int)Session["idAtestado"] });
+                // Create dictionary of values
+                Dictionary<string, string> values = new Dictionary<string, string>();
+                values.Add("Libro", "Libro");
+                values.Add("Artículo", "Articulo");
+                values.Add("Obra didáctica", "ObraDidactica");
+                values.Add("Obra administrativa de desarrollo", "ObraAdministrativa");
+
+                String controlador = values[atestado.Rubro.Nombre];
+
+                return RedirectToAction("Ver", controlador, new { id = (int)Session["idAtestado"] });
             }
             return View(evaluacion);
         }
