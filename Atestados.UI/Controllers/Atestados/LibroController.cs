@@ -77,8 +77,13 @@ namespace Atestados.UI.Controllers.Atestados
         {
             if (ModelState.IsValid)
             {
+                List<AutorDTO> autores = (List <AutorDTO>)Session["Autores"];
+                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+                int porcentajeEq = 100 / autores.Count;
+                
                 atestado.PersonaID = (int)Session["UsuarioID"]; // cambiar por sesion
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
+                atestado.NumeroAutores = autores.Count();
                 Atestado a = AutoMapper.Mapper.Map<LibroDTO, Atestado>(atestado);
                 infoAtestado.GuardarAtestado(a);
                 atestado.AtestadoID = a.AtestadoID;
@@ -86,24 +91,32 @@ namespace Atestados.UI.Controllers.Atestados
                 infoAtestado.GuardarInfoEditorial(infoEditorial);
                 Fecha fecha = AutoMapper.Mapper.Map<LibroDTO, Fecha>(atestado);
                 infoAtestado.GuardarFecha(fecha);
-                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 foreach(ArchivoDTO archivo in archivos)
                 {
                     Archivo ar = AutoMapper.Mapper.Map<ArchivoDTO, Archivo>(archivo);
                     ar.AtestadoID = a.AtestadoID;
                     infoAtestado.GuardarArchivo(ar);
                 }
-                List<AutorDTO> autores = (List <AutorDTO>)Session["Autores"];
                 foreach (AutorDTO autor in autores)
                 {
                     Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
+                    persona.CategoriaActual = 1;
+                    persona.TipoUsuario = 4;
                     infoGeneral.GuardarPersona(persona);
-                    infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
-                    {
+                    if(atestado.AutoresEq)
+                        infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                        {
+                        AtestadoID = a.AtestadoID,
+                        PersonaID = persona.PersonaID,
+                        Porcentaje = porcentajeEq
+                        });
+                    else
+                        infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                        {
                         AtestadoID = a.AtestadoID,
                         PersonaID = persona.PersonaID,
                         Porcentaje = autor.Porcentaje
-                    });
+                        });
                 }
 
                 Session["Archivos"] = new List<ArchivoDTO>();
@@ -303,93 +316,6 @@ namespace Atestados.UI.Controllers.Atestados
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        // GET: Libro/Evaluar
-        public ActionResult Evaluar(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
-            Session["TipoUsuario"] = usuario.TipoUsuario;
-            Session["idAtestado"] = id;
-            Session["idUsuario"] = usuario.UsuarioID;
-
-            EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
-            
-            ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
-            ViewBag.Atestado = infoAtestado.CargarAtestado(id);
-
-            if (e != null)
-            {
-                EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
-                ViewBag.Evaluacion = edto;
-                return View(edto);
-            }
-
-            AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
-            if (atestado == null)
-            {
-                return HttpNotFound();
-            }
-            EvaluacionXAtestadoDTO evaluacion = new EvaluacionXAtestadoDTO();
-            return View(evaluacion);
-        }
-
-        // evaluar
-        // POST: Libro/Evaluar
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Evaluar([Bind(Include = "PorcentajeObtenido, Observaciones")] EvaluacionXAtestadoDTO evaluacion)
-        {
-            if (ModelState.IsValid)
-            {
-                if (evaluacion.Observaciones == null) evaluacion.Observaciones = "N/A";
-
-                evaluacion.AtestadoID = (int)Session["idAtestado"];
-                evaluacion.PersonaID = (int)Session["idUsuario"];
-
-                //evaluacion.Observaciones = (string)Session["observaciones"];
-                //evaluacion.PorcentajeObtenido = (float)Session["nota"];
-
-                //EvaluaciónXAtestado e = AutoMapper.Mapper.Map<EvaluacionXAtestadoDTO, EvaluaciónXAtestado>(evaluacion);
-
-                //e.Atestado = AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(infoAtestado.CargarAtestado((int)Session["idAtestado"]));
-                //e.Persona = AutoMapper.Mapper.Map<PersonaDTO, Persona>(infoGeneral.CargarPersona((int)Session["idUsuario"]));
-
-                
-                EvaluaciónXAtestado e = new EvaluaciónXAtestado()
-                {
-                    AtestadoID = evaluacion.AtestadoID,
-                    PersonaID = evaluacion.PersonaID,
-                    PorcentajeObtenido = (float)evaluacion.PorcentajeObtenido,
-                    Observaciones = evaluacion.Observaciones
-                };
-
-
-                EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
-
-                if (evaluacionActual != null)
-                {
-                    //db.EvaluaciónXAtestado.Remove(evaluacionActual);
-                    infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
-                }
-
-                db.EvaluaciónXAtestado.Add(e);
-
-
-                db.SaveChanges();
-
-
-
-                AtestadoDTO atestado = infoAtestado.CargarAtestado((int)Session["idAtestado"]);
-
-                return RedirectToAction("Ver", new { id = (int)Session["idAtestado"] });
-            }
-            return View(evaluacion);
         }
 
     }

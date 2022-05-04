@@ -22,7 +22,7 @@
         </div>
         <div class="container-fluid">
             <div class="row flex-nowrap">
-                @if ((string)Session["TipoUsuarioNombre"] == "Docente")
+                @if ((string)Session["TipoUsuarioNombre"] == "Funcionario")
                 {
                     @RenderPage("~/Views/Shared/Sidebar.cshtml");
                 }

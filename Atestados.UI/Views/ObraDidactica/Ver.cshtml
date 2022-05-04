@@ -155,10 +155,7 @@
         </div>
     </div>
     <div class="row">
-        <p>
-            @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }) |
-            @Html.ActionLink("Regresar", "Crear")
-        </p>
+        @Html.Partial("Links", Model)
     </div>
 </div>
 
