@@ -19,6 +19,8 @@ namespace Atestados.Objetos.Dtos
         public int CategoriaActual { get; set; }
         public int TipoUsuario { get; set; }
         public int Telefono { get; set; }
+
+        public int TiempoServido { get; set; }
         public List<AtestadoDTO> PorEnviar { get; set; }
         public bool esActivo { get; set; }
     }

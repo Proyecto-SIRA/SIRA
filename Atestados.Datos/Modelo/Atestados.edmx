@@ -57,14 +57,10 @@
           <Property Name="Auditiva" Type="int" Nullable="false" />
           <Property Name="Oral" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="EvaluaciónXAtestado">
           <Key>
             <PropertyRef Name="AtestadoID" />
             <PropertyRef Name="PersonaID" />
-            <PropertyRef Name="PorcentajeObtenido" />
-            <PropertyRef Name="Observaciones" />
           </Key>
           <Property Name="AtestadoID" Type="int" Nullable="false" />
           <Property Name="PersonaID" Type="int" Nullable="false" />
@@ -123,6 +119,16 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="1000" />
           <Property Name="TipoRubro" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="TipoCategoria">
           <Key>
@@ -365,24 +371,18 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <EntitySet Name="Atestado" EntityType="Self.Atestado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AtestadoXPersona" EntityType="Self.AtestadoXPersona" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DominioIdioma" EntityType="Self.DominioIdioma" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EvaluaciónXAtestado" EntityType="Self.EvaluaciónXAtestado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fecha" EntityType="Self.Fecha" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Idioma" EntityType="Self.Idioma" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InfoEditorial" EntityType="Self.InfoEditorial" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pais" EntityType="Self.Pais" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rubro" EntityType="Self.Rubro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoCategoria" EntityType="Self.TipoCategoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoRubro" EntityType="Self.TipoRubro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoUsuario" EntityType="Self.TipoUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EvaluaciónXAtestado" EntityType="Self.EvaluaciónXAtestado" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [EvaluaciónXAtestado].[AtestadoID] AS [AtestadoID], 
-    [EvaluaciónXAtestado].[PersonaID] AS [PersonaID], 
-    [EvaluaciónXAtestado].[PorcentajeObtenido] AS [PorcentajeObtenido], 
-    [EvaluaciónXAtestado].[Observaciones] AS [Observaciones]
-    FROM [dbo].[EvaluaciónXAtestado] AS [EvaluaciónXAtestado]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK__Atestado__PaisID__534D60F1" Association="Self.FK__Atestado__PaisID__534D60F1">
             <End Role="Pais" EntitySet="Pais" />
             <End Role="Atestado" EntitySet="Atestado" />
@@ -837,6 +837,7 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
             <End Role="TipoUsuario" EntitySet="TipoUsuario" />
             <End Role="Persona" EntitySet="Persona" />
           </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="AtestadosModel.sysdiagrams" />
         </EntityContainer>
         <EntityType Name="TipoCategoria">
           <Key>
@@ -860,8 +861,6 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
           <Key>
             <PropertyRef Name="AtestadoID" />
             <PropertyRef Name="PersonaID" />
-            <PropertyRef Name="PorcentajeObtenido" />
-            <PropertyRef Name="Observaciones" />
           </Key>
           <Property Name="AtestadoID" Type="Int32" Nullable="false" />
           <Property Name="PersonaID" Type="Int32" Nullable="false" />
@@ -918,6 +917,16 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1081,6 +1090,17 @@ warning 6002: The table/view 'Atestados.dbo.EvaluaciónXAtestado' does not have 
                 <ScalarProperty Name="PorcentajeObtenido" ColumnName="PorcentajeObtenido" />
                 <ScalarProperty Name="PersonaID" ColumnName="PersonaID" />
                 <ScalarProperty Name="AtestadoID" ColumnName="AtestadoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="AtestadosModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

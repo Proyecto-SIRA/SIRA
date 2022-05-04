@@ -1,8 +1,9 @@
 ﻿@model  List<Atestados.Objetos.Dtos.EnviadoDTO>
+@Scripts.Render("~/bundles/jquery")
 
 @using Atestados.Objetos.Dtos;
 @{ ViewBag.Title = "Principal";
-    Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
+    Layout = "~/Views/Shared/_LayoutGeneral.cshtml";
 }
 
 <style>
@@ -17,7 +18,7 @@
     }
 </style>
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <h2>Comisión</h2>
         <hr />
@@ -67,7 +68,8 @@
                         <!--| @Html.ActionLink("Ver", "VerFuncionario", new { id = enviado.PersonaID })-->
                     </td>
                     <td scope="col">
-                        <a id="@enviado.PersonaID" action="Ver">Ver</a>
+                        <a class="btn btn-outline-primary" id="@enviado.PersonaID" action="Ver">Ver</a>
+                        
                     </td>
                 </tr>
                 }
@@ -77,10 +79,9 @@
 </div>
 
 <script type="text/javascript">
-        
+
         @{string host = HttpContext.Current.Request.Url.Host; }
 
-       
 
         var url = "";
 
@@ -88,7 +89,7 @@
         $("a").click(e => {
             var id = $(e.target).attr('id')
             var action = $(e.target).attr('action')
-            
+
             url = "/Funcionario/" + action + "/" + id
 
             if (action == "Ver") {

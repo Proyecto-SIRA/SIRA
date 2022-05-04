@@ -6,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @Styles.Render("~/Content/css")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
     <title>SIRA</title>
 
 </head>
 <body class="nav-padding">
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+
+
     <div id="main">
         <!--Cabecera-->
         @RenderPage("~/Views/Shared/Header.cshtml")
@@ -22,9 +28,6 @@
         @RenderPage("~/Views/Shared/Popups.cshtml")
     </div>
 
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
 
     <script type="text/javascript">
         var rootDir = "";

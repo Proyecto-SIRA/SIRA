@@ -28,6 +28,8 @@ namespace Atestados.Objetos.Dtos
         public string CategoriaActualNombre { get; set; }
         [RegularExpression(@"^(\d{8})$", ErrorMessage = "Número no válido.")]
         public int Telefono { get; set; }
+
+        public int TiempoServido { get; set; }
         public bool esActivo { get; set; }
 
         public string NombreCompleto()

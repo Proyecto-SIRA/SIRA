@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @Styles.Render("~/Content/css")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
     <title>SIRA</title>
 
 </head>
 <body>
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+
     <div id="main">
         <!--Navegacion-->
         <div>
@@ -17,7 +22,10 @@
         </div>
         <div class="container-fluid">
             <div class="row flex-nowrap">
-                @RenderPage("~/Views/Shared/Sidebar.cshtml")
+                @if ((string)Session["TipoUsuarioNombre"] == "Docente")
+                {
+                    @RenderPage("~/Views/Shared/Sidebar.cshtml");
+                }
                 <div class="col nav-padding">
                     @RenderBody()
                 </div>
@@ -31,9 +39,6 @@
         <!--Fin Popus-->
     </div>
 
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/modernizr")
 
     <script type="text/javascript">
         var rootDir = "";

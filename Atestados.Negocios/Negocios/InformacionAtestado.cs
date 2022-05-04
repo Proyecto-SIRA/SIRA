@@ -148,6 +148,25 @@ namespace Atestados.Negocios.Negocios
             return query;
         }
 
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionesAtestado(int id)
+        {
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == id).ToList();
+            return query;
+        }
+
+        public EvaluaciónXAtestado ObtenerEvaluacionXAtestado(int idAtestado, int idPersona)
+        {
+            EvaluaciónXAtestado query = db.EvaluaciónXAtestado.Find(idAtestado, idPersona);
+            return query;
+        }
+
+        public void BorrarEvaluacion(int idAtestado, int idPersona)
+        {
+            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona);
+            db.EvaluaciónXAtestado.Remove(e);
+            db.SaveChanges();
+        }
+
         public List<EnviadoDTO> PersonasEntregaron()
         {
             List<Atestado> enviados = ObtenerAtestadosEnviados();

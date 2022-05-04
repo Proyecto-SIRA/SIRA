@@ -75,7 +75,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <input type="submit" value="Guardar" class="btn btn-outline-primary"/>
+                    @Html.LabelFor(model => model.TiempoServido, "Tiempo Servido (Años)", htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(model => model.TiempoServido, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TiempoServido, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" value="Guardar" class="btn btn-outline-primary" />
                 </div>
             </form>
         </div>

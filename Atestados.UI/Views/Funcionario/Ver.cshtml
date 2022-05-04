@@ -1,12 +1,11 @@
 ﻿@model Atestados.Objetos.Dtos.PersonaDTO
 
 @using Atestados.Objetos.Dtos;
-
-@{
-    ViewBag.Title = "Ver";
+@{ ViewBag.Title = "Ver";
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
 }
 
+@using Atestados.Negocios.Negocios;
 @using Atestados.Objetos.Dtos;
 
 <link href="~/Views/css/Atestado.css" rel="stylesheet" type="text/css" />
@@ -86,7 +85,7 @@
                         </td>
 
                         <td scope="col">
-                            <a rubro="@item.RubroID" atestado="@item.AtestadoID" action="Ver">Ver</a>
+                            <a class="btn btn-outline-primary" rubro="@item.RubroID" atestado="@item.AtestadoID" action="Ver">Ver</a>
                         </td>
 
                         <!--
@@ -102,3 +101,75 @@
 
 
 </div>
+
+<script type="text/javascript">
+        @{InformacionAtestado infoAtestado = new InformacionAtestado(); }
+        @{string host = HttpContext.Current.Request.Url.Host; }
+
+        var controllers = []
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Artículo"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Capacitación profesional"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Grados académicos"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Idiomas"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("libro"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra administrativa de desarrollo"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra didáctica"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Ponencia"))
+        controllers.push(@infoAtestado.ObtenerIDdeRubro("Proyectos de investigación y extensión"))
+
+        $('#seleccionarTodos').click(function (e) {
+                var table = $(e.target).closest('table');
+            $('td input:checkbox', table).prop('checked', this.checked);
+        });
+
+        var url = "";
+
+
+        $("a").click(e => {
+            var rubro = $(e.target).attr('rubro')
+            var atestado = $(e.target).attr('atestado')
+            var action = $(e.target).attr('action')
+            switch (rubro) {
+                case controllers[0].toString():
+                    url = "/Articulo/" + action + "/" + atestado  // para que funcione en local se debe colocar /Atestados antes | se quita para el deploy
+
+                    break;
+                case controllers[1].toString():
+                    url = "/Capacitacion/" + action + "/" + atestado
+                    break;
+                case controllers[2].toString():
+                    url = "/Certificado/" + action + "/" + atestado
+                    break;
+                case controllers[3].toString():
+                    url = "/Idioma/" + action + "/" + atestado
+                    break;
+                case controllers[4].toString():
+                    url = "/Libro/" + action + "/" + atestado
+                    break;
+                case controllers[5].toString():
+                    url = "/ObraAdministrativa/" + action + "/" + atestado
+                    break;
+                case controllers[6].toString():
+                    url = "/ObraDidactica/" + action + "/" + atestado
+                    break;
+                case controllers[7].toString():
+                    url = "/Ponencia/" + action + "/" + atestado
+                    break;
+                case controllers[8].toString():
+                    url = "/Proyecto/" + action + "/" + atestado
+                    break;
+                default:
+                    url = "/" + action + "/" + atestado
+            }
+
+
+            if (action == "Ver") {
+                if ("@host" == "localhost")
+                    url = "/Atestados" + url
+                window.location.href = url
+            } else
+                console.log("borrar")
+
+        });
+</script>
+
