@@ -1,12 +1,10 @@
 ﻿@model Atestados.Objetos.Dtos.AtestadoDTO
 
 <p>
-    @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }) |
-    @Html.ActionLink("Regresar", null, null, null, new { href = Request.UrlReferrer })
-    @if ((int)Session["TipoUsuario"] == 1 || (int)Session["TipoUsuario"] == 2)
-    {
-        <span>|</span>
-        @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, null)
+    @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }, new { @class = "btn btn-outline-primary" }) 
+    @Html.ActionLink("Regresar", null, null, new { href = Request.UrlReferrer }, new { @class = "btn btn-outline-primary" })
+       @if ((int)Session["TipoUsuario"] == 2) {
+        @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, new { @class = "btn btn-outline-primary" })
     }
 </p>
 

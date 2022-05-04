@@ -19,45 +19,52 @@
     <input type="submit">
 </form>
 -->
-<div class="col-lg-6">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-lg-6">
+                <!-- columna izquierda -->
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcentajeObtenido, "Porcentaje Obtenido", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PorcentajeObtenido, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcentajeObtenido, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <dl class="dl-horizontal">
-            <dt>
-                Funcionario
-            </dt>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Observaciones, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
 
-            <dd>
-                @Html.DisplayFor(model => model.Atestado.Persona.Nombre)
-                @Html.DisplayFor(model => model.Atestado.Persona.PrimerApellido)
-                @Html.DisplayFor(model => model.Atestado.Persona.SegundoApellido)
-            </dd>
-        </dl>
-
-        <div class="form-horizontal">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.PorcentajeObtenido, "Porcentaje Obtenido", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PorcentajeObtenido, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PorcentajeObtenido, "", new { @class = "text-danger" })
+                        <input type="submit" value="Evaluar" class="btn btn-outline-primary" id="submit" />
+                        <a class="btn btn-outline-primary" href="https://www.tec.ac.cr/reglamentos/normas-aplicacion-reglamento-carrera-profesional-instituto-tecnologico-costa-rica">Consultar Reglamento</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Observaciones, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
-                </div>
+            <div class="col-lg-6">
+                <dl class="dl-horizontal">
+                    <dt>
+                        Funcionario
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Atestado.Persona.Nombre)
+                        @Html.DisplayFor(model => model.Atestado.Persona.PrimerApellido)
+                        @Html.DisplayFor(model => model.Atestado.Persona.SegundoApellido)
+                    </dd>
+                </dl>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Evaluar" class="btn btn-default" id="submit" />
-            </div>
-        </div>
-        }
-</div>
+    }
+    
+
