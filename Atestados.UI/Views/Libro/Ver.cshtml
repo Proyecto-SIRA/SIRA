@@ -184,14 +184,7 @@
 
 
     <div class="row">
-        <p>
-            @Html.ActionLink("Editar", "Editar", "Atestado", new { id = Model.AtestadoID }) |
-            @Html.ActionLink("Regresar", "Regresar")
-            @if ((int)Session["TipoUsuario"] == 1 || (int)Session["TipoUsuario"] == 2)
-            {
-                @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, null)
-            }
-        </p>
+        @Html.Partial("Links", Model)
     </div>
 
 
