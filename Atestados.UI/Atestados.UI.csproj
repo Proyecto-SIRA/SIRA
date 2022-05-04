@@ -424,6 +424,11 @@
     <Content Include="Views\Comision\VerAtestado.cshtml" />
     <Content Include="Views\Atestados\Evaluar.cshtml" />
     <Content Include="Views\Shared\Links.cshtml" />
+    <Content Include="Views\Libro\Evaluar.cshtml" />
+    <Content Include="Views\ObraDidactica\Evaluar.cshtml" />
+    <Content Include="Views\ObraAdministrativa\Evaluar.cshtml" />
+    <Content Include="Views\Ponencia\Evaluar.cshtml" />
+    <Content Include="Views\Proyecto\Evaluar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

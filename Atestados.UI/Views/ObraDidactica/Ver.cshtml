@@ -157,6 +157,12 @@
     <div class="row">
         @Html.Partial("Links", Model)
     </div>
+    @if ((int)Session["TipoUsuario"] == 2)
+    {
+        @Html.ActionLink("Evaluar", "Evaluar", new { id = Model.AtestadoID })
+        //<button name="a" id="@item.AtestadoID" action="Ver">Ver</button>
+        //<a id="@enviado.PersonaID" action="Ver">Ver</a>
+    }
 </div>
 
 
