@@ -17,6 +17,7 @@ namespace Atestados.Objetos.Dtos
         [Required(ErrorMessage = "El correo es obligatorio")]
         [EmailAddress(ErrorMessage = "Correo inválido")]
         public string Email { get; set; }
+        [Range(0, 100)]
         public double Porcentaje { get; set; }
         [StringLength(250)]
         public string Departamento { get; set; }
