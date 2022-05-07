@@ -73,14 +73,17 @@ namespace Atestados.UI.Controllers.Atestados
         // POST: Libro/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Crear([Bind(Include = "Annio,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website")] LibroDTO atestado)
+        public ActionResult Crear([Bind(Include = "Annio,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,AutoresEq,AutoresCheck")] LibroDTO atestado)
         {
+            if (!atestado.AutoresCheck)
+                ModelState.AddModelError("AutoresCheck", "El libro debe tener al menos un autor.");
+            else
             if (ModelState.IsValid)
             {
                 List<AutorDTO> autores = (List <AutorDTO>)Session["Autores"];
                 List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 int porcentajeEq = 100 / autores.Count;
-                
+
                 atestado.PersonaID = (int)Session["UsuarioID"]; // cambiar por sesion
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
                 atestado.NumeroAutores = autores.Count();
@@ -243,9 +246,8 @@ namespace Atestados.UI.Controllers.Atestados
         }
 
         [HttpPost]
-        public JsonResult AgregarAutor(AutorDTO autorData)
+        public JsonResult AgregarAutor([Bind(Include = "NumeroAutores")] LibroDTO atestado, AutorDTO autorData)
         {
-
             AutorDTO autor = new AutorDTO()
             {
                 Nombre = autorData.Nombre,
