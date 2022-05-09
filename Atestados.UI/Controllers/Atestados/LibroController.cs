@@ -99,24 +99,47 @@ namespace Atestados.UI.Controllers.Atestados
                 }
                 foreach (AutorDTO autor in autores)
                 {
-                    Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
-                    persona.CategoriaActual = 1;
-                    persona.TipoUsuario = 4;
-                    infoGeneral.GuardarPersona(persona);
-                    if(atestado.AutoresEq)
-                        infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
-                        {
-                        AtestadoID = a.AtestadoID,
-                        PersonaID = persona.PersonaID,
-                        Porcentaje = porcentajeEq
-                        });
-                    else
-                        infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
-                        {
-                        AtestadoID = a.AtestadoID,
-                        PersonaID = persona.PersonaID,
-                        Porcentaje = autor.Porcentaje
-                        });
+                    if (!autor.esFuncionario)
+                    {
+                        Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
+                        persona.CategoriaActual = 1;
+                        persona.TipoUsuario = 4;
+                        infoGeneral.GuardarPersona(persona);
+                        if (atestado.AutoresEq)
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = persona.PersonaID,
+                                Porcentaje = porcentajeEq
+                            });
+                        else
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = persona.PersonaID,
+                                Porcentaje = autor.Porcentaje
+                            });
+                    } else
+                    {
+
+                        UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(autor.Email);
+                        var id = usuario.UsuarioID;
+
+                        if (atestado.AutoresEq)
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = id,
+                                Porcentaje = porcentajeEq
+                            });
+                        else
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = id,
+                                Porcentaje = autor.Porcentaje
+                            });
+                    }
                 }
 
                 Session["Archivos"] = new List<ArchivoDTO>();
