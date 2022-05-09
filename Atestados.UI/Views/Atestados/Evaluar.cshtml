@@ -35,7 +35,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.PorcentajeObtenido, "Porcentaje obtenido", htmlAttributes: new { @class = "control-label col-md-5" })
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.PorcentajeObtenido, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.PorcentajeObtenido, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 0, @max = 100 } })
                             @Html.ValidationMessageFor(model => model.PorcentajeObtenido, "", new { @class = "text-danger" })
                         </div>
                     </div>
