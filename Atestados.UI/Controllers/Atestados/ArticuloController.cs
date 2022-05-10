@@ -11,6 +11,7 @@ using Atestados.Datos.Modelo;
 using Atestados.Negocios.Negocios;
 using Atestados.Objetos.Dtos;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Atestados.UI.Controllers.Atestados
 {
@@ -240,7 +241,9 @@ namespace Atestados.UI.Controllers.Atestados
                 PrimerApellido = autorData.PrimerApellido,
                 SegundoApellido = autorData.SegundoApellido,
                 Porcentaje = autorData.Porcentaje,
-                Email = autorData.Email
+                Email = autorData.Email,
+                //PersonaID = autorData.PersonaID,
+                esFuncionario = autorData.esFuncionario
             };
 
             if (Session["Autores"] == null)
@@ -258,6 +261,29 @@ namespace Atestados.UI.Controllers.Atestados
             {
                 personaJson = jsonTest
             });
+        }
+
+        [HttpPost]
+        public JsonResult getAutores()
+        {
+
+            var autores = Session["Autores"];
+
+            return Json(autores);
+        }
+
+        [HttpPost]
+        public void borrarAutor(AutorDTO autorData)
+        {
+            var email = autorData.Email;
+
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
+            autores.RemoveAll(a => a.Email == email);
+            
+            Session["Autores"] = autores;
+
+            return;
         }
 
         [HttpPost]
