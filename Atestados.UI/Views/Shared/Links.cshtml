@@ -1,18 +1,11 @@
 ﻿@model Atestados.Objetos.Dtos.AtestadoDTO
 
-@{ 
-    string retroceder = "Funcionario";
-    if ((string)Session["TipoUsuarioNombre"] == "Revisor")
-    {
-        retroceder = "Comision";
-    }
-}  
-<p>
-    @Html.ActionLink("Editar", "Editar", new { id = Model.AtestadoID }, new { @class = "btn btn-outline-primary" })
-    @Html.ActionLink("Retroceder", "", retroceder, new { href = Request.UrlReferrer }, new { @class = "btn btn-outline-primary" })
+<div>
     @if ((int)Session["TipoUsuario"] == 1 || (int)Session["TipoUsuario"] == 2)
     {
-        @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, new { @class = "btn btn-outline-primary" })
+        <h4>Opciones de revisor</h4>
+        @Html.ActionLink("Editar", "Editar", "Libro", new { id = Model.AtestadoID }, new {@class = "btn btn-warning me-2"})
+        @Html.ActionLink("Evaluar", "Evaluar", "Atestados", new { id = Model.AtestadoID }, new {@class = "btn btn-primary"})
     }
-</p>
+</div>
 

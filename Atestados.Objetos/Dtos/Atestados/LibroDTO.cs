@@ -11,21 +11,24 @@ namespace Atestados.Objetos.Dtos
 {
     public class LibroDTO
     {
+        public bool AutoresCheck { get; set; }
         public bool AutoresEq { get; set; }
         public int AtestadoID { get; set; }
         [StringLength(250)]
         [Required(ErrorMessage = "Este es un campo requerido")]
+        [DisplayName("Título")]
         public string Nombre { get; set; }
         public int NumeroAutores { get; set; }
         [StringLength(1000)]
         public string Observaciones { get; set; }
         public DateTime HoraCreacion { get; set; }
         [StringLength(250)]
-        [Url]
+        [DisplayName("ISBN")]
         public string Enlace { get; set; }
         [Url]
         [StringLength(250)]
-        //[Required(ErrorMessage = "Este es un campo requerido")]
+        [Required(ErrorMessage = "Este es un campo requerido")]
+        [DisplayName("Sitio web")]
         public string Website { get; set; }
         [StringLength(100)]
         [Required(ErrorMessage = "Este es un campo requerido")]
