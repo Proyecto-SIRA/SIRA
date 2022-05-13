@@ -121,11 +121,14 @@
                         Nombre
                     </th>
                     <th scope="col">
+                        Evaluación
+                    </th>
+                    <th scope="col">
                         Visualización
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="enviados">
                 @foreach (AtestadoDTO item in ViewBag.Enviados)
                 {
                     <tr>
@@ -135,7 +138,7 @@
                         <td scope="col">
                             @item.Nombre
                         </td>
-
+                        <td id="evaluacion" atestado=@item.AtestadoID></td>
                         <td>
                             <a href="@Url.Action("Ver", "Libro", new { id = item.AtestadoID})" class="btn btn-primary btn-sm">Ver</a>
                         </td>
@@ -153,41 +156,71 @@
 @{string host = HttpContext.Current.Request.Url.Host;}
         /**/
 
-        var controllers = []
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Artículo"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Capacitación profesional"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Grados académicos"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Idiomas"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("libro"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra administrativa de desarrollo"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra didáctica"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Ponencia"))
-        /**/
-        /**/
-        controllers.push(@infoAtestado.ObtenerIDdeRubro("Proyectos de investigación y extensión"))
-        /**/
+        // notas de los atestados
+        // en el futuro xd
 
-        $('#seleccionarTodos').click(function (e) {
-            var table = $(e.target).closest('table');
-            $('td input:checkbox', table).prop('checked', this.checked);
-        });
+    //var enviados = document.getElementById("enviados");
 
-        var url = "";
+    //$('#enviados tr').each(function () {
+
+    $(document).ready(function () {
+        $('#enviados tr').each(function () {
+            var e = $(this).find('#evaluacion');
+            var id = e.attr("atestado");
+            //console.log($(this).find('#evaluacion').attr("atestado"));
+            $.ajax({
+                type: 'POST',
+                url: '@Variables.BaseUrl/Funcionario/notaAtestado',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify({ AtestadoID: id }),
+                success: function (response) {
+                    if (response != null) {
+                        console.log(e.text());
+                        e.text(response+"%")
+                    }
+
+                }
+            })
+        })
+    })
+
+    var controllers = []
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Artículo"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Capacitación profesional"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Grados académicos"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Idiomas"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("libro"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra administrativa de desarrollo"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Obra didáctica"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Ponencia"))
+    /**/
+    /**/
+    controllers.push(@infoAtestado.ObtenerIDdeRubro("Proyectos de investigación y extensión"))
+    /**/
+
+    $('#seleccionarTodos').click(function (e) {
+        var table = $(e.target).closest('table');
+        $('td input:checkbox', table).prop('checked', this.checked);
+    });
+
+    var url = "";
 
 
         $("a").click(e => {
