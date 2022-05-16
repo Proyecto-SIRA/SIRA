@@ -238,6 +238,8 @@ namespace Atestados.UI.Controllers
             Session["TipoUsuario"] = usuario.TipoUsuario;
             Session["idAtestado"] = id;
             Session["idUsuario"] = usuario.UsuarioID;
+            Session["autoresAtestado"] = infoAtestado.ObtenerAutores((int)id);
+
 
             EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
 
@@ -311,6 +313,15 @@ namespace Atestados.UI.Controllers
                 return RedirectToAction("Ver", controlador, new { id = (int)Session["idAtestado"] });
             }
             return View(evaluacion);
+        }
+
+        // POST: Atestados/ObtenerAutores
+        [HttpPost]
+        public JsonResult ObtenerAutores()
+        {
+            var autores = Session["autoresAtestado"];
+            //var jsonTest = JsonConvert.SerializeObject(autores);
+            return Json(autores);
         }
     }
 }

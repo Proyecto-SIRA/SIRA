@@ -21,6 +21,7 @@ namespace Atestados.Objetos.Dtos
         public double Porcentaje { get; set; }
         [StringLength(250)]
         public string Departamento { get; set; }
+        public bool esFuncionario { get; set; }
 
     }
 }

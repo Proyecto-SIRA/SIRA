@@ -99,5 +99,53 @@ namespace Atestados.UI.Controllers
             return View(funcionario);
         }
 
+
+        [HttpPost]
+        public JsonResult UsuarioPorEmail(UsuarioDTO usuarioData)
+        {
+
+            var email = usuarioData.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            if (usuario == null)
+            {
+                return Json(new
+                {
+                    usuario = false
+                });
+            }
+
+            var json = JsonConvert.SerializeObject(usuario);
+
+            return Json(new
+            {
+                usuario = json
+            });
+
+        }
+
+        [HttpPost]
+        public float notaAtestado(AtestadoDTO atestado)
+        {
+            var id = atestado.AtestadoID;
+            var evaluaciones = infoAtestado.ObtenerEvaluacionesAtestado(id);
+            if (evaluaciones.Count == 0)
+            {
+                return 0;
+            }
+
+            var porcentaje = .0;
+
+            foreach (EvaluaciónXAtestado evaluacion in evaluaciones)  {
+                porcentaje += evaluacion.PorcentajeObtenido;
+            }
+
+            var r = porcentaje / evaluaciones.Count;
+
+            return (float) r;
+
+        }
+
     }
 }

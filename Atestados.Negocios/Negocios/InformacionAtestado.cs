@@ -167,6 +167,17 @@ namespace Atestados.Negocios.Negocios
             db.SaveChanges();
         }
 
+        public List<PersonaDTO> ObtenerAutores(int idAtestado)
+        {
+            List<AtestadoXPersona> query = db.AtestadoXPersona.Where(a => a.AtestadoID == idAtestado).ToList();
+            List<PersonaDTO> personas = new List<PersonaDTO>();
+            foreach (var e in query)
+            {
+                var p = db.Persona.Find(e.PersonaID);
+                personas.Add(AutoMapper.Mapper.Map<Persona, PersonaDTO>(p));
+            }
+            return personas;
+        }
         public List<EnviadoDTO> PersonasEntregaron()
         {
             List<Atestado> enviados = ObtenerAtestadosEnviados();

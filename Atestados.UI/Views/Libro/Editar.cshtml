@@ -8,7 +8,6 @@
 @using Atestados.Objetos.Dtos;
 
 @{double porcentaje = 100;}
-<link href="~/Views/css/Atestado.css" rel="stylesheet" type="text/css" />
 
 <style>
     textarea {
@@ -102,13 +101,38 @@
                         </div>
                     </div>
 
+                    <h3>Autores</h3>
+
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Porcentaje</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAutores">
+                                @foreach (AutorDTO autor in ViewBag.Autores)
+                                {
+                                    porcentaje -= autor.Porcentaje;
+                                    <tr>
+                                        <td>@autor.Nombre</td>
+                                        <td>@autor.Porcentaje</td>
+                                        <td><a class="btn btn-primary btn-sm" onclick="Borrar()">Borrar</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>         
+                    
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <div class="btn btn-primary" onclick="AbrirModal()">Agregar Autores</div>
                         </div>
                     </div>
 
-
+                    <br />
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10 mt-2">
@@ -282,31 +306,58 @@
         return (per - percentage) >= 0 && percentage >= 0;
     }
 
-    $('#autorAgregar').click(function () {
-        var autor = new Object()
-        autor.Nombre = $('#nombre').val()
-        autor.PrimerApellido = $('#apellido1').val()
-        autor.SegundoApellido = $('#apellido2').val()
-        autor.Email = $('#email').val()
-        autor.Porcentaje = $('#porcentaje').val()
+    $(document).ready(function () {
 
-        if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
-            $.ajax({
-                type: 'POST',
-                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td><td><a>Borrar</a></td></td></tr>')
+        var rowIdx = 0;
+
+        $('#autorAgregar').click(function () {
+            var autor = new Object()
+            autor.Nombre = $('#nombre').val()
+            autor.PrimerApellido = $('#apellido1').val()
+            autor.SegundoApellido = $('#apellido2').val()
+            autor.Email = $('#email').val()
+            autor.Porcentaje = $('#porcentaje').val()
+
+            if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Variables.BaseUrl/Articulo/AgregarAutor',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(autor),
+                    success: function (response) {
+                        var autores = JSON.parse(response.personaJson)
+                        if (response != null) {
+                            per -= parseInt(autor.Porcentaje);
+                            $("#tablaAutores").append('<tr id="R${++rowIdx}"><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                        }
                     }
-                }
-            })
-        }
-    })
+                })
+                /*
+                $('#borrar').click(function () {
+                    //window.alert($('#email').val());
+                    console.log((this).parentElement.parentElement);
+                    (this).parentElement.parentElement.remove();
+                    delete autor;
+                })
+                */
+            }
+        })
+
+        $('#tablaAutores').on('click', '.remove', function () {
+            //console.log($(this).attr('email'));
+            var child = $(this).closest('tr').nextAll();
+            child.each(function () {
+                var id = $(this).attr('id');
+                var idx = $(this).children('.row-index').children('p');
+                var dig = parseInt(id.substring(1));
+                idx.html(`Row ${dig - 1}`);
+                $(this).attr('id', `R${dig - 1}`);
+            });
+            $(this).closest('tr').remove();
+        });
+
+    });
 
     $('#subirArchivo').submit(function (e) {
         e.preventDefault();

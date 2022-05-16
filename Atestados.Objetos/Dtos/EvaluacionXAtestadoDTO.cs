@@ -10,6 +10,7 @@ namespace Atestados.Objetos.Dtos
     {
         public int AtestadoID { get; set; }
         public int PersonaID { get; set; }
+        public int AutorID { get; set; }
         public float PorcentajeObtenido { get; set; }
         public string Observaciones { get; set; }
 
