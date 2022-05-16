@@ -354,6 +354,8 @@ namespace Atestados.Objetos
                     opt => opt.MapFrom(src => src.AtestadoID))
                 .ForMember(dest => dest.PersonaID,
                     opt => opt.MapFrom(src => src.PersonaID))
+                .ForMember(dest => dest.AutorID,
+                    opt => opt.MapFrom(src => src.AutorID))
                 .ForMember(dest => dest.PorcentajeObtenido,
                     opt => opt.MapFrom(src => src.PorcentajeObtenido))
                 .ForMember(dest => dest.Observaciones,
