@@ -16,6 +16,7 @@ namespace Atestados.Datos.Modelo
     {
         public int AtestadoID { get; set; }
         public int PersonaID { get; set; }
+        public int AutorID { get; set; }
         public double PorcentajeObtenido { get; set; }
         public string Observaciones { get; set; }
     
