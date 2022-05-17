@@ -258,6 +258,7 @@
             contentType: 'application/json; charset=utf-8',
             success: function (response) {
                 console.log(response);
+                if (response.length > 0) autoresCheck.checked = true;
                 response.forEach(function (autor) {
                     per -= parseInt(autor.Porcentaje);
                     $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.Porcentaje + '</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
