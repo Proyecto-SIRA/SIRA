@@ -33,7 +33,8 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    @Html.Partial("BotonRegresar")
+    <div class="mt-4">
         <h2>Evaluar</h2>
         <hr />
     </div>
@@ -56,14 +57,14 @@
                     </dl>
 
                     <form method="post">
-                        <dt>
-                            Formulario
-                        </dt>
-                        <div id="newRow">
-                            <input type="hidden" id="total" value="0" />
-                        </div>
-                        <button id="addRow" type="button" class="btn btn-outline-primary">Agregar</button>
-                        <input type="submit" class="btn btn-outline-primary" value="Crear" />
+                    <dt>
+                        Formulario
+                    </dt>
+                    <div id="newRow">
+                        <input type="hidden" id="total" value="0" />
+                    </div>
+                    <button id="addRow" type="button" class="btn btn-outline-primary">Agregar</button>
+                    <input type="submit" class="btn btn-outline-primary" value="Crear" />
                     </form>
                 </div>
                 <div class="col-lg-6">
@@ -83,7 +84,7 @@
                         </div>
                         <div class="form-group" style="margin-top: 10px">
                             <div class="col-md-offset-2 col-md-10">
-                                <input  value="Evaluar" class="btn btn-outline-primary" id="submit" />
+                                <input value="Evaluar" class="btn btn-outline-primary" id="submit" />
                                 <a class="btn btn-outline-primary" href="https://www.tec.ac.cr/reglamentos/normas-aplicacion-reglamento-carrera-profesional-instituto-tecnologico-costa-rica" target="_blank">Consultar Reglamento</a>
                             </div>
                         </div>
