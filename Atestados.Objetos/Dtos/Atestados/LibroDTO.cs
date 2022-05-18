@@ -23,7 +23,7 @@ namespace Atestados.Objetos.Dtos
         public string Observaciones { get; set; }
         public DateTime HoraCreacion { get; set; }
         [StringLength(250)]
-        [DisplayName("ISBN")]
+        [DisplayName("Enlace")]
         public string Enlace { get; set; }
         [Url]
         [StringLength(250)]

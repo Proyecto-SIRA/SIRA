@@ -72,10 +72,17 @@ namespace Atestados.UI.Controllers.Atestados
         // POST: Articulo/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Crear([Bind(Include = "Annio,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website")] LibroDTO atestado)
+        public ActionResult Crear([Bind(Include = "Annio,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,AutoresEq,AutoresCheck")] LibroDTO atestado)
         {
+            if (!atestado.AutoresCheck)
+                ModelState.AddModelError("AutoresCheck", "El libro debe tener al menos un autor.");
+            else
             if (ModelState.IsValid)
             {
+                List<AutorDTO> autores = (List <AutorDTO>)Session["Autores"];
+                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+                int porcentajeEq = 100 / autores.Count;
+
                 atestado.PersonaID = (int)Session["UsuarioID"]; 
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
                 Atestado a = AutoMapper.Mapper.Map<LibroDTO, Atestado>(atestado);
@@ -86,24 +93,56 @@ namespace Atestados.UI.Controllers.Atestados
                 Fecha fecha = AutoMapper.Mapper.Map<LibroDTO, Fecha>(atestado);
                 infoAtestado.GuardarFecha(fecha);
 
-                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 foreach (ArchivoDTO archivo in archivos)
                 {
                     Archivo ar = AutoMapper.Mapper.Map<ArchivoDTO, Archivo>(archivo);
                     ar.AtestadoID = a.AtestadoID;
                     infoAtestado.GuardarArchivo(ar);
                 }
-                List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
                 foreach (AutorDTO autor in autores)
                 {
-                    Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
-                    infoGeneral.GuardarPersona(persona);
-                    infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                    if (!autor.esFuncionario)
                     {
-                        AtestadoID = a.AtestadoID,
-                        PersonaID = persona.PersonaID,
-                        Porcentaje = autor.Porcentaje
-                    });
+                        Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
+                        persona.CategoriaActual = 1;
+                        persona.TipoUsuario = 4;
+                        infoGeneral.GuardarPersona(persona);
+                        if (atestado.AutoresEq)
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = persona.PersonaID,
+                                Porcentaje = porcentajeEq
+                            });
+                        else
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = persona.PersonaID,
+                                Porcentaje = autor.Porcentaje
+                            });
+                    } else
+                    {
+
+                        UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(autor.Email);
+                        var id = usuario.UsuarioID;
+
+                        if (atestado.AutoresEq)
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = id,
+                                Porcentaje = porcentajeEq
+                            });
+                        else
+                            infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
+                            {
+                                AtestadoID = a.AtestadoID,
+                                PersonaID = id,
+                                Porcentaje = autor.Porcentaje
+                            });
+                    }
                 }
 
                 Session["Archivos"] = new List<ArchivoDTO>();

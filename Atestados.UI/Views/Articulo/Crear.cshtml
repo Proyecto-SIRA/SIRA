@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
 }
 
+@using Atestados.Negocios.Negocios;
 @using Atestados.Objetos.Dtos;
 
 <div class="container-fluid">
@@ -29,15 +30,7 @@
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NumeroAutores, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.NumeroAutores, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.NumeroAutores, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Enlace, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <label for="Enlace" class="control-label col-md-2">DOI</label>
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.Enlace, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Enlace, "", new { @class = "text-danger" })
@@ -45,7 +38,7 @@
                     </div>
 
                     <div class="form-group">
-                        <b class="control-label col-md-2">Revista</b>
+                        <label for="Editorial" class="control-label col-md-2">Revista</label>
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.Editorial, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Editorial, "", new { @class = "text-danger" })
@@ -83,16 +76,21 @@
                             @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="btn btn-default" onclick="AbrirModal()">Agregar Autores</div>
-                        </div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAutores">
+                            Modificar autores
+                        </button>
+                        @Html.ValidationMessageFor(model => model.AutoresCheck, "", new { @class = "text-danger" })
+                    </div>
+                    <div hidden>
+                        @*Checkbox oculto porque si está dentro del modal, no devuelve el estado correctamente.*@
+                        @Html.CheckBoxFor(model => model.AutoresEq)
+                        @Html.CheckBoxFor(model => model.AutoresCheck)
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group my-2">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Crear" class="btn btn-default" id="submit" />
+                            <input type="submit" value="Crear" class="btn btn-success" id="submit" />
                         </div>
                     </div>
                 </div>
@@ -145,9 +143,24 @@
                             @item.Nombre
                         </td>
                         <td>
-                            @Html.ActionLink("Editar", "Editar", new { id = item.AtestadoID }) |
-                            @Html.ActionLink("Ver", "Ver", new { id = item.AtestadoID }) |
-                            @Html.ActionLink("Borrar", "Borrar", new { id = item.AtestadoID })
+                            <a href="@Url.Action("Editar", "Articulo", new { id = item.AtestadoID })" class="btn btn-warning btn-sm" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                </svg>
+                            </a>
+                            <a href="@Url.Action("Ver","Articulo", new {id = item.AtestadoID})" class="btn btn-primary btn-sm" title="Ver">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                                </svg>
+                            </a>
+                            <a href="@Url.Action("Borrar","Articulo", new {id = item.AtestadoID})" class="btn btn-danger btn-sm" title="Borrar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#000" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                </svg>
+                            </a>
                         </td>
                     </tr>
                 }
@@ -156,16 +169,15 @@
     </div>
 </div>
 
-
-<div id="autoresModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+<div id="modalAutores" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4>Agregar Autores</h4>
+                <h4 class="modal-title" id="staticBackdropLabel">Modificar autores</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped" >
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -174,23 +186,38 @@
                         </tr>
                     </thead>
                     <tbody id="tablaAutores">
-
                     </tbody>
+                </table>
+                <h3>Autor externo</h3>
+                <table class="table">
+                    <tr>
+                        <td><input class="form-control" type="text" placeholder="Nombre" id="nombre" /></td>
+                        <td><input class="form-control" type="text" placeholder="Primer apellido" id="apellido1" /></td>
+                        <td><input class="form-control" type="text" placeholder="Segundo apellido" id="apellido2" /></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" type="email" placeholder="Correo electrónico" id="email" /></td>
+                        <td><input class="form-control" type="number" placeholder="Porcentaje" id="porcentaje" /></td>
+                        <td><button type="button" class="btn btn-primary" id="autorAgregar">Agregar</button></td>
+                    </tr>
+                </table>
+                <h3>Funcionario del Tec</h3>
+                <table class="table">
+                    <tr>
+                        <td><input class="form-control" type="email" placeholder="Correo electrónico" id="email_funcionario" runat="server" /></td>
+                        <td><input class="form-control" type="number" placeholder="Porcentaje" id="porcentaje_funcionario" /></td>
+                        <td><button type="button" class="btn btn-primary" id="funcionarioAgregar">Agregar</button></td>
+                    </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <table class="table">
-                    <tr>
-                        <td><input type="text" placeholder="Nombre" id="nombre" /></td>
-                        <td><input type="text" placeholder="Primer apellido" id="apellido1" /></td>
-                        <td><input type="text" placeholder="Segundo apellido" id="apellido2" /></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" placeholder="Email" id="email" /></td>
-                        <td><input type="number" placeholder="Porcentaje" id="porcentaje" /></td>
-                        <td><button type="button" class="btn btn-default" id="autorAgregar">Agregar</button></td>
-                    </tr>
-                </table>
+                <div class="me-auto">
+                    <input class="form-check-input" type="checkbox" value="" id="hiddenCheck" name="hiddenCheck" />
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Porcentaje equitativo
+                    </label>
+                </div>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </div>
     </div>
@@ -198,34 +225,146 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
-
-    function AbrirModal() {
-        $("#autoresModal").modal()
-    }
-
-    function isEmail(email) {
-      var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,6})+$/;
-      return regex.test(email);
-    }
+@{InformacionGeneral infoGeneral = new InformacionGeneral();}
 
     var per = 100;
+    var modal = document.getElementById('modalAutores');
+    var checkbox = document.getElementById('AutoresEq');
+    var hiddenCheck = document.getElementById('hiddenCheck');
+    var autoresCheck = document.getElementById('AutoresCheck');
+
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,6})+$/;
+        return regex.test(email);
+    }
 
     function validPercentage(percentage) {
         return (per - percentage) >= 0 && percentage >= 0;
     }
 
+    hiddenCheck.onchange = function () {
+        document.getElementById('porcentaje').disabled = this.checked;
+        document.getElementById('porcentaje_funcionario').disabled = this.checked;
+        checkbox.checked = this.checked;
+    };
+
+    // Agregar autores a la tabla de autores.
+    $.ajax({
+            type: 'POST',
+            url: '@Variables.BaseUrl/Articulo/getAutores',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                response.forEach(function (autor) {
+                    per -= parseInt(autor.Porcentaje);
+                    $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.Porcentaje + '</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                });
+            }
+        })
+
+    // Agregar funcionarios como autores al libro.
+    $('#funcionarioAgregar').click(function () {
+        var usuario = new Object();
+        usuario.Email = $('#email_funcionario').val();
+
+        var funcionario = null;
+
+        $.ajax({
+            type: 'POST',
+            url: '@Variables.BaseUrl/Funcionario/UsuarioPorEmail',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(usuario),
+            success: function (response) {
+                funcionario = JSON.parse(response.usuario)
+            }
+        })
+        console.log($('#email_funcionario').val());
+        console.log($('#porcentaje_funcionario').val());
+        console.log(funcionario);
+
+        if (!funcionario) {
+            console.log("XD");
+            alert("Funcionario no encontrado");
+        } else {
+            var autor = new Object()
+            autor.Nombre = funcionario.Nombre
+            autor.PrimerApellido = funcionario.PrimerApellido
+            autor.SegundoApellido = funcionario.SegundoApellido
+            autor.Email = funcionario.Email
+            autor.esFuncionario = true
+            autor.PersonaID = funcionario.UsuarioID
+            if (checkbox.checked) {
+                autor.Porcentaje = 'Equitativo';
+            } else if ($('#porcentaje_funcionario').val() == "") {
+                alert("Debe ingresar un porcentaje");
+                return;
+            } else {
+                autor.Porcentaje = $('#porcentaje_funcionario').val()
+            }
+
+
+            if (autor != null && isEmail(autor.Email) && checkbox.checked) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Variables.BaseUrl/Articulo/AgregarAutor',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(autor),
+                    success: function (response) {
+                        var autores = JSON.parse(response.personaJson)
+                        if (response != null) {
+                            per -= parseInt(autor.Porcentaje);
+                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                        }
+                    }
+                })
+            }
+            else if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Variables.BaseUrl/Articulo/AgregarAutor',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(autor),
+                    success: function (response) {
+                        var autores = JSON.parse(response.personaJson)
+                        if (response != null) {
+                            per -= parseInt(autor.Porcentaje);
+                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                        }
+                    }
+                })
+            }
+        }
+
+    });
+
+    // Agregar un agente externo como autor.
     $('#autorAgregar').click(function () {
         var autor = new Object()
         autor.Nombre = $('#nombre').val()
         autor.PrimerApellido = $('#apellido1').val()
         autor.SegundoApellido = $('#apellido2').val()
         autor.Email = $('#email').val()
-        autor.Porcentaje = $('#porcentaje').val()
+        autor.esFuncionario = false
+        if (checkbox.checked) {
+            autor.Porcentaje = 'Equitativo';
+        } else {
+            autor.Porcentaje = $('#porcentaje').val()
+        }
 
-        if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
+
+        if (autor != null && isEmail(autor.Email) && checkbox.checked) {
+            autoresCheck.checked = true;
             $.ajax({
                 type: 'POST',
                 url: '@Variables.BaseUrl/Articulo/AgregarAutor',
+                async: false,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 data: JSON.stringify(autor),
@@ -233,12 +372,61 @@
                     var autores = JSON.parse(response.personaJson)
                     if (response != null) {
                         per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td><td><a>Borrar</a></td></td></tr>')
+                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
                     }
                 }
             })
         }
+        else if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
+            autoresCheck.checked = true;
+            $.ajax({
+                type: 'POST',
+                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(autor),
+                success: function (response) {
+                    var autores = JSON.parse(response.personaJson)
+                    if (response != null) {
+                        per -= parseInt(autor.Porcentaje);
+                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                    }
+                }
+            })
+        }
+
+
     })
+
+    $('#tablaAutores').on('click', '.remove', function () {
+
+        var autor = new Object()
+        autor.Email = $(this).attr('email');
+        var child = $(this).closest('tr').nextAll();
+        child.each(function () {
+            var id = $(this).attr('id');
+            var idx = $(this).children('.row-index').children('p');
+            var dig = parseInt(id.substring(1));
+            idx.html(`Row ${dig - 1}`);
+            $(this).attr('id', `R${dig - 1}`);
+        });
+        console.log($(this).attr('email'));
+        $(this).closest('tr').remove();
+
+        $.ajax({
+                type: 'POST',
+                url: '@Variables.BaseUrl/Articulo/borrarAutor',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(autor),
+                success: function (response) {
+                    console.log("autor eliminado");
+                }
+            })
+
+    });
 
     $('#subirArchivo').submit(function (e) {
         e.preventDefault();
