@@ -233,18 +233,18 @@ namespace Atestados.UI.Controllers.Atestados
             Session["idAtestado"] = id;
             Session["idUsuario"] = usuario.UsuarioID;
 
-            EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
+            //EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
 
             ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
             ViewBag.Atestado = infoAtestado.CargarAtestado(id);
-
+            /*
             if (e != null)
             {
                 EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
                 ViewBag.Evaluacion = edto;
                 return View(edto);
             }
-
+            */
             AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
             if (atestado == null)
             {
@@ -284,7 +284,7 @@ namespace Atestados.UI.Controllers.Atestados
                     Observaciones = evaluacion.Observaciones
                 };
 
-
+                /*
                 EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
 
                 if (evaluacionActual != null)
@@ -292,7 +292,7 @@ namespace Atestados.UI.Controllers.Atestados
                     //db.EvaluaciónXAtestado.Remove(evaluacionActual);
                     infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
                 }
-
+                */
                 db.EvaluaciónXAtestado.Add(e);
 
 

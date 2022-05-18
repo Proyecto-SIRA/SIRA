@@ -61,9 +61,11 @@
           <Key>
             <PropertyRef Name="AtestadoID" />
             <PropertyRef Name="PersonaID" />
+            <PropertyRef Name="AutorID" />
           </Key>
           <Property Name="AtestadoID" Type="int" Nullable="false" />
           <Property Name="PersonaID" Type="int" Nullable="false" />
+          <Property Name="AutorID" Type="int" Nullable="false" />
           <Property Name="PorcentajeObtenido" Type="float" Nullable="false" />
           <Property Name="Observaciones" Type="varchar(max)" Nullable="false" />
         </EntityType>
@@ -302,6 +304,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EvaluaciónXAtestado_Persona1">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+          <End Role="EvaluaciónXAtestado" Type="Self.EvaluaciónXAtestado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="PersonaID" />
+            </Principal>
+            <Dependent Role="EvaluaciónXAtestado">
+              <PropertyRef Name="AutorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Fecha_AtestadoID">
           <End Role="Atestado" Type="Self.Atestado" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -424,6 +438,10 @@
             <End Role="EvaluaciónXAtestado" EntitySet="EvaluaciónXAtestado" />
           </AssociationSet>
           <AssociationSet Name="FK_EvaluaciónXAtestado_Persona" Association="Self.FK_EvaluaciónXAtestado_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="EvaluaciónXAtestado" EntitySet="EvaluaciónXAtestado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EvaluaciónXAtestado_Persona1" Association="Self.FK_EvaluaciónXAtestado_Persona1">
             <End Role="Persona" EntitySet="Persona" />
             <End Role="EvaluaciónXAtestado" EntitySet="EvaluaciónXAtestado" />
           </AssociationSet>
@@ -571,6 +589,7 @@
           <NavigationProperty Name="TipoCategoria" Relationship="AtestadosModel.FK_Persona_TipoCategoria" FromRole="Persona" ToRole="TipoCategoria" />
           <NavigationProperty Name="TipoUsuario1" Relationship="AtestadosModel.FK_Persona_TipoUsuario" FromRole="Persona" ToRole="TipoUsuario" />
           <Property Name="esActivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EvaluaciónXAtestado1" Relationship="AtestadosModel.FK_EvaluaciónXAtestado_Persona1" FromRole="Persona" ToRole="EvaluaciónXAtestado" />
         </EntityType>
         <EntityType Name="Rubro">
           <Key>
@@ -838,6 +857,10 @@
             <End Role="Persona" EntitySet="Persona" />
           </AssociationSet>
           <EntitySet Name="sysdiagrams" EntityType="AtestadosModel.sysdiagrams" />
+          <AssociationSet Name="FK_EvaluaciónXAtestado_Persona1" Association="AtestadosModel.FK_EvaluaciónXAtestado_Persona1">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="EvaluaciónXAtestado" EntitySet="EvaluaciónXAtestado" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="TipoCategoria">
           <Key>
@@ -861,6 +884,7 @@
           <Key>
             <PropertyRef Name="AtestadoID" />
             <PropertyRef Name="PersonaID" />
+            <PropertyRef Name="AutorID" />
           </Key>
           <Property Name="AtestadoID" Type="Int32" Nullable="false" />
           <Property Name="PersonaID" Type="Int32" Nullable="false" />
@@ -868,6 +892,8 @@
           <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Atestado" Relationship="AtestadosModel.FK_EvaluaciónXAtestado_Atestado" FromRole="EvaluaciónXAtestado" ToRole="Atestado" />
           <NavigationProperty Name="Persona" Relationship="AtestadosModel.FK_EvaluaciónXAtestado_Persona" FromRole="EvaluaciónXAtestado" ToRole="Persona" />
+          <Property Name="AutorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Persona1" Relationship="AtestadosModel.FK_EvaluaciónXAtestado_Persona1" FromRole="EvaluaciónXAtestado" ToRole="Persona" />
         </EntityType>
         <Association Name="FK_EvaluaciónXAtestado_Atestado">
           <End Type="AtestadosModel.Atestado" Role="Atestado" Multiplicity="1" />
@@ -927,6 +953,18 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <Association Name="FK_EvaluaciónXAtestado_Persona1">
+          <End Type="AtestadosModel.Persona" Role="Persona" Multiplicity="1" />
+          <End Type="AtestadosModel.EvaluaciónXAtestado" Role="EvaluaciónXAtestado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="PersonaID" />
+            </Principal>
+            <Dependent Role="EvaluaciónXAtestado">
+              <PropertyRef Name="AutorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1086,6 +1124,7 @@
           <EntitySetMapping Name="EvaluaciónXAtestado">
             <EntityTypeMapping TypeName="AtestadosModel.EvaluaciónXAtestado">
               <MappingFragment StoreEntitySet="EvaluaciónXAtestado">
+                <ScalarProperty Name="AutorID" ColumnName="AutorID" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
                 <ScalarProperty Name="PorcentajeObtenido" ColumnName="PorcentajeObtenido" />
                 <ScalarProperty Name="PersonaID" ColumnName="PersonaID" />
