@@ -154,9 +154,9 @@ namespace Atestados.Negocios.Negocios
             return query;
         }
 
-        public EvaluaciónXAtestado ObtenerEvaluacionXAtestado(int idAtestado, int idPersona)
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionXAtestadoRevisor(int idAtestado, int idPersona)
         {
-            EvaluaciónXAtestado query = db.EvaluaciónXAtestado.Find(idAtestado, idPersona);
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == idAtestado && a.PersonaID == idPersona).ToList();
             return query;
         }
 

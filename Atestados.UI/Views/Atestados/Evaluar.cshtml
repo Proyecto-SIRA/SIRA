@@ -74,6 +74,10 @@
                         <div class="form-group" id="autores">
 
                         </div>
+                        <br />
+                        <div class="col-md-offset-2 col-md-10">
+                            <input value="Guardar Puntaje" class="btn btn-outline-primary" id="guardarPuntaje" />
+                        </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
@@ -83,7 +87,7 @@
                         </div>
                         <div class="form-group" style="margin-top: 10px">
                             <div class="col-md-offset-2 col-md-10">
-                                <input  value="Evaluar" class="btn btn-outline-primary" id="submit" />
+                                <input type="submit" value="Evaluar" class="btn btn-outline-primary" id="submit" />
                                 <a class="btn btn-outline-primary" href="https://www.tec.ac.cr/reglamentos/normas-aplicacion-reglamento-carrera-profesional-instituto-tecnologico-costa-rica" target="_blank">Consultar Reglamento</a>
                             </div>
                         </div>
@@ -109,7 +113,7 @@
                 $("#autores").append(
                     '<dt>' + autor.Nombre +' ' + autor.PrimerApellido + '</dt>' +
                     '<div id="' + i + '">' +
-                    '<input type="number" class="puntaje" name="[' + autor.PersonaID + '].Puntaje"  />' +
+                    '<input type="number" class="puntaje" name="' + autor.PersonaID + '"  />' +
                     '</div>'
                 )
                 i += 1;
@@ -118,9 +122,36 @@
         }
     })
 
+
     $('#submit').click(function () {
 
-    }
+        var autores = []
+
+        $(".puntaje").each(function () {
+            var autor = new Object();
+            autor.AutorID = $(this).attr('name');
+            autor.PorcentajeObtenido = $(this).val();
+            console.log($(this).attr('name') + ": " + $(this).val());
+
+            autores.push(autor);
+
+        });
+
+        //console.log(autores);
+        console.log(JSON.stringify(autores));
+
+        $.ajax({
+            type: 'POST',
+            url: '@Variables.BaseUrl/Atestados/AsignarPuntos',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(autores),
+            success: function (response) {
+                console.log("guardando puntajes");
+            }
+        })
+    })
 
 
 </script>
