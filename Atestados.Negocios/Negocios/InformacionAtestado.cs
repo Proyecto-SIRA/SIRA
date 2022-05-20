@@ -173,6 +173,13 @@ namespace Atestados.Negocios.Negocios
             db.SaveChanges();
         }
 
+        public void ModificarEvaluacion(int idAtestado, int idPersona, int idAutor, double porcentajeObtenido)
+        {
+            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona, idAutor);
+            e.PorcentajeObtenido = porcentajeObtenido;
+            db.SaveChanges();
+        }
+
         public List<PersonaDTO> ObtenerAutores(int idAtestado)
         {
             List<AtestadoXPersona> query = db.AtestadoXPersona.Where(a => a.AtestadoID == idAtestado).ToList();

@@ -306,13 +306,15 @@ namespace Atestados.UI.Controllers
                 
                     if (evaluacionActual != null)
                     {
-                        infoAtestado.BorrarEvaluacion(evaluacionActual.AtestadoID, evaluacionActual.PersonaID, evaluacionActual.AutorID);
+                        infoAtestado.ModificarEvaluacion(e.AtestadoID, e.PersonaID, e.AutorID, e.PorcentajeObtenido);
                     }
-                    db.EvaluaciónXAtestado.Add(e);
+                    else
+                    {
+                        db.EvaluaciónXAtestado.Add(e);
+                        db.SaveChanges();
+                    }
 
 
-                    db.SaveChanges();
-            
                 }
 
 
