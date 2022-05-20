@@ -160,9 +160,15 @@ namespace Atestados.Negocios.Negocios
             return query;
         }
 
-        public void BorrarEvaluacion(int idAtestado, int idPersona)
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionXAtestado(int idAtestado, int idPersona, int idAutor)
         {
-            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona);
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == idAtestado && a.PersonaID == idPersona && a.AutorID == idAutor).ToList();
+            return query;
+        }
+
+        public void BorrarEvaluacion(int idAtestado, int idPersona, int idAutor)
+        {
+            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona, idAutor);
             db.EvaluaciónXAtestado.Remove(e);
             db.SaveChanges();
         }
@@ -520,7 +526,6 @@ namespace Atestados.Negocios.Negocios
             db.AtestadoXPersona.Remove(atestadoXPersona);
             db.SaveChanges();
         }
-
         #endregion
 
         #region DominioIdioma

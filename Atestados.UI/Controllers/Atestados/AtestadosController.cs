@@ -302,14 +302,12 @@ namespace Atestados.UI.Controllers
                         Observaciones = evaluacion.Observaciones
                     };
 
-                    /*
-                    EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
+                    EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado(e.AtestadoID, e.PersonaID, e.AutorID)[0];
                 
                     if (evaluacionActual != null)
                     {
-                        infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
+                        infoAtestado.BorrarEvaluacion(evaluacionActual.AtestadoID, evaluacionActual.PersonaID, evaluacionActual.AutorID);
                     }
-                    */
                     db.EvaluaciónXAtestado.Add(e);
 
 
