@@ -1,0 +1,50 @@
+﻿@model Atestados.Objetos.Dtos.PersonaDTO
+
+@using Atestados.Objetos.Dtos;
+@{
+    ViewBag.Title = "Ver Usuario";
+    Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="mt-4">
+        <h2>Ver Persona</h2>
+        <hr />
+    </div>
+    <p>Nombre: @Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</p>
+    <div class="row">
+        <h4>Puntos obtenidos</h4>
+    </div>
+    <div class="row table-wraper scrollbar">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Tipo Atestado
+                    </th>
+                    <th>
+                        Paso Actual
+                    </th>
+                    <th>
+                        Acumulado
+                    </th
+                </tr>
+            </thead>
+            <tbody>
+                @for(int i = 0; i < 2; i++){
+                    <tr>
+                        <td scope="col">
+                            Total
+                        </td>
+                        <td scope="col">
+                            50/50
+                        </td>
+                        <td scope="col">
+                            200
+                        </td>
+                    </tr>
+    }
+            </tbody>
+        </table>
+    </div>
+</div>

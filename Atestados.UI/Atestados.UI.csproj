@@ -425,6 +425,7 @@
     <Content Include="Views\Atestados\Evaluar.cshtml" />
     <Content Include="Views\Shared\Links.cshtml" />
     <Content Include="Views\Shared\BotonRegresar.cshtml" />
+    <Content Include="Views\Administrador\Ver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
