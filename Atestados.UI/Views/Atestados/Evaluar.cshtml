@@ -113,7 +113,7 @@
                 $("#autores").append(
                     '<dt>' + autor.Nombre +' ' + autor.PrimerApellido + '</dt>' +
                     '<div id="' + i + '">' +
-                    '<input type="number" class="puntaje" name="' + autor.PersonaID + '"  />' +
+                    '<input type="number" class="puntaje" name="' + autor.PersonaID + '" min="0" max="100"  />' +
                     '</div>'
                 )
                 i += 1;
