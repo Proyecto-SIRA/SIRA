@@ -15,5 +15,6 @@ namespace Atestados.Objetos.Dtos
         public double PuntosPasoActual { get; set; }
         public double PuntosMaximosPasoActual { get; set; }
         public double PuntosAcumulados { get; set; }
+        public double PuntosMaximosAcumulados { get; set; }
     }
 }

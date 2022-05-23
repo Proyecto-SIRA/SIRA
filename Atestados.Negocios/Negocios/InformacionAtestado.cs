@@ -7,6 +7,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Atestados.Negocios.Negocios
 {
@@ -217,6 +218,60 @@ namespace Atestados.Negocios.Negocios
         {
             List<EnviadoDTO> enviados = PersonasEntregaron();
             return enviados.FirstOrDefault(x => x.PersonaID == personaID);
+        }
+
+        public float ObtenerNotaAtestado(AtestadoDTO atestado)
+        {
+            var id = atestado.AtestadoID;
+            var evaluaciones = ObtenerEvaluacionesAtestado(id);
+            if (evaluaciones.Count == 0)
+            {
+                return 0;
+            }
+
+            var porcentaje = .0;
+
+            foreach (EvaluaciónXAtestado evaluacion in evaluaciones)
+            {
+                porcentaje += evaluacion.PorcentajeObtenido;
+            }
+
+            var r = porcentaje / evaluaciones.Count;
+
+            return (float)r;
+        }
+
+        public List<PuntosXRubroDTO> CargarPuntosPersona(int id)
+        {
+            List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
+
+            PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
+            puntosXRubroDTO.Rubro = "Libro";
+            puntosXRubroDTO.PuntosPasoActual = CalcularPuntosAtestado(41);
+            puntosXRubroDTO.PuntosMaximosPasoActual = 10;
+            puntosXRubroDTO.PuntosAcumulados = 25;
+
+            PuntosXRubroDTO puntosXRubroDTO2 = new PuntosXRubroDTO();
+            puntosXRubroDTO2.Rubro = "Total 2";
+            puntosXRubroDTO2.PuntosPasoActual = 6;
+            puntosXRubroDTO2.PuntosMaximosPasoActual = 16;
+            puntosXRubroDTO2.PuntosAcumulados = 23;
+
+            puntosXRubroDTOs.Add(puntosXRubroDTO);
+            puntosXRubroDTOs.Add(puntosXRubroDTO2);
+
+            return puntosXRubroDTOs;
+        }
+
+        public double CalcularPuntosAtestado(int idAtestado)
+        {
+            Atestado atestado = db.Atestado.Find(idAtestado);
+            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
+            if (atestado.Rubro.Nombre == "Libro")
+            {
+                return (ObtenerNotaAtestado(atestadoDTO) * 14) / 100;
+            }
+            return 0;
         }
 
         #endregion

@@ -22,6 +22,7 @@ namespace Atestados.UI.Controllers
         }
 
         InformacionGeneral info = new InformacionGeneral();
+        InformacionAtestado infoAtestado = new InformacionAtestado();
         // GET: Administrador
         public ActionResult Index()
         {
@@ -52,24 +53,7 @@ namespace Atestados.UI.Controllers
         [HttpGet]
         public ActionResult Ver(int id)
         {
-            List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
-
-            PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
-            puntosXRubroDTO.Rubro = "Total";
-            puntosXRubroDTO.PuntosPasoActual = 5;
-            puntosXRubroDTO.PuntosMaximosPasoActual = 10;
-            puntosXRubroDTO.PuntosAcumulados = 25;
-
-            PuntosXRubroDTO puntosXRubroDTO2 = new PuntosXRubroDTO();
-            puntosXRubroDTO2.Rubro = "Total 2";
-            puntosXRubroDTO2.PuntosPasoActual = 6;
-            puntosXRubroDTO2.PuntosMaximosPasoActual = 16;
-            puntosXRubroDTO2.PuntosAcumulados = 23;
-
-            puntosXRubroDTOs.Add(puntosXRubroDTO);
-            puntosXRubroDTOs.Add(puntosXRubroDTO2);
-
-            ViewBag.PuntosXRubroDTOs = puntosXRubroDTOs;
+            ViewBag.PuntosXRubroDTOs = infoAtestado.CargarPuntosPersona(id);
 
             return View(info.CargarPersona(id));
         }

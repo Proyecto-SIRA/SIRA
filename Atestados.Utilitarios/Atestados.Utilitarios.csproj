@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Clases\ManejoArchivos.cs" />
     <Compile Include="Clases\Utilitarios.cs" />
+    <Compile Include="Constantes\Puntos.cs" />
     <Compile Include="Constantes\Constantes.cs" />
     <Compile Include="Mensajes\Mensajes.Designer.cs">
       <AutoGen>True</AutoGen>
