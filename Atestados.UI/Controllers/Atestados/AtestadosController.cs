@@ -302,8 +302,12 @@ namespace Atestados.UI.Controllers
                         Observaciones = evaluacion.Observaciones
                     };
 
-                    EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado(e.AtestadoID, e.PersonaID, e.AutorID)[0];
-                
+                    List<EvaluaciónXAtestado> evaluacionesActuales = infoAtestado.ObtenerEvaluacionXAtestado(e.AtestadoID, e.PersonaID, e.AutorID);
+                    EvaluaciónXAtestado evaluacionActual = null;
+                    if (evaluacionesActuales.Count > 0)
+                    {
+                        evaluacionActual = evaluacionesActuales.First();
+                    }
                     if (evaluacionActual != null)
                     {
                         infoAtestado.ModificarEvaluacion(e.AtestadoID, e.PersonaID, e.AutorID, e.PorcentajeObtenido);

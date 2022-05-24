@@ -155,6 +155,12 @@ namespace Atestados.Negocios.Negocios
             return query;
         }
 
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionesAtestadoPorAutor(int id, int idAutor)
+        {
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == id && a.AutorID == idAutor).ToList();
+            return query;
+        }
+
         public List<EvaluaciónXAtestado> ObtenerEvaluacionXAtestadoRevisor(int idAtestado, int idPersona)
         {
             List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == idAtestado && a.PersonaID == idPersona).ToList();
@@ -223,7 +229,18 @@ namespace Atestados.Negocios.Negocios
         public float ObtenerNotaAtestado(AtestadoDTO atestado)
         {
             var id = atestado.AtestadoID;
-            var evaluaciones = ObtenerEvaluacionesAtestado(id);
+            List<EvaluaciónXAtestado> evaluaciones = ObtenerEvaluacionesAtestado(id);
+            return CalcularPonderado(evaluaciones);
+        }
+
+        public float ObtenerNotaAtestadoPorAutor(AtestadoDTO atestado, int idAutor)
+        {
+            var id = atestado.AtestadoID;
+            List<EvaluaciónXAtestado> evaluaciones = ObtenerEvaluacionesAtestadoPorAutor(id, idAutor);
+            return CalcularPonderado(evaluaciones);
+        }
+
+        private float CalcularPonderado(List<EvaluaciónXAtestado> evaluaciones){
             if (evaluaciones.Count == 0)
             {
                 return 0;
@@ -272,6 +289,19 @@ namespace Atestados.Negocios.Negocios
                 return (ObtenerNotaAtestado(atestadoDTO) * 14) / 100;
             }
             return 0;
+        }
+
+        public List<double> CargarNotasPonderadasAutores(int? id)
+        {
+            List<AutorDTO> autores = CargarAutoresAtestado(id);
+            List<double> notasPonderadas = new List<double>();
+            Atestado atestado = db.Atestado.Find(id);
+            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
+            foreach (AutorDTO autor in autores)
+            {
+                notasPonderadas.Add(ObtenerNotaAtestadoPorAutor(atestadoDTO, autor.PersonaID));
+            }
+            return notasPonderadas;
         }
 
         #endregion

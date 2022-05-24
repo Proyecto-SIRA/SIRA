@@ -41,6 +41,7 @@ namespace Atestados.UI.Controllers.Atestados
                 return HttpNotFound();
             }
             ViewBag.Autores = infoAtestado.CargarAutoresAtestado(id);
+            ViewBag.NotasPonderadas = infoAtestado.CargarNotasPonderadasAutores(id);
             UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
             Session["TipoUsuario"] = usuario.TipoUsuario;
             Session["idAtestado"] = id;
