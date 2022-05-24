@@ -42,6 +42,7 @@ namespace Atestados.UI.Controllers.Atestados
             }
             ViewBag.Autores = infoAtestado.CargarAutoresAtestado(id);
             ViewBag.NotasPonderadas = infoAtestado.CargarNotasPonderadasAutores(id);
+            ViewBag.Puntos = infoAtestado.CargarPuntosAutores(id);            
             UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
             Session["TipoUsuario"] = usuario.TipoUsuario;
             Session["idAtestado"] = id;

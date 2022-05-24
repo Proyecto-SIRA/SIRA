@@ -286,10 +286,22 @@ namespace Atestados.Negocios.Negocios
             AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
             if (atestado.Rubro.Nombre == "Libro")
             {
-                return (ObtenerNotaAtestado(atestadoDTO) * 14) / 100;
+                return ObtenerNotaAtestado(atestadoDTO) * 14 / 100;
             }
             return 0;
         }
+
+        public double CalcularPuntosAtestadoPorAutor(int? idAtestado, int idAutor)
+        {
+            Atestado atestado = db.Atestado.Find(idAtestado);
+            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
+            if (atestado.Rubro.Nombre == "Libro")
+            {
+                return ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * 14 / 100;
+            }
+            return 0;
+        }
+
 
         public List<double> CargarNotasPonderadasAutores(int? id)
         {
@@ -303,6 +315,18 @@ namespace Atestados.Negocios.Negocios
             }
             return notasPonderadas;
         }
+
+        public List<double> CargarPuntosAutores(int? id)
+        {
+            List<AutorDTO> autores = CargarAutoresAtestado(id);
+            List<double> puntos = new List<double>();
+            foreach (AutorDTO autor in autores)
+            {
+                puntos.Add(CalcularPuntosAtestadoPorAutor(id, autor.PersonaID));
+            }
+            return puntos;
+        }
+
 
         #endregion
 
