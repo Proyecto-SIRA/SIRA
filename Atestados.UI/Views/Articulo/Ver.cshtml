@@ -136,23 +136,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in ViewBag.Autores)
-                        {
-                        <tr>
-                            <td>
-                                @item.Nombre
-                            </td>
-                            <td>
-                                @item.PrimerApellido
-                            </td>
-                            <td>
-                                @item.Email
-                            </td>
-                            <td>
-                                @item.Porcentaje
-                            </td>
-                        </tr>
-                        }
+                        @Html.Partial("Autores")
                     </tbody>
                 </table>
             </div>

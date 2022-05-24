@@ -426,6 +426,7 @@
     <Content Include="Views\Shared\Links.cshtml" />
     <Content Include="Views\Shared\BotonRegresar.cshtml" />
     <Content Include="Views\Administrador\Ver.cshtml" />
+    <Content Include="Views\Shared\Autores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
