@@ -264,7 +264,7 @@ namespace Atestados.Negocios.Negocios
 
             PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
             puntosXRubroDTO.Rubro = "Libro";
-            puntosXRubroDTO.PuntosPasoActual = CalcularPuntosAtestado(41);
+            puntosXRubroDTO.PuntosPasoActual = CalcularPuntosAtestadoPorAutor(41, id);
             puntosXRubroDTO.PuntosMaximosPasoActual = 10;
             puntosXRubroDTO.PuntosAcumulados = 25;
 
@@ -278,17 +278,6 @@ namespace Atestados.Negocios.Negocios
             puntosXRubroDTOs.Add(puntosXRubroDTO2);
 
             return puntosXRubroDTOs;
-        }
-
-        public double CalcularPuntosAtestado(int idAtestado)
-        {
-            Atestado atestado = db.Atestado.Find(idAtestado);
-            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
-            if (atestado.Rubro.Nombre == "Libro")
-            {
-                return ObtenerNotaAtestado(atestadoDTO) * 14 / 100;
-            }
-            return 0;
         }
 
         public double CalcularPuntosAtestadoPorAutor(int? idAtestado, int idAutor)
