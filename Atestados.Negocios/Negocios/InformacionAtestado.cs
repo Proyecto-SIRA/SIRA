@@ -7,6 +7,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Atestados.Negocios.Negocios
 {
@@ -154,16 +155,35 @@ namespace Atestados.Negocios.Negocios
             return query;
         }
 
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionesAtestadoPorAutor(int id, int idAutor)
+        {
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == id && a.AutorID == idAutor).ToList();
+            return query;
+        }
+
         public List<EvaluaciónXAtestado> ObtenerEvaluacionXAtestadoRevisor(int idAtestado, int idPersona)
         {
             List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == idAtestado && a.PersonaID == idPersona).ToList();
             return query;
         }
 
-        public void BorrarEvaluacion(int idAtestado, int idPersona)
+        public List<EvaluaciónXAtestado> ObtenerEvaluacionXAtestado(int idAtestado, int idPersona, int idAutor)
         {
-            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona);
+            List<EvaluaciónXAtestado> query = db.EvaluaciónXAtestado.Where(a => a.AtestadoID == idAtestado && a.PersonaID == idPersona && a.AutorID == idAutor).ToList();
+            return query;
+        }
+
+        public void BorrarEvaluacion(int idAtestado, int idPersona, int idAutor)
+        {
+            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona, idAutor);
             db.EvaluaciónXAtestado.Remove(e);
+            db.SaveChanges();
+        }
+
+        public void ModificarEvaluacion(int idAtestado, int idPersona, int idAutor, double porcentajeObtenido)
+        {
+            EvaluaciónXAtestado e = db.EvaluaciónXAtestado.Find(idAtestado, idPersona, idAutor);
+            e.PorcentajeObtenido = porcentajeObtenido;
             db.SaveChanges();
         }
 
@@ -205,6 +225,98 @@ namespace Atestados.Negocios.Negocios
             List<EnviadoDTO> enviados = PersonasEntregaron();
             return enviados.FirstOrDefault(x => x.PersonaID == personaID);
         }
+
+        public float ObtenerNotaAtestado(AtestadoDTO atestado)
+        {
+            var id = atestado.AtestadoID;
+            List<EvaluaciónXAtestado> evaluaciones = ObtenerEvaluacionesAtestado(id);
+            return CalcularPonderado(evaluaciones);
+        }
+
+        public float ObtenerNotaAtestadoPorAutor(AtestadoDTO atestado, int idAutor)
+        {
+            var id = atestado.AtestadoID;
+            List<EvaluaciónXAtestado> evaluaciones = ObtenerEvaluacionesAtestadoPorAutor(id, idAutor);
+            return CalcularPonderado(evaluaciones);
+        }
+
+        private float CalcularPonderado(List<EvaluaciónXAtestado> evaluaciones){
+            if (evaluaciones.Count == 0)
+            {
+                return 0;
+            }
+
+            var porcentaje = .0;
+
+            foreach (EvaluaciónXAtestado evaluacion in evaluaciones)
+            {
+                porcentaje += evaluacion.PorcentajeObtenido;
+            }
+
+            var r = porcentaje / evaluaciones.Count;
+
+            return (float)r;
+        }
+
+        public List<PuntosXRubroDTO> CargarPuntosPersona(int id)
+        {
+            List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
+
+            PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
+            puntosXRubroDTO.Rubro = "Libro";
+            puntosXRubroDTO.PuntosPasoActual = CalcularPuntosAtestadoPorAutor(41, id);
+            puntosXRubroDTO.PuntosMaximosPasoActual = 10;
+            puntosXRubroDTO.PuntosAcumulados = 25;
+
+            PuntosXRubroDTO puntosXRubroDTO2 = new PuntosXRubroDTO();
+            puntosXRubroDTO2.Rubro = "Total 2";
+            puntosXRubroDTO2.PuntosPasoActual = 6;
+            puntosXRubroDTO2.PuntosMaximosPasoActual = 16;
+            puntosXRubroDTO2.PuntosAcumulados = 23;
+
+            puntosXRubroDTOs.Add(puntosXRubroDTO);
+            puntosXRubroDTOs.Add(puntosXRubroDTO2);
+
+            return puntosXRubroDTOs;
+        }
+
+        public double CalcularPuntosAtestadoPorAutor(int? idAtestado, int idAutor)
+        {
+            Atestado atestado = db.Atestado.Find(idAtestado);
+            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
+            AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(idAtestado, idAutor);
+            if (atestado.Rubro.Nombre == "Libro")
+            {
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * 14 / 100) * (atestadoXPersona.Porcentaje / 100));
+            }
+            return 0;
+        }
+
+
+        public List<double> CargarNotasPonderadasAutores(int? id)
+        {
+            List<AutorDTO> autores = CargarAutoresAtestado(id);
+            List<double> notasPonderadas = new List<double>();
+            Atestado atestado = db.Atestado.Find(id);
+            AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
+            foreach (AutorDTO autor in autores)
+            {
+                notasPonderadas.Add(ObtenerNotaAtestadoPorAutor(atestadoDTO, autor.PersonaID));
+            }
+            return notasPonderadas;
+        }
+
+        public List<double> CargarPuntosAutores(int? id)
+        {
+            List<AutorDTO> autores = CargarAutoresAtestado(id);
+            List<double> puntos = new List<double>();
+            foreach (AutorDTO autor in autores)
+            {
+                puntos.Add(CalcularPuntosAtestadoPorAutor(id, autor.PersonaID));
+            }
+            return puntos;
+        }
+
 
         #endregion
 
@@ -520,7 +632,6 @@ namespace Atestados.Negocios.Negocios
             db.AtestadoXPersona.Remove(atestadoXPersona);
             db.SaveChanges();
         }
-
         #endregion
 
         #region DominioIdioma

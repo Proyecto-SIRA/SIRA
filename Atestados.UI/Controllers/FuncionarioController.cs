@@ -128,23 +128,7 @@ namespace Atestados.UI.Controllers
         [HttpPost]
         public float notaAtestado(AtestadoDTO atestado)
         {
-            var id = atestado.AtestadoID;
-            var evaluaciones = infoAtestado.ObtenerEvaluacionesAtestado(id);
-            if (evaluaciones.Count == 0)
-            {
-                return 0;
-            }
-
-            var porcentaje = .0;
-
-            foreach (EvaluaciónXAtestado evaluacion in evaluaciones)  {
-                porcentaje += evaluacion.PorcentajeObtenido;
-            }
-
-            var r = porcentaje / evaluaciones.Count;
-
-            return (float) r;
-
+            return infoAtestado.ObtenerNotaAtestado(atestado);           
         }
 
     }

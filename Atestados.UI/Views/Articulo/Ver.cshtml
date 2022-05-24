@@ -116,46 +116,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="row table-wraper scrollbar-atestados">
-                <h4>Autores</h4>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <th>
-                                Apellidos
-                            </th>
-                            <th>
-                                Email
-                            </th>
-                            <th>
-                                Porcentaje
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in ViewBag.Autores)
-                        {
-                        <tr>
-                            <td>
-                                @item.Nombre
-                            </td>
-                            <td>
-                                @item.PrimerApellido
-                            </td>
-                            <td>
-                                @item.Email
-                            </td>
-                            <td>
-                                @item.Porcentaje
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+            @Html.Partial("Autores")
         </div>
     </div>
     <div class="row">

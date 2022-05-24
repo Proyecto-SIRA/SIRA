@@ -22,6 +22,7 @@ namespace Atestados.UI.Controllers
         }
 
         InformacionGeneral info = new InformacionGeneral();
+        InformacionAtestado infoAtestado = new InformacionAtestado();
         // GET: Administrador
         public ActionResult Index()
         {
@@ -47,6 +48,14 @@ namespace Atestados.UI.Controllers
             info.EditarPersona(persona);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult Ver(int id)
+        {
+            ViewBag.PuntosXRubroDTOs = infoAtestado.CargarPuntosPersona(id);
+
+            return View(info.CargarPersona(id));
         }
 
         [HttpGet]

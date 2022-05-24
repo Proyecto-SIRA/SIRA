@@ -1,0 +1,52 @@
+﻿<div class="row table-wraper scrollbar-atestados">
+    <h4>Autores</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Apellidos
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Porcentaje
+                </th>
+                <th>
+                    Nota ponderada
+                </th>
+                <th>
+                    Puntos obtenidos
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.Autores.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.Autores[i].Nombre
+                    </td>
+                    <td>
+                        @ViewBag.Autores[i].PrimerApellido
+                    </td>
+                    <td>
+                        @ViewBag.Autores[i].Email
+                    </td>
+                    <td>
+                        @ViewBag.Autores[i].Porcentaje
+                    </td>
+                    <td>
+                        @ViewBag.NotasPonderadas[i]
+                    </td>
+                    <td>
+                        @ViewBag.Puntos[i]
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

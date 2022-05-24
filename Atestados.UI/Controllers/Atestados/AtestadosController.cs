@@ -302,19 +302,23 @@ namespace Atestados.UI.Controllers
                         Observaciones = evaluacion.Observaciones
                     };
 
-                    /*
-                    EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
-                
+                    List<EvaluaciónXAtestado> evaluacionesActuales = infoAtestado.ObtenerEvaluacionXAtestado(e.AtestadoID, e.PersonaID, e.AutorID);
+                    EvaluaciónXAtestado evaluacionActual = null;
+                    if (evaluacionesActuales.Count > 0)
+                    {
+                        evaluacionActual = evaluacionesActuales.First();
+                    }
                     if (evaluacionActual != null)
                     {
-                        infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
+                        infoAtestado.ModificarEvaluacion(e.AtestadoID, e.PersonaID, e.AutorID, e.PorcentajeObtenido);
                     }
-                    */
-                    db.EvaluaciónXAtestado.Add(e);
+                    else
+                    {
+                        db.EvaluaciónXAtestado.Add(e);
+                        db.SaveChanges();
+                    }
 
 
-                    db.SaveChanges();
-            
                 }
 
 
