@@ -63,6 +63,7 @@
                         @enviado.Atestados.Count
                     </td>
                     <td>
+                        @Html.ActionLink("Ver Puntos", "VerPuntos", new { id = enviado.PersonaID }) |
                         @Html.ActionLink("Descargar Excel", "GenerarExcel", new { id = enviado.PersonaID }) |
                         @Html.ActionLink("Descargar Archivos", "Descarga", new { id = enviado.PersonaID })
                         <!--| @Html.ActionLink("Ver", "VerFuncionario", new { id = enviado.PersonaID })-->

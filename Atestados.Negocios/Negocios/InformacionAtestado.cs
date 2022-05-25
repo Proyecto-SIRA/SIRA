@@ -286,7 +286,7 @@ namespace Atestados.Negocios.Negocios
             Atestado atestado = db.Atestado.Find(idAtestado);
             AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
             AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(idAtestado, idAutor);
-            if (atestado.Rubro.Nombre == "Libro")
+            if (atestado.Rubro.Nombre == "Libro" && atestadoXPersona != null)
             {
                 return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO / 100) * (atestadoXPersona.Porcentaje / 100));
             }

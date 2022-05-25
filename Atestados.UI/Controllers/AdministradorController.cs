@@ -51,14 +51,6 @@ namespace Atestados.UI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Ver(int id)
-        {
-            ViewBag.PuntosXRubroDTOs = infoAtestado.CargarPuntosPersona(id);
-
-            return View(info.CargarPersona(id));
-        }
-
-        [HttpGet]
         public ActionResult Editar(int id)
         {
             return View(info.CargarPersonaParaEditar(id));
