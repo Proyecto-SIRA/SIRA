@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Atestados.Utilitarios.Puntos;
 
 namespace Atestados.Negocios.Negocios
 {
@@ -287,7 +288,7 @@ namespace Atestados.Negocios.Negocios
             AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(idAtestado, idAutor);
             if (atestado.Rubro.Nombre == "Libro")
             {
-                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * 14 / 100) * (atestadoXPersona.Porcentaje / 100));
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO / 100) * (atestadoXPersona.Porcentaje / 100));
             }
             return 0;
         }

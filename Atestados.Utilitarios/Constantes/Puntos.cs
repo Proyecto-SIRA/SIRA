@@ -10,7 +10,7 @@ namespace Atestados.Utilitarios.Puntos
     {
         public struct Libro
         {
-            public const int UN_AUTOR = 14;
+            public const int MAXIMO = 14;
         }
 
         public struct Articulo
