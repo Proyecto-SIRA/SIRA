@@ -235,6 +235,8 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
                             <th>Porcentaje</th>
                             <th></th>
                         </tr>
@@ -243,11 +245,13 @@
                         @foreach (AutorDTO autor in ViewBag.Autores)
                         {
                             porcentaje -= autor.Porcentaje;
-                            <tr>
-                                <td>@autor.Nombre</td>
-                                <td>@autor.Porcentaje</td>
-                                @*<td><a>Borrar</a></td>*@
-                            </tr>
+                        <tr>
+                            <td>@autor.Nombre</td>
+                            <td>@autor.PrimerApellido</td>
+                            <td>@autor.SegundoApellido</td>
+                            <td>@autor.Porcentaje</td>
+                            @*<td><a>Borrar</a></td>*@
+                        </tr>
                         }
                     </tbody>
                 </table>
