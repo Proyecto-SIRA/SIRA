@@ -268,11 +268,40 @@ namespace Atestados.Negocios.Negocios
             List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
 
             // Total
-            PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
-            puntosXRubroDTO.Rubro = "Total";
-            puntosXRubroDTO.PuntosPasoActual = CalcularPuntosPorPersonaYRubro(id, "Libro");
-            puntosXRubroDTO.PuntosMaximosPasoActual = 10;
-            puntosXRubroDTO.PuntosAcumulados = 25;
+            PuntosXRubroDTO puntosTotalInfo = new PuntosXRubroDTO();
+            puntosTotalInfo.Rubro = "Total";
+            double puntosTotal = CalcularPuntosPorPersona(id);
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosTotal > puntosTotalInfo.PuntosMaximosPasoActual && puntosTotalInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosTotalInfo.PuntosPasoActual = puntosTotalInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosTotalInfo.PuntosPasoActual = puntosTotal;
+            }
+            puntosTotalInfo.PuntosMaximosAcumulados = Puntos.Total.MAXIMO_PROFESIONAL_4;
+            if (puntosTotal > puntosTotalInfo.PuntosMaximosAcumulados && puntosTotalInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosTotalInfo.PuntosAcumulados = puntosTotalInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosTotalInfo.PuntosAcumulados = puntosTotal;
+            }
 
             // Libro
             PuntosXRubroDTO puntosLibroInfo = new PuntosXRubroDTO();
@@ -311,10 +340,15 @@ namespace Atestados.Negocios.Negocios
             }
 
             // Añadir a lista
-            puntosXRubroDTOs.Add(puntosXRubroDTO);
+            puntosXRubroDTOs.Add(puntosTotalInfo);
             puntosXRubroDTOs.Add(puntosLibroInfo);
 
             return puntosXRubroDTOs;
+        }
+
+        private List<Atestado> ObtenerAtestadosPorPersona(int idPersona)
+        {
+            return db.Atestado.Where(a => a.PersonaID == idPersona).ToList();
         }
 
         private List<Atestado> ObtenerAtestadosPorPersonaYNombreRubro(int idPersona, string rubro)
@@ -322,9 +356,20 @@ namespace Atestados.Negocios.Negocios
             return db.Atestado.Where(a => a.PersonaID == idPersona && a.Rubro.Nombre == rubro).ToList();
         }
 
+        private double CalcularPuntosPorPersona(int idPersona)
+        {
+            List<Atestado> atestados = ObtenerAtestadosPorPersona(idPersona);
+            return CalcularPuntosAtestados(atestados, idPersona);
+        }
+
         private double CalcularPuntosPorPersonaYRubro(int idPersona, string rubro)
         {
             List<Atestado> atestados = ObtenerAtestadosPorPersonaYNombreRubro(idPersona, rubro);
+            return CalcularPuntosAtestados(atestados, idPersona);
+        }
+
+        private double CalcularPuntosAtestados(List<Atestado> atestados, int idPersona)
+        {
             double puntos = 0;
 
             foreach (Atestado atestado in atestados)

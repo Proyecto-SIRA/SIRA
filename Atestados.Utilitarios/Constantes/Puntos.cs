@@ -8,6 +8,12 @@ namespace Atestados.Utilitarios.Puntos
 {
     public static class Puntos
     {
+        public struct Total
+        {
+            public const int MAXIMO_PROFESIONAL_2 = 24;
+            public const int MAXIMO_PROFESIONAL_3 = 72;
+            public const int MAXIMO_PROFESIONAL_4 = 144;
+        }
         public struct Libro
         {
             public const int MAXIMO_POR_LIBRO = 14;
