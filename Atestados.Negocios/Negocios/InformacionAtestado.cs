@@ -261,22 +261,58 @@ namespace Atestados.Negocios.Negocios
 
         public List<PuntosXRubroDTO> CargarPuntosPersona(int id)
         {
+            // Obtener la categoría de la persona
+            var persona = db.Persona.Find(id);
+            var categoria = persona.TipoCategoria.Nombre;
+
             List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
 
+            // Total
             PuntosXRubroDTO puntosXRubroDTO = new PuntosXRubroDTO();
-            puntosXRubroDTO.Rubro = "Libro";
+            puntosXRubroDTO.Rubro = "Total";
             puntosXRubroDTO.PuntosPasoActual = CalcularPuntosPorPersonaYRubro(id, "Libro");
             puntosXRubroDTO.PuntosMaximosPasoActual = 10;
             puntosXRubroDTO.PuntosAcumulados = 25;
 
-            PuntosXRubroDTO puntosXRubroDTO2 = new PuntosXRubroDTO();
-            puntosXRubroDTO2.Rubro = "Total 2";
-            puntosXRubroDTO2.PuntosPasoActual = 6;
-            puntosXRubroDTO2.PuntosMaximosPasoActual = 16;
-            puntosXRubroDTO2.PuntosAcumulados = 23;
+            // Libro
+            PuntosXRubroDTO puntosLibroInfo = new PuntosXRubroDTO();
+            puntosLibroInfo.Rubro = "Libro";
+            double puntosLibro = CalcularPuntosPorPersonaYRubro(id, "Libro");
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosLibroInfo.PuntosMaximosPasoActual = Puntos.Libro.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosLibroInfo.PuntosMaximosPasoActual = Puntos.Libro.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosLibroInfo.PuntosMaximosPasoActual = Puntos.Libro.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosLibro > puntosLibroInfo.PuntosMaximosPasoActual && puntosLibroInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosLibroInfo.PuntosPasoActual = puntosLibroInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosLibroInfo.PuntosPasoActual = puntosLibro;
+            }
+            puntosLibroInfo.PuntosMaximosAcumulados = Puntos.Libro.MAXIMO_PROFESIONAL_4;
+            if (puntosLibro > puntosLibroInfo.PuntosMaximosAcumulados && puntosLibroInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosLibroInfo.PuntosAcumulados = puntosLibroInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosLibroInfo.PuntosAcumulados = puntosLibro;
+            }
 
+            // Añadir a lista
             puntosXRubroDTOs.Add(puntosXRubroDTO);
-            puntosXRubroDTOs.Add(puntosXRubroDTO2);
+            puntosXRubroDTOs.Add(puntosLibroInfo);
 
             return puntosXRubroDTOs;
         }
@@ -306,7 +342,7 @@ namespace Atestados.Negocios.Negocios
             AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(idAtestado, idAutor);
             if (atestado.Rubro.Nombre == "Libro" && atestadoXPersona != null)
             {
-                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO / 100) * (atestadoXPersona.Porcentaje / 100));
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO_POR_LIBRO / 100) * (atestadoXPersona.Porcentaje / 100));
             }
             return 0;
         }

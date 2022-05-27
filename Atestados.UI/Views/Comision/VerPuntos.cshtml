@@ -38,10 +38,17 @@
                         @puntosXRubroDTO.Rubro
                     </td>
                     <td>
-                        @puntosXRubroDTO.PuntosPasoActual / @puntosXRubroDTO.PuntosMaximosPasoActual
+                        @puntosXRubroDTO.PuntosPasoActual 
+                        @if(@puntosXRubroDTO.PuntosMaximosPasoActual != 0) { 
+                            <span>/</span> @puntosXRubroDTO.PuntosMaximosPasoActual
+                        }
                     </td>
                     <td>
                         @puntosXRubroDTO.PuntosAcumulados
+                        @if (@puntosXRubroDTO.PuntosMaximosAcumulados != 0)
+                        {
+                            <span>/</span> @puntosXRubroDTO.PuntosMaximosAcumulados
+                        }
                     </td>
                 </tr>
                 }

@@ -10,7 +10,10 @@ namespace Atestados.Utilitarios.Puntos
     {
         public struct Libro
         {
-            public const int MAXIMO = 14;
+            public const int MAXIMO_POR_LIBRO = 14;
+            public const int MAXIMO_PROFESIONAL_2 = 24;
+            public const int MAXIMO_PROFESIONAL_3 = 72;
+            public const int MAXIMO_PROFESIONAL_4 = 144;
         }
 
         public struct Articulo
