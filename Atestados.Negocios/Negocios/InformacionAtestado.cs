@@ -267,42 +267,6 @@ namespace Atestados.Negocios.Negocios
 
             List<PuntosXRubroDTO> puntosXRubroDTOs = new List<PuntosXRubroDTO>();
 
-            // Total
-            PuntosXRubroDTO puntosTotalInfo = new PuntosXRubroDTO();
-            puntosTotalInfo.Rubro = "Total";
-            double puntosTotal = CalcularPuntosPorPersona(id);
-            switch (categoria)
-            {
-                case "Primera":
-                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_2;
-                    break;
-                case "Segunda":
-                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_3;
-                    break;
-                case "Tercera":
-                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_4;
-                    break;
-                default:
-                    break;
-            }
-            if (puntosTotal > puntosTotalInfo.PuntosMaximosPasoActual && puntosTotalInfo.PuntosMaximosPasoActual != 0)
-            {
-                puntosTotalInfo.PuntosPasoActual = puntosTotalInfo.PuntosMaximosPasoActual;
-            }
-            else
-            {
-                puntosTotalInfo.PuntosPasoActual = puntosTotal;
-            }
-            puntosTotalInfo.PuntosMaximosAcumulados = Puntos.Total.MAXIMO_PROFESIONAL_4;
-            if (puntosTotal > puntosTotalInfo.PuntosMaximosAcumulados && puntosTotalInfo.PuntosMaximosAcumulados != 0)
-            {
-                puntosTotalInfo.PuntosAcumulados = puntosTotalInfo.PuntosMaximosAcumulados;
-            }
-            else
-            {
-                puntosTotalInfo.PuntosAcumulados = puntosTotal;
-            }
-
             // Libro
             PuntosXRubroDTO puntosLibroInfo = new PuntosXRubroDTO();
             puntosLibroInfo.Rubro = "Libro";
@@ -337,6 +301,44 @@ namespace Atestados.Negocios.Negocios
             else
             {
                 puntosLibroInfo.PuntosAcumulados = puntosLibro;
+            }
+
+            // Total
+            PuntosXRubroDTO puntosTotalInfo = new PuntosXRubroDTO();
+            puntosTotalInfo.Rubro = "Total";
+            // Sumar los puntos de todos los tipos de rubros
+            double puntosTotalPasoActual = puntosLibroInfo.PuntosPasoActual;
+            double puntosTotalAcumulados = puntosLibroInfo.PuntosAcumulados;
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosTotalInfo.PuntosMaximosPasoActual = Puntos.Total.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosTotalPasoActual > puntosTotalInfo.PuntosMaximosPasoActual && puntosTotalInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosTotalInfo.PuntosPasoActual = puntosTotalInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosTotalInfo.PuntosPasoActual = puntosTotalPasoActual;
+            }
+            puntosTotalInfo.PuntosMaximosAcumulados = Puntos.Total.MAXIMO_PROFESIONAL_4;
+            if (puntosTotalAcumulados > puntosTotalInfo.PuntosMaximosAcumulados && puntosTotalInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosTotalInfo.PuntosAcumulados = puntosTotalInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosTotalInfo.PuntosAcumulados = puntosTotalAcumulados;
             }
 
             // Añadir a lista
