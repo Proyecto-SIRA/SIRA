@@ -54,9 +54,9 @@ namespace Atestados.UI.Controllers
                     UsuarioDTO usuario = info.UsuarioPorEmail(email);
                     CrearSesion(usuario);
                     // Llevar al usuario a su panel principal según su tipo.
-                    if (usuario.UsuarioID == 1)
+                    if (usuario.TipoUsuario == 1)
                         return RedirectToAction("Index", "Administrador");
-                    if (usuario.UsuarioID == 2)
+                    if (usuario.TipoUsuario == 2)
                         return RedirectToAction("Index", "Comision");
                     else
                         return RedirectToAction("Index", "Funcionario");

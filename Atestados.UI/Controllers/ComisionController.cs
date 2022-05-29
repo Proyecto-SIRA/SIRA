@@ -115,5 +115,12 @@ namespace Atestados.UI.Controllers
             return View(atestado);
         }
 
+        [HttpGet]
+        public ActionResult VerPuntos(int id)
+        {
+            ViewBag.PuntosXRubroDTOs = infoAtestado.CargarPuntosPersona(id);
+
+            return View(infoGeneral.CargarPersona(id));
+        }
     }
 }

@@ -37,6 +37,7 @@
         <AssociationConnector Association="AtestadosModel.FK_Persona_TipoCategoria" />
         <AssociationConnector Association="AtestadosModel.FK_Persona_TipoUsuario" />
         <EntityTypeShape EntityType="AtestadosModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="AtestadosModel.FK_EvaluaciónXAtestado_Persona1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

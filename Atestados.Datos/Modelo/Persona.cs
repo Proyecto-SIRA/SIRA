@@ -20,6 +20,7 @@ namespace Atestados.Datos.Modelo
             this.Atestado = new HashSet<Atestado>();
             this.AtestadoXPersona = new HashSet<AtestadoXPersona>();
             this.EvaluaciónXAtestado = new HashSet<EvaluaciónXAtestado>();
+            this.EvaluaciónXAtestado1 = new HashSet<EvaluaciónXAtestado>();
         }
     
         public int PersonaID { get; set; }
@@ -30,8 +31,6 @@ namespace Atestados.Datos.Modelo
         public int CategoriaActual { get; set; }
         public int TipoUsuario { get; set; }
         public Nullable<int> Telefono { get; set; }
-
-        public int TiempoServido { get; set; }
         public bool esActivo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -43,5 +42,7 @@ namespace Atestados.Datos.Modelo
         public virtual ICollection<EvaluaciónXAtestado> EvaluaciónXAtestado { get; set; }
         public virtual TipoCategoria TipoCategoria { get; set; }
         public virtual TipoUsuario TipoUsuario1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EvaluaciónXAtestado> EvaluaciónXAtestado1 { get; set; }
     }
 }

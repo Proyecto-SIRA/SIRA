@@ -16,6 +16,7 @@ namespace Atestados.Objetos.Dtos
 
         public AtestadoDTO Atestado { get; set; }
         public PersonaDTO Persona { get; set; }
+        public PersonaDTO Autor { get; set; }
 
     }
 }

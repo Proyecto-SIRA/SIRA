@@ -33,7 +33,7 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="mt-4">
         <h2>Evaluar</h2>
         <hr />
     </div>
@@ -56,14 +56,14 @@
                     </dl>
 
                     <form method="post">
-                        <dt>
-                            Formulario
-                        </dt>
-                        <div id="newRow">
-                            <input type="hidden" id="total" value="0" />
-                        </div>
-                        <button id="addRow" type="button" class="btn btn-outline-primary">Agregar</button>
-                        <input type="submit" class="btn btn-outline-primary" value="Crear" />
+                    <dt>
+                        Formulario
+                    </dt>
+                    <div id="newRow">
+                        <input type="hidden" id="total" value="0" />
+                    </div>
+                    <button id="addRow" type="button" class="btn btn-outline-primary">Agregar</button>
+                    <input type="submit" class="btn btn-outline-primary" value="Crear" />
                     </form>
                 </div>
                 <div class="col-lg-6">
@@ -74,6 +74,8 @@
                         <div class="form-group" id="autores">
 
                         </div>
+                        <br />
+
                         <div class="form-group">
                             @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
@@ -109,7 +111,7 @@
                 $("#autores").append(
                     '<dt>' + autor.Nombre +' ' + autor.PrimerApellido + '</dt>' +
                     '<div id="' + i + '">' +
-                    '<input type="number" class="puntaje" name="[' + autor.PersonaID + '].Puntaje"  />' +
+                    '<input type="number" class="puntaje" name="' + autor.PersonaID + '" min="0" max="100"  />' +
                     '</div>'
                 )
                 i += 1;
@@ -118,9 +120,36 @@
         }
     })
 
+
     $('#submit').click(function () {
 
-    }
+        var autores = []
+
+        $(".puntaje").each(function () {
+            var autor = new Object();
+            autor.AutorID = $(this).attr('name');
+            autor.PorcentajeObtenido = $(this).val();
+            console.log($(this).attr('name') + ": " + $(this).val());
+
+            autores.push(autor);
+
+        });
+
+        //console.log(autores);
+        console.log(JSON.stringify(autores));
+
+        $.ajax({
+            type: 'POST',
+            url: '@Variables.BaseUrl/Atestados/AsignarPuntos',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(autores),
+            success: function (response) {
+                console.log("guardando puntajes");
+            }
+        })
+    })
 
 
 </script>

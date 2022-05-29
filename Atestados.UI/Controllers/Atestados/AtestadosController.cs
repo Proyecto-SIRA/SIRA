@@ -241,16 +241,16 @@ namespace Atestados.UI.Controllers
             Session["autoresAtestado"] = infoAtestado.ObtenerAutores((int)id);
 
 
-            EvaluaciónXAtestado e = infoAtestado.ObtenerEvaluacionXAtestado((int)id, usuario.UsuarioID);
+            List<EvaluaciónXAtestado> e = infoAtestado.ObtenerEvaluacionXAtestadoRevisor((int)id, usuario.UsuarioID);
 
             ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
             ViewBag.Atestado = infoAtestado.CargarAtestado(id);
 
             if (e != null)
             {
-                EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
-                ViewBag.Evaluacion = edto;
-                return View(edto);
+                //EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
+                //ViewBag.Evaluacion = edto;
+                //return View(evaluacion);
             }
 
             AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
@@ -267,7 +267,7 @@ namespace Atestados.UI.Controllers
         // POST: Atestados/Evaluar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Evaluar([Bind(Include = "PorcentajeObtenido, Observaciones")] EvaluacionXAtestadoDTO evaluacion)
+        public ActionResult Evaluar([Bind(Include = "Observaciones")] EvaluacionXAtestadoDTO evaluacion)
         {
             if (ModelState.IsValid)
             {
@@ -276,27 +276,50 @@ namespace Atestados.UI.Controllers
                 evaluacion.AtestadoID = (int)Session["idAtestado"];
                 evaluacion.PersonaID = (int)Session["idUsuario"];
 
-                EvaluaciónXAtestado e = new EvaluaciónXAtestado()
+                List<PersonaDTO> autores = (List<PersonaDTO>)Session["autoresAtestado"];
+                List<EvaluacionXAtestadoDTO> puntos = (List<EvaluacionXAtestadoDTO>)Session["puntosAutores"];
+
+                foreach (EvaluacionXAtestadoDTO eval in puntos)
                 {
-                    AtestadoID = evaluacion.AtestadoID,
-                    PersonaID = evaluacion.PersonaID,
-                    PorcentajeObtenido = (float)evaluacion.PorcentajeObtenido,
-                    Observaciones = evaluacion.Observaciones
-                };
+                    /*
+                    float porcentaje = 0;
+                    //int idAutor;
+                    foreach (EvaluacionXAtestadoDTO eval in puntos)
+                    {
+                        if (eval.AutorID == autor.PersonaID)
+                        {
+                            porcentaje = eval.PorcentajeObtenido;
+                        }
+                    }
+                    */
+
+                    EvaluaciónXAtestado e = new EvaluaciónXAtestado()
+                    {
+                        AtestadoID = evaluacion.AtestadoID,
+                        PersonaID = evaluacion.PersonaID,
+                        AutorID = eval.AutorID,
+                        PorcentajeObtenido = eval.PorcentajeObtenido,
+                        Observaciones = evaluacion.Observaciones
+                    };
+
+                    List<EvaluaciónXAtestado> evaluacionesActuales = infoAtestado.ObtenerEvaluacionXAtestado(e.AtestadoID, e.PersonaID, e.AutorID);
+                    EvaluaciónXAtestado evaluacionActual = null;
+                    if (evaluacionesActuales.Count > 0)
+                    {
+                        evaluacionActual = evaluacionesActuales.First();
+                    }
+                    if (evaluacionActual != null)
+                    {
+                        infoAtestado.ModificarEvaluacion(e.AtestadoID, e.PersonaID, e.AutorID, e.PorcentajeObtenido);
+                    }
+                    else
+                    {
+                        db.EvaluaciónXAtestado.Add(e);
+                        db.SaveChanges();
+                    }
 
 
-                EvaluaciónXAtestado evaluacionActual = infoAtestado.ObtenerEvaluacionXAtestado((int)Session["idAtestado"], (int)Session["idUsuario"]);
-
-                if (evaluacionActual != null)
-                {
-                    infoAtestado.BorrarEvaluacion((int)Session["idAtestado"], (int)Session["idUsuario"]);
                 }
-
-                db.EvaluaciónXAtestado.Add(e);
-
-
-                db.SaveChanges();
-
 
 
                 AtestadoDTO atestado = infoAtestado.CargarAtestado((int)Session["idAtestado"]);
@@ -322,6 +345,43 @@ namespace Atestados.UI.Controllers
             var autores = Session["autoresAtestado"];
             //var jsonTest = JsonConvert.SerializeObject(autores);
             return Json(autores);
+        }
+
+        // POST: Atestados/AsignarPuntos
+        [HttpPost]
+        public void AsignarPuntos(List<EvaluacionXAtestadoDTO> evaluacionData)
+        {
+            List<EvaluacionXAtestadoDTO> puntos = new List<EvaluacionXAtestadoDTO>();
+
+            foreach (EvaluacionXAtestadoDTO evaluacion in evaluacionData) {
+
+                EvaluacionXAtestadoDTO e = new EvaluacionXAtestadoDTO()
+                {
+                    AutorID = (int)evaluacion.AutorID,
+                    PorcentajeObtenido = (int)evaluacion.PorcentajeObtenido
+                };
+
+                puntos.Add(e);
+
+            }
+
+            Session["puntosAutores"] = puntos;
+
+            //Object[] autores = (Object[])Session["autoresAtestado"];
+
+            //Object[] newautores; 
+            /*
+            foreach (Object autor in autores)
+            {
+                foreach (EvaluacionXAtestadoDTO e in json)
+                {
+                    if (e.PersonaID == autor.)
+                }
+                autor.PorcentajeObtenido
+            }
+            */
+            //List<EvaluacionXAtestadoDTO> puntos = new List<EvaluacionXAtestadoDTO>();
+
         }
     }
 }

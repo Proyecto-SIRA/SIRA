@@ -1,0 +1,58 @@
+﻿@model Atestados.Objetos.Dtos.PersonaDTO
+
+@using Atestados.Objetos.Dtos;
+@{
+    ViewBag.Title = "Ver Usuario";
+    Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
+    List<PuntosXRubroDTO> puntosXRubroDTOs = ViewBag.PuntosXRubroDTOs;
+}
+
+<div class="container-fluid">
+    <div class="mt-4">
+        <h2>Ver Persona</h2>
+        <hr />
+    </div>
+    <p>Nombre: @Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</p>
+    <div class="row">
+        <h4>Puntos obtenidos</h4>
+    </div>
+    <div class="row table-wraper scrollbar">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Tipo Atestado
+                    </th>
+                    <th>
+                        Paso Actual
+                    </th>
+                    <th>
+                        Acumulado
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PuntosXRubroDTO puntosXRubroDTO in puntosXRubroDTOs) {
+                <tr>
+                    <td>
+                        @puntosXRubroDTO.Rubro
+                    </td>
+                    <td>
+                        @puntosXRubroDTO.PuntosPasoActual 
+                        @if(@puntosXRubroDTO.PuntosMaximosPasoActual != 0) { 
+                            <span>/</span> @puntosXRubroDTO.PuntosMaximosPasoActual
+                        }
+                    </td>
+                    <td>
+                        @puntosXRubroDTO.PuntosAcumulados
+                        @if (@puntosXRubroDTO.PuntosMaximosAcumulados != 0)
+                        {
+                            <span>/</span> @puntosXRubroDTO.PuntosMaximosAcumulados
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

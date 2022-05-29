@@ -182,6 +182,7 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Apellido</th>
                             <th>Porcentaje</th>
                             <th></th>
                         </tr>
@@ -244,6 +245,15 @@
         return (per - percentage) >= 0 && percentage >= 0;
     }
 
+    function actualizarPorcentajes() {
+        //console.log($('.porcentaje_equitativo').length);
+        var autores = $('.porcentaje_equitativo').length;
+        var porcentaje = 100 / autores;
+        if (porcentaje % 1 !== 0) porcentaje = porcentaje.toFixed(1);
+        $('.porcentaje_equitativo').text(porcentaje);
+
+    }
+
     hiddenCheck.onchange = function () {
         document.getElementById('porcentaje').disabled = this.checked;
         document.getElementById('porcentaje_funcionario').disabled = this.checked;
@@ -258,9 +268,10 @@
             contentType: 'application/json; charset=utf-8',
             success: function (response) {
                 console.log(response);
+                if (response.length > 0) autoresCheck.checked = true;
                 response.forEach(function (autor) {
                     per -= parseInt(autor.Porcentaje);
-                    $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.Porcentaje + '</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                    $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' + autor.Porcentaje + '%</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
                 });
             }
         })
@@ -291,6 +302,7 @@
             console.log("XD");
             alert("Funcionario no encontrado");
         } else {
+            autoresCheck.checked = true;
             var autor = new Object()
             autor.Nombre = funcionario.Nombre
             autor.PrimerApellido = funcionario.PrimerApellido
@@ -320,7 +332,10 @@
                         var autores = JSON.parse(response.personaJson)
                         if (response != null) {
                             per -= parseInt(autor.Porcentaje);
-                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' +
+                                //autores.Porcentaje 
+                                '<span class="porcentaje_equitativo"></span>'
+                                + '%</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
                         }
                     }
                 })
@@ -337,12 +352,18 @@
                         var autores = JSON.parse(response.personaJson)
                         if (response != null) {
                             per -= parseInt(autor.Porcentaje);
-                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
+                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' + autores.Porcentaje + '%</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
                         }
                     }
                 })
             }
         }
+
+        $('#email_funcionario').val('');
+        $('#porcentaje_funcionario').val('');
+
+        actualizarPorcentajes();
+
 
     });
 
@@ -398,6 +419,11 @@
             })
         }
 
+        $('#nombre').val('');
+        $('#apellido1').val('');
+        $('#apellido2').val('');
+        $('#email').val('');
+        $('#porcentaje').val('');
 
     })
 
