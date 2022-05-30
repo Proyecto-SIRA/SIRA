@@ -43,7 +43,8 @@
                         @ViewBag.NotasPonderadas[i]
                     </td>
                     <td>
-                        @ViewBag.Puntos[i]
+                        <!-- Mostrar solo dos decimales -->
+                        @ViewBag.Puntos[i].ToString("0.00")
                     </td>
                 </tr>
             }
