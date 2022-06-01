@@ -38,13 +38,13 @@
                         @puntosXRubroDTO.Rubro
                     </td>
                     <td>
-                        @puntosXRubroDTO.PuntosPasoActual 
+                        @puntosXRubroDTO.PuntosPasoActual.ToString("0.00") 
                         @if(@puntosXRubroDTO.PuntosMaximosPasoActual != 0) { 
                             <span>/</span> @puntosXRubroDTO.PuntosMaximosPasoActual
                         }
                     </td>
                     <td>
-                        @puntosXRubroDTO.PuntosAcumulados
+                        @puntosXRubroDTO.PuntosAcumulados.ToString("0.00")
                         @if (@puntosXRubroDTO.PuntosMaximosAcumulados != 0)
                         {
                             <span>/</span> @puntosXRubroDTO.PuntosMaximosAcumulados
