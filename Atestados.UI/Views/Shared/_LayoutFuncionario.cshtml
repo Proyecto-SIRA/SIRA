@@ -48,9 +48,10 @@
                     @RenderPage("~/Views/Shared/Sidebar.cshtml");
                 }
                 <div class="col nav-padding">
+                    @* No todas las páginas necesitan un botón de regresar. 
                     <div class="container-fluid">
                         @RenderPage("~/Views/Shared/BotonRegresar.cshtml")
-                    </div>
+                    </div>*@
                     @RenderBody()
                 </div>
             </div>
