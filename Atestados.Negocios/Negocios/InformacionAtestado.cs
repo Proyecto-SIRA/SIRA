@@ -387,9 +387,30 @@ namespace Atestados.Negocios.Negocios
             Atestado atestado = db.Atestado.Find(idAtestado);
             AtestadoDTO atestadoDTO = Mapper.Map<Atestado, AtestadoDTO>(atestado);
             AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(idAtestado, idAutor);
-            if (atestado.Rubro.Nombre == "Libro" && atestadoXPersona != null)
+            int maximo;
+            if (atestadoXPersona == null)
+            {
+                return 0;
+            }
+            else if (atestado.Rubro.Nombre == "Libro")
             {
                 return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO_POR_LIBRO / 100) * (atestadoXPersona.Porcentaje / 100));
+            }
+            else if (atestado.Rubro.Nombre == "Artículo")
+            {
+                if (atestado.NumeroAutores <= 1)
+                {
+                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_UN_AUTOR;
+                }
+                else if (atestado.NumeroAutores == 2)
+                {
+                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_DOS_AUTORES;
+                }
+                else
+                {
+                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_TRES_O_MAS_AUTORES;
+                }
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * maximo / 100) * (atestadoXPersona.Porcentaje / 100));
             }
             return 0;
         }

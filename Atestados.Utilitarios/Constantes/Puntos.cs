@@ -24,9 +24,9 @@ namespace Atestados.Utilitarios.Puntos
 
         public struct Articulo
         {
-            public const int UN_AUTOR = 4;
-            public const int DOS_AUTORES = 6;
-            public const int TRES_O_MAS_AUTORES = 4;
+            public const int MAXIMO_POR_ARTICULO_UN_AUTOR = 4;
+            public const int MAXIMO_POR_ARTICULO_DOS_AUTORES = 6;
+            public const int MAXIMO_POR_ARTICULO_TRES_O_MAS_AUTORES = 8;
             public const int MAXIMO_PROFESIONAL_2 = 8;
             public const int MAXIMO_PROFESIONAL_3 = 20;
         }
