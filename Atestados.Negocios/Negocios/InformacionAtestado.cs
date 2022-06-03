@@ -303,12 +303,48 @@ namespace Atestados.Negocios.Negocios
                 puntosLibroInfo.PuntosAcumulados = puntosLibro;
             }
 
+            // Artículo
+            PuntosXRubroDTO puntosArticuloInfo = new PuntosXRubroDTO();
+            puntosArticuloInfo.Rubro = "Artículo";
+            double puntosArticulo = CalcularPuntosPorPersonaYRubro(id, "Artículo");
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosArticuloInfo.PuntosMaximosPasoActual = Puntos.Articulo.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosArticuloInfo.PuntosMaximosPasoActual = Puntos.Articulo.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosArticuloInfo.PuntosMaximosPasoActual = Puntos.Articulo.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosArticulo > puntosArticuloInfo.PuntosMaximosPasoActual && puntosArticuloInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosArticuloInfo.PuntosPasoActual = puntosArticuloInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosArticuloInfo.PuntosPasoActual = puntosArticulo;
+            }
+            puntosArticuloInfo.PuntosMaximosAcumulados = Puntos.Articulo.MAXIMO_PROFESIONAL_4;
+            if (puntosArticulo > puntosArticuloInfo.PuntosMaximosAcumulados && puntosArticuloInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosArticuloInfo.PuntosAcumulados = puntosArticuloInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosArticuloInfo.PuntosAcumulados = puntosArticulo;
+            }
+
             // Total
             PuntosXRubroDTO puntosTotalInfo = new PuntosXRubroDTO();
             puntosTotalInfo.Rubro = "Total";
             // Sumar los puntos de todos los tipos de rubros
-            double puntosTotalPasoActual = puntosLibroInfo.PuntosPasoActual;
-            double puntosTotalAcumulados = puntosLibroInfo.PuntosAcumulados;
+            double puntosTotalPasoActual = puntosLibroInfo.PuntosPasoActual + puntosArticuloInfo.PuntosPasoActual;
+            double puntosTotalAcumulados = puntosLibroInfo.PuntosAcumulados + puntosArticuloInfo.PuntosAcumulados;
             switch (categoria)
             {
                 case "Primera":
@@ -344,6 +380,7 @@ namespace Atestados.Negocios.Negocios
             // Añadir a lista
             puntosXRubroDTOs.Add(puntosTotalInfo);
             puntosXRubroDTOs.Add(puntosLibroInfo);
+            puntosXRubroDTOs.Add(puntosArticuloInfo);
 
             return puntosXRubroDTOs;
         }

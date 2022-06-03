@@ -29,6 +29,7 @@ namespace Atestados.Utilitarios.Puntos
             public const int MAXIMO_POR_ARTICULO_TRES_O_MAS_AUTORES = 8;
             public const int MAXIMO_PROFESIONAL_2 = 8;
             public const int MAXIMO_PROFESIONAL_3 = 20;
+            public const int MAXIMO_PROFESIONAL_4 = 144;
         }
 
     }
