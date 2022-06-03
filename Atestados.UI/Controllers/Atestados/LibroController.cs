@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -72,6 +72,7 @@ namespace Atestados.UI.Controllers.Atestados
         [ValidateAntiForgeryToken]
         public ActionResult Crear([Bind(Include = "Annio,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,AutoresEq,AutoresCheck")] LibroDTO atestado)
         {
+            // Check manual para determinar si hay al menos un autor ingresado.
             if (!atestado.AutoresCheck)
                 ModelState.AddModelError("AutoresCheck", "El libro debe tener al menos un autor.");
             else
@@ -81,22 +82,29 @@ namespace Atestados.UI.Controllers.Atestados
                 List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 int porcentajeEq = 100 / autores.Count;
 
-                atestado.PersonaID = (int)Session["UsuarioID"]; // cambiar por sesion
+                // Obtener el id del usuario que está agregando el atestado.
+                atestado.PersonaID = (int)Session["UsuarioID"]; 
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
                 atestado.NumeroAutores = autores.Count();
-                Atestado a = AutoMapper.Mapper.Map<LibroDTO, Atestado>(atestado);
-                infoAtestado.GuardarAtestado(a);
-                atestado.AtestadoID = a.AtestadoID;
+                // Mappear el atestado una vez que está completo.
+                // Esta operación es muy frágil, y podría llevar a errores de llaves en la BD.
+                Atestado atestado_mapped = AutoMapper.Mapper.Map<LibroDTO, Atestado>(atestado);
+                infoAtestado.GuardarAtestado(atestado_mapped);
+                // Obtener y guardar información adicional del atestado.
+                atestado.AtestadoID = atestado_mapped.AtestadoID;
                 InfoEditorial infoEditorial = AutoMapper.Mapper.Map<LibroDTO, InfoEditorial>(atestado);
                 infoAtestado.GuardarInfoEditorial(infoEditorial);
                 Fecha fecha = AutoMapper.Mapper.Map<LibroDTO, Fecha>(atestado);
                 infoAtestado.GuardarFecha(fecha);
+
+                // Agregar archivos
                 foreach(ArchivoDTO archivo in archivos)
                 {
                     Archivo ar = AutoMapper.Mapper.Map<ArchivoDTO, Archivo>(archivo);
-                    ar.AtestadoID = a.AtestadoID;
+                    ar.AtestadoID = atestado_mapped.AtestadoID;
                     infoAtestado.GuardarArchivo(ar);
                 }
+                // Agregar autores
                 foreach (AutorDTO autor in autores)
                 {
                     if (!autor.esFuncionario)
@@ -108,14 +116,14 @@ namespace Atestados.UI.Controllers.Atestados
                         if (atestado.AutoresEq)
                             infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
                             {
-                                AtestadoID = a.AtestadoID,
+                                AtestadoID = atestado_mapped.AtestadoID,
                                 PersonaID = persona.PersonaID,
                                 Porcentaje = porcentajeEq
                             });
                         else
                             infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
                             {
-                                AtestadoID = a.AtestadoID,
+                                AtestadoID = atestado_mapped.AtestadoID,
                                 PersonaID = persona.PersonaID,
                                 Porcentaje = autor.Porcentaje
                             });
@@ -128,14 +136,14 @@ namespace Atestados.UI.Controllers.Atestados
                         if (atestado.AutoresEq)
                             infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
                             {
-                                AtestadoID = a.AtestadoID,
+                                AtestadoID = atestado_mapped.AtestadoID,
                                 PersonaID = id,
                                 Porcentaje = porcentajeEq
                             });
                         else
                             infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
                             {
-                                AtestadoID = a.AtestadoID,
+                                AtestadoID = atestado_mapped.AtestadoID,
                                 PersonaID = id,
                                 Porcentaje = autor.Porcentaje
                             });
@@ -157,32 +165,28 @@ namespace Atestados.UI.Controllers.Atestados
         public ActionResult Editar(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
+            // Asegurarse que los autores y archivos no son nulos.
             if (Session["Autores"] == null)
-            {
                 Session["Autores"] = new List<AutorDTO>();
-            }
-
             if (Session["Archivos"] == null)
-            {
                 Session["Archivos"] = new List<ArchivoDTO>();
-            }
 
+            // Cargar el atestado y verificar que no es nulo.
             Atestado atestado = infoAtestado.CargarAtestadoParaEditar(id);
-            AtestadoDTO a = AutoMapper.Mapper.Map<Atestado, AtestadoDTO>(atestado);
             if (atestado == null)
-            {
                 return HttpNotFound();
-            }
+
+            AtestadoDTO atestado_mapped = AutoMapper.Mapper.Map<Atestado, AtestadoDTO>(atestado);
+
             ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", atestado.PaisID);
             ViewBag.AtestadoID = new SelectList(db.Fecha, "FechaID", "FechaID", atestado.AtestadoID);
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial", atestado.AtestadoID);
             ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
-            return View(a);
+            Session["Archivos"] = infoAtestado.CargarArchivosDeAtestado(id);
+            return View(atestado_mapped);
         }
 
         // POST: Libro/Editar
@@ -194,7 +198,10 @@ namespace Atestados.UI.Controllers.Atestados
         {
             if (ModelState.IsValid)
             {
-                atestado.PersonaID = (int)Session["UsuarioID"]; // cambiar por sesion
+                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+                List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
+                atestado.PersonaID = (int)Session["UsuarioID"]; 
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
                 atestado.Fecha.FechaID = atestado.AtestadoID;
                 atestado.Fecha.FechaInicio = DateTime.Now;
@@ -204,16 +211,15 @@ namespace Atestados.UI.Controllers.Atestados
                 infoAtestado.EditarInfoEditorial(AutoMapper.Mapper.Map<InfoEditorialDTO, InfoEditorial>(atestado.InfoEditorial));
                 atestado.Archivos = infoAtestado.CargarArchivosDeAtestado(atestado.AtestadoID);
                 atestado.AtestadoXPersona = AutoMapper.Mapper.Map<List<AtestadoXPersona>, List<AtestadoXPersonaDTO>>(infoAtestado.CargarAtestadoXPersonasdeAtestado(atestado.AtestadoID));
+                atestado.NumeroAutores = autores.Count();
                 infoAtestado.EditarAtestado(AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado));
 
-                List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 foreach (ArchivoDTO archivo in archivos)
                 {
                     Archivo ar = AutoMapper.Mapper.Map<ArchivoDTO, Archivo>(archivo);
                     ar.AtestadoID = atestado.AtestadoID;
                     infoAtestado.GuardarArchivo(ar);
                 }
-                List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
                 foreach (AutorDTO autor in autores)
                 {
                     Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);

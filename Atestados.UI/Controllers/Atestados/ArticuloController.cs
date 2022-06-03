@@ -156,18 +156,12 @@ namespace Atestados.UI.Controllers.Atestados
         public ActionResult Editar(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (Session["Autores"] == null)
-            {
-                Session["Autores"] = new List<AutorDTO>();
-            }
 
+            if (Session["Autores"] == null)
+                Session["Autores"] = new List<AutorDTO>();
             if (Session["Archivos"] == null)
-            {
                 Session["Archivos"] = new List<ArchivoDTO>();
-            }
 
             Atestado atestado = infoAtestado.CargarAtestadoParaEditar(id);
             AtestadoDTO a = AutoMapper.Mapper.Map<Atestado, AtestadoDTO>(atestado);
@@ -181,6 +175,7 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial", atestado.AtestadoID);
             ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
+            Session["Archivos"] = infoAtestado.CargarArchivosDeAtestado(id);
             return View(a);
         }
 

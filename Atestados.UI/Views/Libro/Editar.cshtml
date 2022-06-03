@@ -161,16 +161,16 @@
                         </tr>
                     </thead>
                     <tbody id="tablaArchivos">
-                        @foreach (ArchivoDTO item in Model.Archivos)
+                        @foreach (ArchivoDTO item in Session["Archivos"] as List<ArchivoDTO>)
                         {
                             <tr>
                                 <td>
                                     @item.Nombre
                                 </td>
-                                <td>
+                                @*<td>
                                     <a>Destargar</a> |
                                     <a>Borrar</a>
-                                </td>
+                                </td>*@
                             </tr>
                         }
                     </tbody>
