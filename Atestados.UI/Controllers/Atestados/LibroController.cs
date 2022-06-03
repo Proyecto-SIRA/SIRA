@@ -19,7 +19,6 @@ namespace Atestados.UI.Controllers.Atestados
         private AtestadosEntities db = new AtestadosEntities();
         private InformacionAtestado infoAtestado = new InformacionAtestado();
         private InformacionGeneral infoGeneral = new InformacionGeneral();
-
         private readonly string Rubro = "libro";
 
         // GET: Libros
@@ -31,19 +30,21 @@ namespace Atestados.UI.Controllers.Atestados
         // GET: Libro/Ver
         public ActionResult Ver(int? id)
         {
+            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
+
+            // Validar los datos ingresados.
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
+
             if (atestado == null)
-            {
                 return HttpNotFound();
-            }
+
+            // Asignar los datos para visualizar.
             ViewBag.Autores = infoAtestado.CargarAutoresAtestado(id);
             ViewBag.NotasPonderadas = infoAtestado.CargarNotasPonderadasAutores(id);
             ViewBag.Puntos = infoAtestado.CargarPuntosAutores(id);            
-            UsuarioDTO usuario = (UsuarioDTO)Session["Usuario"];
             Session["TipoUsuario"] = usuario.TipoUsuario;
             Session["idAtestado"] = id;
             Session["idUsuario"] = usuario.UsuarioID;
@@ -59,15 +60,9 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", infoAtestado.ObtenerIDdePais("costa rica"));
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
 
-            if (Session["Autores"] == null)
-            {
-                Session["Autores"] = new List<AutorDTO>();
-            }
-
-            if (Session["Archivos"] == null)
-            {
-                Session["Archivos"] = new List<ArchivoDTO>();
-            }
+            // Limpiar las listas de archivos y autores por si tienen basura.
+            Session["Autores"] = new List<AutorDTO>();
+            Session["Archivos"] = new List<ArchivoDTO>();
 
             return View(libro);
         }

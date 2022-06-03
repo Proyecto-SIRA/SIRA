@@ -56,15 +56,9 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial");
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
 
-            if (Session["Autores"] == null)
-            {
-                Session["Autores"] = new List<AutorDTO>();
-            }
-
-            if (Session["Archivos"] == null)
-            {
-                Session["Archivos"] = new List<ArchivoDTO>();
-            }
+            // Limpiar las listas de archivos y autores por si tienen basura.
+            Session["Autores"] = new List<AutorDTO>(); 
+            Session["Archivos"] = new List<ArchivoDTO>();
 
             return View(libro);
         }
