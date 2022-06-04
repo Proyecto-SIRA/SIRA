@@ -339,12 +339,84 @@ namespace Atestados.Negocios.Negocios
                 puntosArticuloInfo.PuntosAcumulados = puntosArticulo;
             }
 
+            // Obra didáctica
+            PuntosXRubroDTO puntosObraDidacticaInfo = new PuntosXRubroDTO();
+            puntosObraDidacticaInfo.Rubro = "Obra didáctica";
+            double puntosObraDidactica = CalcularPuntosPorPersonaYRubro(id, "Obra didáctica");
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosObraDidacticaInfo.PuntosMaximosPasoActual = Puntos.ObraDidactica.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosObraDidacticaInfo.PuntosMaximosPasoActual = Puntos.ObraDidactica.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosObraDidacticaInfo.PuntosMaximosPasoActual = Puntos.ObraDidactica.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosObraDidactica > puntosObraDidacticaInfo.PuntosMaximosPasoActual && puntosObraDidacticaInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosObraDidacticaInfo.PuntosPasoActual = puntosObraDidacticaInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosObraDidacticaInfo.PuntosPasoActual = puntosObraDidactica;
+            }
+            puntosObraDidacticaInfo.PuntosMaximosAcumulados = Puntos.Articulo.MAXIMO_PROFESIONAL_4;
+            if (puntosObraDidactica > puntosObraDidacticaInfo.PuntosMaximosAcumulados && puntosObraDidacticaInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosObraDidacticaInfo.PuntosAcumulados = puntosObraDidacticaInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosObraDidacticaInfo.PuntosAcumulados = puntosObraDidactica;
+            }
+
+            // Obra administrativa de desarrollo
+            PuntosXRubroDTO puntosObraAdmInfo = new PuntosXRubroDTO();
+            puntosObraAdmInfo.Rubro = "Obra administrativa de desarrollo";
+            double puntosObraAdm = CalcularPuntosPorPersonaYRubro(id, "Obra administrativa de desarrollo");
+            switch (categoria)
+            {
+                case "Primera":
+                    puntosObraAdmInfo.PuntosMaximosPasoActual = Puntos.ObraAdministrativa.MAXIMO_PROFESIONAL_2;
+                    break;
+                case "Segunda":
+                    puntosObraAdmInfo.PuntosMaximosPasoActual = Puntos.ObraAdministrativa.MAXIMO_PROFESIONAL_3;
+                    break;
+                case "Tercera":
+                    puntosObraAdmInfo.PuntosMaximosPasoActual = Puntos.ObraAdministrativa.MAXIMO_PROFESIONAL_4;
+                    break;
+                default:
+                    break;
+            }
+            if (puntosObraAdm > puntosObraAdmInfo.PuntosMaximosPasoActual && puntosObraAdmInfo.PuntosMaximosPasoActual != 0)
+            {
+                puntosObraAdmInfo.PuntosPasoActual = puntosObraAdmInfo.PuntosMaximosPasoActual;
+            }
+            else
+            {
+                puntosObraAdmInfo.PuntosPasoActual = puntosObraAdm;
+            }
+            puntosObraAdmInfo.PuntosMaximosAcumulados = Puntos.Articulo.MAXIMO_PROFESIONAL_4;
+            if (puntosObraAdm > puntosObraAdmInfo.PuntosMaximosAcumulados && puntosObraAdmInfo.PuntosMaximosAcumulados != 0)
+            {
+                puntosObraAdmInfo.PuntosAcumulados = puntosObraAdmInfo.PuntosMaximosAcumulados;
+            }
+            else
+            {
+                puntosObraAdmInfo.PuntosAcumulados = puntosObraAdm;
+            }
+
             // Total
             PuntosXRubroDTO puntosTotalInfo = new PuntosXRubroDTO();
             puntosTotalInfo.Rubro = "Total";
             // Sumar los puntos de todos los tipos de rubros
-            double puntosTotalPasoActual = puntosLibroInfo.PuntosPasoActual + puntosArticuloInfo.PuntosPasoActual;
-            double puntosTotalAcumulados = puntosLibroInfo.PuntosAcumulados + puntosArticuloInfo.PuntosAcumulados;
+            double puntosTotalPasoActual = puntosLibroInfo.PuntosPasoActual + puntosArticuloInfo.PuntosPasoActual + puntosObraDidacticaInfo.PuntosPasoActual + puntosObraAdmInfo.PuntosPasoActual;
+            double puntosTotalAcumulados = puntosLibroInfo.PuntosAcumulados + puntosArticuloInfo.PuntosAcumulados + puntosObraDidacticaInfo.PuntosAcumulados + puntosObraAdmInfo.PuntosAcumulados;
             switch (categoria)
             {
                 case "Primera":
@@ -381,6 +453,8 @@ namespace Atestados.Negocios.Negocios
             puntosXRubroDTOs.Add(puntosTotalInfo);
             puntosXRubroDTOs.Add(puntosLibroInfo);
             puntosXRubroDTOs.Add(puntosArticuloInfo);
+            puntosXRubroDTOs.Add(puntosObraDidacticaInfo);
+            puntosXRubroDTOs.Add(puntosObraAdmInfo);
 
             return puntosXRubroDTOs;
         }
@@ -431,23 +505,31 @@ namespace Atestados.Negocios.Negocios
             }
             else if (atestado.Rubro.Nombre == "Libro")
             {
-                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO_POR_LIBRO / 100) * (atestadoXPersona.Porcentaje / 100));
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.Libro.MAXIMO_POR_ATESTADO / 100) * (atestadoXPersona.Porcentaje / 100));
             }
             else if (atestado.Rubro.Nombre == "Artículo")
             {
                 if (atestado.NumeroAutores <= 1)
                 {
-                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_UN_AUTOR;
+                    maximo = Puntos.Articulo.MAXIMO_POR_ATESTADO_UN_AUTOR;
                 }
                 else if (atestado.NumeroAutores == 2)
                 {
-                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_DOS_AUTORES;
+                    maximo = Puntos.Articulo.MAXIMO_POR_ATESTADO_DOS_AUTORES;
                 }
                 else
                 {
-                    maximo = Puntos.Articulo.MAXIMO_POR_ARTICULO_TRES_O_MAS_AUTORES;
+                    maximo = Puntos.Articulo.MAXIMO_POR_ATESTADO_TRES_O_MAS_AUTORES;
                 }
                 return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * maximo / 100) * (atestadoXPersona.Porcentaje / 100));
+            }
+            else if (atestado.Rubro.Nombre == "Obra didáctica")
+            {
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.ObraDidactica.MAXIMO_POR_ATESTADO / 100) * (atestadoXPersona.Porcentaje / 100));
+            }
+            else if (atestado.Rubro.Nombre == "Obra administrativa de desarrollo")
+            {
+                return (double)((ObtenerNotaAtestadoPorAutor(atestadoDTO, idAutor) * Puntos.ObraAdministrativa.MAXIMO_POR_ATESTADO / 100) * (atestadoXPersona.Porcentaje / 100));
             }
             return 0;
         }
