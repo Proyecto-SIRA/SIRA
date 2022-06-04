@@ -48,9 +48,7 @@ namespace Atestados.Objetos.Dtos
         public DominioIdiomaDTO DominioIdioma { get; set; }
         public FechaDTO Fecha { get; set; }
         public InfoEditorialDTO InfoEditorial { get; set; }
-
         public bool MarcarEnviado { get; set; }
         public bool MarcarDescargado { get; set; }
-
     }
 }

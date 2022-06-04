@@ -23,6 +23,27 @@ namespace Atestados.Objetos.Dtos
         public int TiempoServido { get; set; }
         public List<AtestadoDTO> PorEnviar { get; set; }
         public bool esActivo { get; set; }
+
+        // Función utilizada obtener el nombre de la vista de un atestado, para
+        // poder redireccionar a una vista de dicho atestado. Obtiene el ID del
+        // atestados y retorna el nombre interno de la vista. Como Rubro es una
+        // tabla catálogo en la base de datos, se espera que se siemrpe tengan
+        // los mismos IDs. En caso de que los IDs de esa tabla se modifiquen,
+        // esta función tendrá que ser modificada también.
+        public string getNombreVista(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    return "Libro";
+                case 2:
+                    return "Articulo";
+                case 34:
+                    return "Idioma";
+                default:
+                    return "Atestados";
+            }
+        }
     }
 
 }
