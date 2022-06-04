@@ -179,53 +179,6 @@ namespace Atestados.UI.Controllers
             return RedirectToAction("Crear");
         }
 
-        [HttpPost]
-        public JsonResult Cargar(HttpPostedFileBase archivo)
-        {
-            byte[] bytes;
-            using (BinaryReader br = new BinaryReader(archivo.InputStream))
-            {
-                bytes = br.ReadBytes(archivo.ContentLength);
-            }
-
-            if (Session["Archivos"] == null)
-            {
-                Session["Archivos"] = new List<ArchivoDTO>();
-            }
-
-            ArchivoDTO ar = new ArchivoDTO
-            {
-                Nombre = Path.GetFileName(archivo.FileName),
-                TipoArchivo = archivo.ContentType,
-                Datos = bytes
-            };
-            List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
-            archivos.Add(ar);
-            Session["Archivos"] = archivos;
-
-            var jsonTest = JsonConvert.SerializeObject(ar);
-
-            return Json(new
-            {
-                archivoJson = jsonTest
-            });
-        }
-
-        [HttpPost]
-        public FileResult Descargar(int? archivoID)
-        {
-            ArchivoDTO archivo = infoAtestado.CargarArchivo(archivoID);
-            return File(archivo.Datos, archivo.TipoArchivo, archivo.Nombre);
-        }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         // GET: Atestados/Evaluar
         public ActionResult Evaluar(int? id)
         {
@@ -382,6 +335,137 @@ namespace Atestados.UI.Controllers
             */
             //List<EvaluacionXAtestadoDTO> puntos = new List<EvaluacionXAtestadoDTO>();
 
+        }
+
+
+
+
+
+        [HttpPost]
+        public FileResult Descargar(int? archivoID)
+        {
+            ArchivoDTO archivo = infoAtestado.CargarArchivo(archivoID);
+            return File(archivo.Datos, archivo.TipoArchivo, archivo.Nombre);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        // Métodos utilizados por AtestadoShared.js
+        [HttpPost]
+        public JsonResult getAutores()
+        {
+
+            var autores = Session["Autores"];
+
+            return Json(autores);
+        }
+
+        [HttpPost]
+        public void borrarAutor(AutorDTO autorData)
+        {
+            var email = autorData.Email;
+
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
+            autores.RemoveAll(a => a.Email == email);
+            
+            Session["Autores"] = autores;
+
+            return;
+        }
+
+        [HttpPost]
+        public JsonResult UsuarioPorEmail(UsuarioDTO usuarioData)
+        {
+
+            var email = usuarioData.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            if (usuario == null)
+            {
+                return Json(new
+                {
+                    usuario = false
+                });
+            }
+
+            var json = JsonConvert.SerializeObject(usuario);
+
+            return Json(new
+            {
+                usuario = json
+            });
+
+        }
+
+        [HttpPost]
+        public JsonResult AgregarAutor(AutorDTO autorData)
+        {
+            AutorDTO autor = new AutorDTO()
+            {
+                Nombre = autorData.Nombre,
+                PrimerApellido = autorData.PrimerApellido,
+                SegundoApellido = autorData.SegundoApellido,
+                Porcentaje = autorData.Porcentaje,
+                Email = autorData.Email,
+                //PersonaID = autorData.PersonaID,
+                esFuncionario = autorData.esFuncionario
+            };
+
+            if (Session["Autores"] == null)
+            {
+                Session["Autores"] = new List<AutorDTO>();
+            }
+
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+            autores.Add(autor);
+            Session["Autores"] = autores;
+
+            var jsonTest = JsonConvert.SerializeObject(autor);
+
+            return Json(new
+            {
+                personaJson = jsonTest
+            });
+        }
+
+        [HttpPost]
+        public JsonResult Cargar(HttpPostedFileBase archivo)
+        {
+            byte[] bytes;
+            using (BinaryReader br = new BinaryReader(archivo.InputStream))
+            {
+                bytes = br.ReadBytes(archivo.ContentLength);
+            }
+
+            if (Session["Archivos"] == null)
+            {
+                Session["Archivos"] = new List<ArchivoDTO>();
+            }
+
+            ArchivoDTO ar = new ArchivoDTO
+            {
+                Nombre = Path.GetFileName(archivo.FileName),
+                TipoArchivo = archivo.ContentType,
+                Datos = bytes
+            };
+            List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+            archivos.Add(ar);
+            Session["Archivos"] = archivos;
+
+            var jsonTest = JsonConvert.SerializeObject(ar);
+
+            return Json(new
+            {
+                archivoJson = jsonTest
+            });
         }
     }
 }

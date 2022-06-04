@@ -19,6 +19,9 @@ namespace Atestados.UI
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/atestados").Include(
+                        "~/Scripts/AtestadoShared.js"));
+
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.bundle.min.js",
                       "~/Scripts/respond.js"));

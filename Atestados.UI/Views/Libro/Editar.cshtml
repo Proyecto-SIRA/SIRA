@@ -28,9 +28,10 @@
     }
 </style>
 
-        <h2 class="mt-4">Editar un libro</h2>
+@RenderPage("~/Views/Shared/BotonRegresar.cshtml")
+<h2 class="mt-4">Editar un libro</h2>
 <div class="container-fluid">
-        <hr />
+    <hr />
     <div class="row w-100">
         <div class="col-lg-6">
             @using (Html.BeginForm())
@@ -118,8 +119,8 @@
                                 }
                             </tbody>
                         </table>
-                    </div>         
-                    
+                    </div>
+
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <div class="btn btn-primary" onclick="AbrirModal()">Modificar autores</div>
@@ -168,9 +169,9 @@
                                     @item.Nombre
                                 </td>
                                 @*<td>
-                                    <a>Destargar</a> |
-                                    <a>Borrar</a>
-                                </td>*@
+                                        <a>Destargar</a> |
+                                        <a>Borrar</a>
+                                    </td>*@
                             </tr>
                         }
                     </tbody>
@@ -245,13 +246,13 @@
                         @foreach (AutorDTO autor in ViewBag.Autores)
                         {
                             porcentaje -= autor.Porcentaje;
-                        <tr>
-                            <td>@autor.Nombre</td>
-                            <td>@autor.PrimerApellido</td>
-                            <td>@autor.SegundoApellido</td>
-                            <td>@autor.Porcentaje</td>
-                            @*<td><a>Borrar</a></td>*@
-                        </tr>
+                            <tr>
+                                <td>@autor.Nombre</td>
+                                <td>@autor.PrimerApellido</td>
+                                <td>@autor.SegundoApellido</td>
+                                <td>@autor.Porcentaje</td>
+                                @*<td><a>Borrar</a></td>*@
+                            </tr>
                         }
                     </tbody>
                 </table>

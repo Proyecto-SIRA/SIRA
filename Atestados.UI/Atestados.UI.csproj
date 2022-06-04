@@ -196,6 +196,7 @@
     <Compile Include="Controllers\AdministradorController.cs" />
     <Compile Include="Controllers\Atestados\AtestadosController.cs" />
     <Compile Include="Controllers\Atestados\ArticuloController.cs" />
+    <Compile Include="Controllers\Atestados\AtestadoShared.cs" />
     <Compile Include="Controllers\Atestados\CapacitacionController.cs" />
     <Compile Include="Controllers\Atestados\CertificadoController.cs" />
     <Compile Include="Controllers\Atestados\IdiomaController.cs" />
@@ -460,6 +461,12 @@
       <Project>{3987707f-7a8b-4918-84e0-a4838d805535}</Project>
       <Name>Atestados.Utilitarios</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\AtestadoShared.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
