@@ -119,8 +119,10 @@ namespace Atestados.UI.Controllers
         public ActionResult VerPuntos(int id)
         {
             ViewBag.PuntosXRubroDTOs = infoAtestado.CargarPuntosPersona(id);
-
-            return View(infoGeneral.CargarPersona(id));
+            var persona = infoGeneral.CargarPersona(id);
+            var categoria = db.TipoCategoria.Where(c => c.TipoCategoriaID == persona.CategoriaActual).FirstOrDefault();
+            ViewBag.TipoCategoria = categoria;
+            return View(persona);
         }
     }
 }

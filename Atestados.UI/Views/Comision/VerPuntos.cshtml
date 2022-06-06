@@ -1,10 +1,12 @@
 ﻿@model Atestados.Objetos.Dtos.PersonaDTO
 
+@using Atestados.Datos.Modelo;
 @using Atestados.Objetos.Dtos;
 @{
     ViewBag.Title = "Ver Usuario";
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
     List<PuntosXRubroDTO> puntosXRubroDTOs = ViewBag.PuntosXRubroDTOs;
+    TipoCategoria tipoCategoria = ViewBag.TipoCategoria;
 }
 
 <div class="container-fluid">
@@ -13,6 +15,8 @@
         <hr />
     </div>
     <p>Nombre: @Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</p>
+    <p>Tiempo servido: @Model.TiempoServido años</p>
+    <p>Categoría actual: @tipoCategoria.Nombre</p>
     <div class="row">
         <h4>Puntos obtenidos</h4>
     </div>
@@ -32,25 +36,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (PuntosXRubroDTO puntosXRubroDTO in puntosXRubroDTOs) {
-                <tr>
-                    <td>
-                        @puntosXRubroDTO.Rubro
-                    </td>
-                    <td>
-                        @puntosXRubroDTO.PuntosPasoActual.ToString("0.00") 
-                        @if(@puntosXRubroDTO.PuntosMaximosPasoActual != 0) { 
-                            <span>/</span> @puntosXRubroDTO.PuntosMaximosPasoActual
-                        }
-                    </td>
-                    <td>
-                        @puntosXRubroDTO.PuntosAcumulados.ToString("0.00")
-                        @if (@puntosXRubroDTO.PuntosMaximosAcumulados != 0)
-                        {
-                            <span>/</span> @puntosXRubroDTO.PuntosMaximosAcumulados
-                        }
-                    </td>
-                </tr>
+                @foreach (PuntosXRubroDTO puntosXRubroDTO in puntosXRubroDTOs)
+                {
+                    <tr>
+                        <td>
+                            @puntosXRubroDTO.Rubro
+                        </td>
+                        <td>
+                            @puntosXRubroDTO.PuntosPasoActual.ToString("0.00")
+                            @if (@puntosXRubroDTO.PuntosMaximosPasoActual != 0)
+                            {
+                                <span>/</span> @puntosXRubroDTO.PuntosMaximosPasoActual
+                            }
+                        </td>
+                        <td>
+                            @puntosXRubroDTO.PuntosAcumulados.ToString("0.00")
+                            @if (@puntosXRubroDTO.PuntosMaximosAcumulados != 0)
+                            {
+                                <span>/</span> @puntosXRubroDTO.PuntosMaximosAcumulados
+                            }
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
