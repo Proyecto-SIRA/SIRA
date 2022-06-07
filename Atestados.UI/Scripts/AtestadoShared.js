@@ -103,7 +103,6 @@ $('#funcionarioAgregar').click(function () {
     autor.porcEquitativo = false;
     autor.Porcentaje = $('#porcentaje_funcionario').val();
     autor.numAutor = ++autorCont;
-    console.log(JSON.stringify(autor));
 
     // Si está marcada la opción de porcentaje equitativo.
     if (autor != null && isEmail(autor.Email) && checkbox.checked) {
@@ -126,7 +125,6 @@ $('#funcionarioAgregar').click(function () {
     }
     // Si no está marcada la opción de porcentaje equitativo.
     else if (autor != null && isEmail(autor.Email)) {
-        console.log("wena lolas")
         per = per - parseInt(autor.Porcentaje);
         $.ajax({
             type: 'POST',
@@ -224,33 +222,47 @@ function clearAuthorForm() {
 }
 
 // Borrar autores de la tabla.
-$('#tablaAutores').on('click', '.remove', function () {
+$('#autoresTabla').on('click', '.remove', function () {
 
+    // Encontrar el número de autor que 
+    var $row = $(this).closest("tr");  
+    var $text = $row.find(".numAut").text();
+
+    // Crear el objeto que se le pasa al controlador.
     var autor = new Object()
-    autor.Email = $(this).attr('email');
-    var child = $(this).closest('tr').nextAll();
-    child.each(function () {
-        var id = $(this).attr('id');
-        var idx = $(this).children('.row-index').children('p');
-        var dig = parseInt(id.substring(1));
-        idx.html(`Row ${dig - 1}`);
-        $(this).attr('id', `R${dig - 1}`);
-    });
-    console.log($(this).attr('email'));
-    $(this).closest('tr').remove();
+    autor.numAutor = $text;
 
     $.ajax({
         type: 'POST',
         url: `${baseUrl}/borrarAutor`,
         async: false,
         contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
+        dataType: 'html',
         data: JSON.stringify(autor),
-        success: function (response) {
-            console.log("autor eliminado");
+        success: function (result) {
+            $("#autoresTabla").html(result);
         }
-    })
+    });
+    // Calcular el porcentaje restante una vez removido el autor.
+    if (!checkbox.checked) {
+        $.ajax({
+            type: 'POST',
+            url: `${baseUrl}/calcularPorcentajes`,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                p = JSON.parse(response.p);
+                per = p;
+                if (per == 100) {
+                    // Volver a poner el check de menos de un autor.
+                    autoresCheck.checked = false;
+                    // Volver a habilitar el check para autores equitativos.
+                    hiddenCheck.disabled = false;
 
+                }
+            }
+    });
+    }
 });
-
 

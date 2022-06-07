@@ -365,20 +365,6 @@ namespace Atestados.UI.Controllers
         }
 
         [HttpPost]
-        public void borrarAutor(AutorDTO autorData)
-        {
-            var email = autorData.Email;
-
-            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
-
-            autores.RemoveAll(a => a.Email == email);
-            
-            Session["Autores"] = autores;
-
-            return;
-        }
-
-        [HttpPost]
         public JsonResult UsuarioPorEmail(UsuarioDTO usuarioData)
         {
 
@@ -403,8 +389,31 @@ namespace Atestados.UI.Controllers
 
         }
 
+        [HttpPost]
+        // Calcular el porcentaje restante para los autores con porcentaje manual.
+        public JsonResult calcularPorcentajes()
+        {
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+            int size = autores.Count;
+            int counter = 0;
+
+            // Retornar 100 si no hay autores.
+            if(size == 0)
+                return Json(new
+                {p = 100});
+
+            // Iterar para sumar el porcentaje total de todos los autores.
+            foreach (AutorDTO autor in autores)
+                counter += (int)autor.Porcentaje;
+
+            counter = 100 - counter;
+
+            return Json(new
+                {p = counter});
+        }
+
         // Calcular los porcentajes equitativos.
-        public void calcularPorcentajes(List<AutorDTO> autores)
+        public void calcularPorcentajesEq(List<AutorDTO> autores)
         {
             int size = autores.Count;
             int perc = 100 / size;
@@ -435,7 +444,7 @@ namespace Atestados.UI.Controllers
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
             autores.Add(autor);
             if (autor.porcEquitativo)
-                calcularPorcentajes(autores);
+                calcularPorcentajesEq(autores);
             else
                 Session["Autores"] = autores;
             return PartialView("_AutoresTabla");
@@ -465,7 +474,7 @@ namespace Atestados.UI.Controllers
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
             autores.Add(autor);
             if (autor.porcEquitativo)
-                calcularPorcentajes(autores);
+                calcularPorcentajesEq(autores);
             else
                 Session["Autores"] = autores;
             return PartialView("_AutoresTabla");
@@ -473,17 +482,17 @@ namespace Atestados.UI.Controllers
 
 
         [HttpPost]
-        public void borrarAutorNew(AutorDTO autorData)
+        public ActionResult borrarAutor(AutorDTO autorData)
         {
-            var id = autorData.PersonaID;
+            var id = autorData.numAutor;
 
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
 
-            autores.RemoveAll(a => a.PersonaID == id);
+            autores.RemoveAll(a => a.numAutor== id);
             
             Session["Autores"] = autores;
 
-            return;
+            return PartialView("_AutoresTabla");
         }
 
         [HttpPost]
