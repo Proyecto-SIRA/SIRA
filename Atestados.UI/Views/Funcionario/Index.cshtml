@@ -7,28 +7,15 @@
 @using Atestados.Negocios.Negocios;
 @using System.Web;
 
-<style>
-    .table-wraper {
-        display: block;
-    }
-
-    .scrollbar {
-        position: relative;
-        height: 230px;
-        overflow: auto;
-    }
-</style>
-
-
 <div class="container-fluid">
-    <div class="row">
+    <div class="">
         <h2>Funcionario</h2>
         <hr />
     </div>
-    <div class="row">
+    <div class="">
         <h4>Documentos sin enviar</h4>
     </div>
-    <div class="row table-wraper scrollbar">
+    <div class="container-fluid">
         @using (Html.BeginForm("Index", "Funcionario", FormMethod.Post))
         {
             @Html.HiddenFor(model => model.PersonaID)
@@ -107,10 +94,11 @@
             </div>
         }
     </div>
-    <div class="row">
+    <div class="">
+        <hr />
         <h4>Documentos enviados</h4>
     </div>
-    <div class="row table-wraper scrollbar">
+    <div class="table-wraper scrollbar">
         <table class="table table-striped">
             <thead>
                 <tr>

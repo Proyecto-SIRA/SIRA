@@ -428,6 +428,7 @@
     <Content Include="Views\Shared\BotonRegresar.cshtml" />
     <Content Include="Views\Shared\Autores.cshtml" />
     <Content Include="Views\Comision\VerPuntos.cshtml" />
+    <Content Include="Views\Shared\_AutoresTabla.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -463,10 +464,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\AtestadoShared.js" />
+    <Content Include="Scripts\AtestadoSharedCreate.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\AtestadoSharedEdit.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

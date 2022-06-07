@@ -14,8 +14,8 @@ namespace Atestados.Negocios.Negocios
 {
     public class InformacionAtestado
     {
-        private AtestadosEntities db = new AtestadosEntities();
-        private InformacionGeneral info = new InformacionGeneral();
+        private readonly AtestadosEntities db = new AtestadosEntities();
+        private readonly InformacionGeneral info = new InformacionGeneral();
 
         #region Atestado
 

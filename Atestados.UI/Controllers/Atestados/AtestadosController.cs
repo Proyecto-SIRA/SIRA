@@ -16,6 +16,7 @@ namespace Atestados.UI.Controllers
 {
     public class AtestadosController : Controller
     {
+        private static int autorCont = 0;
         private AtestadosEntities db = new AtestadosEntities();
         private InformacionAtestado infoAtestado = new InformacionAtestado();
         private InformacionGeneral infoGeneral = new InformacionGeneral();
@@ -337,16 +338,13 @@ namespace Atestados.UI.Controllers
 
         }
 
-
-
-
-
         [HttpPost]
         public FileResult Descargar(int? archivoID)
         {
             ArchivoDTO archivo = infoAtestado.CargarArchivo(archivoID);
             return File(archivo.Datos, archivo.TipoArchivo, archivo.Nombre);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -405,36 +403,103 @@ namespace Atestados.UI.Controllers
 
         }
 
+        // Calcular los porcentajes equitativos.
+        public void calcularPorcentajes(List<AutorDTO> autores)
+        {
+            int size = autores.Count;
+            int perc = 100 / size;
+
+            foreach (AutorDTO autor in autores)
+                autor.Porcentaje = perc;
+
+            Session["Autores"] = autores;
+        }
+
         [HttpPost]
-        public JsonResult AgregarAutor(AutorDTO autorData)
+        // Agregar un autor con porcentajes ingresados por el usuario.
+        public ActionResult agregarAutor(AutorDTO autorData)
         {
             AutorDTO autor = new AutorDTO()
             {
+                numAutor = autorData.numAutor,
                 Nombre = autorData.Nombre,
                 PrimerApellido = autorData.PrimerApellido,
                 SegundoApellido = autorData.SegundoApellido,
                 Porcentaje = autorData.Porcentaje,
                 Email = autorData.Email,
-                //PersonaID = autorData.PersonaID,
-                esFuncionario = autorData.esFuncionario
+                PersonaID = autorData.PersonaID,
+                esFuncionario = autorData.esFuncionario,
+                porcEquitativo  = autorData.porcEquitativo
             };
-
-            if (Session["Autores"] == null)
-            {
-                Session["Autores"] = new List<AutorDTO>();
-            }
 
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
             autores.Add(autor);
+            if (autor.porcEquitativo)
+                calcularPorcentajes(autores);
+            else
+                Session["Autores"] = autores;
+            return PartialView("_AutoresTabla");
+        }
+
+        [HttpPost]
+        public void borrarAutorNew(AutorDTO autorData)
+        {
+            var id = autorData.PersonaID;
+
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
+            autores.RemoveAll(a => a.PersonaID == id);
+            
             Session["Autores"] = autores;
 
-            var jsonTest = JsonConvert.SerializeObject(autor);
+            return;
+        }
+
+        [HttpPost]
+        public JsonResult checkFuncionario(UsuarioDTO funcionarioMail)
+        {
+
+            var email = funcionarioMail.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            if (usuario == null)
+                return Json(new
+                {
+                    usuario = false
+                });
+            else
+                return Json(new
+                {
+                    ususario = true
+                });
+        }
+
+        [HttpPost]
+        public JsonResult agregarFuncionario(UsuarioDTO usuarioData)
+        {
+
+            var email = usuarioData.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            if (usuario == null)
+            {
+                return Json(new
+                {
+                    usuario = false
+                });
+            }
+
+            var json = JsonConvert.SerializeObject(usuario);
 
             return Json(new
             {
-                personaJson = jsonTest
+                usuario = json
             });
+
         }
+
 
         [HttpPost]
         public JsonResult Cargar(HttpPostedFileBase archivo)

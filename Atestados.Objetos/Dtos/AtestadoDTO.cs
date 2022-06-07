@@ -15,7 +15,6 @@ namespace Atestados.Objetos.Dtos
         [StringLength(250)]
         public string Nombre { get; set; }
         [DisplayName("Número de autores")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe tener más de un autor.")]
         public int NumeroAutores { get; set; }
         [StringLength(1000)]
         public string Observaciones { get; set; }
