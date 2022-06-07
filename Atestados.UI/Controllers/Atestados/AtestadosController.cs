@@ -416,7 +416,7 @@ namespace Atestados.UI.Controllers
         }
 
         [HttpPost]
-        // Agregar un autor con porcentajes ingresados por el usuario.
+        // Agregar un autor externo.
         public ActionResult agregarAutor(AutorDTO autorData)
         {
             AutorDTO autor = new AutorDTO()
@@ -442,6 +442,37 @@ namespace Atestados.UI.Controllers
         }
 
         [HttpPost]
+        // Agregar un autor funcionario.
+        public ActionResult agregarFuncionario(AutorDTO autorData)
+        {
+            var email = autorData.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            AutorDTO autor = new AutorDTO()
+            {
+                Nombre = usuario.Nombre,
+                PrimerApellido = usuario.PrimerApellido,
+                SegundoApellido = usuario.SegundoApellido,
+                PersonaID = usuario.UsuarioID,
+                numAutor = autorData.numAutor,
+                Porcentaje = autorData.Porcentaje,
+                Email = autorData.Email,
+                esFuncionario = autorData.esFuncionario,
+                porcEquitativo  = autorData.porcEquitativo
+            };
+
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+            autores.Add(autor);
+            if (autor.porcEquitativo)
+                calcularPorcentajes(autores);
+            else
+                Session["Autores"] = autores;
+            return PartialView("_AutoresTabla");
+        }
+
+
+        [HttpPost]
         public void borrarAutorNew(AutorDTO autorData)
         {
             var id = autorData.PersonaID;
@@ -465,41 +496,11 @@ namespace Atestados.UI.Controllers
 
             if (usuario == null)
                 return Json(new
-                {
-                    usuario = false
-                });
+                {usuario = false});
             else
                 return Json(new
-                {
-                    ususario = true
-                });
+                {usuario = true});
         }
-
-        [HttpPost]
-        public JsonResult agregarFuncionario(UsuarioDTO usuarioData)
-        {
-
-            var email = usuarioData.Email;
-
-            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
-
-            if (usuario == null)
-            {
-                return Json(new
-                {
-                    usuario = false
-                });
-            }
-
-            var json = JsonConvert.SerializeObject(usuario);
-
-            return Json(new
-            {
-                usuario = json
-            });
-
-        }
-
 
         [HttpPost]
         public JsonResult Cargar(HttpPostedFileBase archivo)

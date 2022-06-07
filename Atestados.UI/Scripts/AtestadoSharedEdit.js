@@ -1,5 +1,5 @@
 ﻿// Este archivo contiene todos los métodos JS y AJAX para agregar y eliminar
-// autores y archivos cuando se está creando un atestado.
+// autores y archivos cuando se está realizando CRUD a un atestado.
 
 var per = 100;
 var autorCont = 0;
@@ -15,15 +15,6 @@ function isEmail(e) {
 
 function validPercentage(percentage) {
     return (per - percentage) >= 0 && percentage >= 0;
-}
-
-function actualizarPorcentajes() {
-    //console.log($('.porcentaje_equitativo').length);
-    var autores = $('.porcentaje_equitativo').length;
-    var porcentaje = 100 / autores;
-    if (porcentaje % 1 !== 0) porcentaje = porcentaje.toFixed(1);
-    $('.porcentaje_equitativo').text(porcentaje);
-
 }
 
 hiddenCheck.onchange = function () {
@@ -70,6 +61,7 @@ $('#subirArchivo').submit(function (e) {
         })
     }
 })
+
 // Agregar funcionarios como autores al libro.
 $('#funcionarioAgregar').click(function () {
     var usuario = new Object();
@@ -87,87 +79,87 @@ $('#funcionarioAgregar').click(function () {
         success: function (response) {
             funcionario = JSON.parse(response.usuario)
         }
-    })
-    console.log($('#email_funcionario').val());
-    console.log($('#porcentaje_funcionario').val());
-    console.log(funcionario);
+    });
 
     if (!funcionario) {
-        console.log("XD");
         alert("Funcionario no encontrado");
-    } else {
-        autoresCheck.checked = true;
-        var autor = new Object()
-        autor.Nombre = funcionario.Nombre
-        autor.PrimerApellido = funcionario.PrimerApellido
-        autor.SegundoApellido = funcionario.SegundoApellido
-        autor.Email = funcionario.Email
-        autor.esFuncionario = true
-        autor.PersonaID = funcionario.UsuarioID
-        if (checkbox.checked) {
-            autor.Porcentaje = 'Equitativo';
-        } else if ($('#porcentaje_funcionario').val() == "") {
-            alert("Debe ingresar un porcentaje");
-            return;
-        } else {
-            autor.Porcentaje = $('#porcentaje_funcionario').val()
-        }
-
-        console.log(autor);
-        console.log(isEmail(autor.Email));
-        console.log(checkbox.checked);
-
-        if (autor != null && isEmail(autor.Email) && checkbox.checked) {
-            $.ajax({
-                type: 'POST',
-                url: `${baseUrl}/AgregarAutor`,
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' +
-                            //autores.Porcentaje 
-                            '<span class="porcentaje_equitativo"></span>'
-                            + '%</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                    }
-                }
-            })
-            // No se pueden mezclar los autores de forma equitativa y no equitativa. 
-            hiddenCheck.disabled = true;
-        }
-        else if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
-            $.ajax({
-                type: 'POST',
-                url: `${baseUrl}/AgregarAutor`,
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' + autores.Porcentaje + '%</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                    }
-                }
-            })
-            // No se pueden mezclar los autores de forma equitativa y no equitativa. 
-            hiddenCheck.disabled = true;
-        }
+        return;
     }
 
-    $('#email_funcionario').val('');
-    $('#porcentaje_funcionario').val('');
+    // Validar si el porcentaje ingresado es correcto.
+    if (!checkbox.checked && $('#porcentaje_funcionario').val() == "") {
+        alert("Debe ingresar un porcentaje");
+        return;
+    }
+    if (!checkbox.checked && !validPercentage(parseInt($('#porcentaje_funcionario').val()))) {
+        alert("Se ha ingresado un porcentaje inválido");
+        return;
+    }
 
-    actualizarPorcentajes();
+    // Crear el objeto del autor con la información ingresada.
+    var autor = new Object();
+    autor.Email = usuario.Email;
+    autor.esFuncionario = true;
+    autor.porcEquitativo = false;
+    autor.Porcentaje = $('#porcentaje_funcionario').val();
+    autor.numAutor = ++autorCont;
+    console.log(JSON.stringify(autor));
+
+    // Si está marcada la opción de porcentaje equitativo.
+    if (autor != null && isEmail(autor.Email) && checkbox.checked) {
+        autor.porcEquitativo = true;
+        $.ajax({
+            type: 'POST',
+            url: `${baseUrl}/agregarFuncionario`,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'html',
+            data: JSON.stringify(autor),
+            success: function (result) {
+                $("#autoresTabla").html(result);
+            }
+        });
+        // Marcar el requerimiento de al menos un autor como cumplido.
+        autoresCheck.checked = true;
+        // No se pueden mezclar los autores de forma equitativa y no equitativa. 
+        hiddenCheck.disabled = true;
+    }
+    // Si no está marcada la opción de porcentaje equitativo.
+    else if (autor != null && isEmail(autor.Email)) {
+        console.log("wena lolas")
+        per = per - parseInt(autor.Porcentaje);
+        $.ajax({
+            type: 'POST',
+            url: `${baseUrl}/agregarFuncionario`,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'html',
+            data: JSON.stringify(autor),
+            success: function (result) {
+                $("#autoresTabla").html(result);
+            }
+        });
+        // Marcar el requerimiento de al menos un autor como cumplido.
+        autoresCheck.checked = true;
+        // No se pueden mezclar los autores de forma equitativa y no equitativa. 
+        hiddenCheck.disabled = true;
+    }
+    clearAuthorForm();
 });
 
 // Agregar un agente externo como autor.
 $('#autorAgregar').click(function () {
+
+    // Validar que el porcentaje ingresado es correcto.
+    if (!checkbox.checked && $('#porcentaje').val() == "") {
+        alert("Debe ingresar un porcentaje");
+        return;
+    }
+    if (!checkbox.checked && !validPercentage(parseInt($('#porcentaje').val()))) {
+        alert("Se ha ingresado un porcentaje inválido");
+        return;
+    }
+
     // Crear el objeto del autor con la información ingresada.
     var autor = new Object();
     autor.Nombre = $('#nombre').val();
@@ -176,17 +168,7 @@ $('#autorAgregar').click(function () {
     autor.Email = $('#email').val();
     autor.esFuncionario = false;
     autor.porcEquitativo = false;
-
-    if (!checkbox.checked && $('#porcentaje').val() == "") {
-        alert("Debe ingresar un porcentaje");
-        return;
-    }
     autor.Porcentaje = $('#porcentaje').val()
-    if (!checkbox.checked && !validPercentage(parseInt(autor.Porcentaje))) {
-        alert("Se ha ingresado un porcentaje inválido");
-        return;
-    } 
-
     autor.numAutor = ++autorCont;
 
     // Si está marcada la opción de porcentaje equitativo.
@@ -202,7 +184,7 @@ $('#autorAgregar').click(function () {
             success: function (result) {
                 $("#autoresTabla").html(result);
             }
-        })
+        });
         // Marcar el requerimiento de al menos un autor como cumplido.
         autoresCheck.checked = true;
         // No se pueden mezclar los autores de forma equitativa y no equitativa. 
@@ -221,7 +203,7 @@ $('#autorAgregar').click(function () {
             success: function (result) {
                 $("#autoresTabla").html(result);
             }
-        })
+        });
         // Marcar el requerimiento de al menos un autor como cumplido.
         autoresCheck.checked = true;
         // No se pueden mezclar los autores de forma equitativa y no equitativa. 
@@ -258,16 +240,16 @@ $('#tablaAutores').on('click', '.remove', function () {
     $(this).closest('tr').remove();
 
     $.ajax({
-            type: 'POST',
-            url: `${baseUrl}/borrarAutor`,
-            async: false,
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(autor),
-            success: function (response) {
-                console.log("autor eliminado");
-            }
-        })
+        type: 'POST',
+        url: `${baseUrl}/borrarAutor`,
+        async: false,
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        data: JSON.stringify(autor),
+        success: function (response) {
+            console.log("autor eliminado");
+        }
+    })
 
 });
 
