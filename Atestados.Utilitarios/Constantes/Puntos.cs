@@ -47,6 +47,15 @@ namespace Atestados.Utilitarios.Puntos
             public const int MAXIMO_PROFESIONAL_3 = 72;
             public const int MAXIMO_PROFESIONAL_4 = 144;
         }
+
+        public struct TiempoPasoCategoria
+        {
+            public const int SIN_CATEGORIA = 0;
+            public const int PRIMERA = 3;
+            public const int SEGUNDA = 8;
+            public const int TERCERA = 14;
+            public const int CUARTA = 0;
+        }
     }
 
 }

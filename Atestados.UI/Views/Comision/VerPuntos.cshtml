@@ -2,6 +2,7 @@
 
 @using Atestados.Datos.Modelo;
 @using Atestados.Objetos.Dtos;
+@using Atestados.Utilitarios.Puntos
 @{
     ViewBag.Title = "Ver Usuario";
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
@@ -15,8 +16,18 @@
         <hr />
     </div>
     <p>Nombre: @Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</p>
-    <p>Tiempo servido: @Model.TiempoServido años</p>
     <p>Categoría actual: @tipoCategoria.Nombre</p>
+    <p>Tiempo servido: @Model.TiempoServido años</p>
+    @if (tipoCategoria.Nombre != "Cuarta") { 
+        <p>
+            Tiempo requerido para pasar a la siguiente categoría: 
+            @if (tipoCategoria.Nombre == "Sin Categoría") { @Puntos.TiempoPasoCategoria.SIN_CATEGORIA }
+            @if (tipoCategoria.Nombre == "Primera") { @Puntos.TiempoPasoCategoria.PRIMERA }
+            @if (tipoCategoria.Nombre == "Segunda") { @Puntos.TiempoPasoCategoria.SEGUNDA }
+            @if (tipoCategoria.Nombre == "Tercera") { @Puntos.TiempoPasoCategoria.TERCERA }
+            años
+        </p>
+    }
     <div class="row">
         <h4>Puntos obtenidos</h4>
     </div>
