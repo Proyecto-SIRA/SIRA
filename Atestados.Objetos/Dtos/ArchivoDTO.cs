@@ -8,6 +8,7 @@ namespace Atestados.Objetos.Dtos
 {
     public class ArchivoDTO
     {
+        public int numArchivo { get; set; }
         public int ArchivoID { get; set; }
         public bool Obligatorio { get; set; }
         public string Nombre { get; set; }

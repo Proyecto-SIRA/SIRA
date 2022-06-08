@@ -16,7 +16,7 @@ namespace Atestados.UI.Controllers
 {
     public class AtestadosController : Controller
     {
-        private static int autorCont = 0;
+        private static int archCont = 0;
         private AtestadosEntities db = new AtestadosEntities();
         private InformacionAtestado infoAtestado = new InformacionAtestado();
         private InformacionGeneral infoGeneral = new InformacionGeneral();
@@ -307,7 +307,8 @@ namespace Atestados.UI.Controllers
         {
             List<EvaluacionXAtestadoDTO> puntos = new List<EvaluacionXAtestadoDTO>();
 
-            foreach (EvaluacionXAtestadoDTO evaluacion in evaluacionData) {
+            foreach (EvaluacionXAtestadoDTO evaluacion in evaluacionData)
+            {
 
                 EvaluacionXAtestadoDTO e = new EvaluacionXAtestadoDTO()
                 {
@@ -338,12 +339,6 @@ namespace Atestados.UI.Controllers
 
         }
 
-        [HttpPost]
-        public FileResult Descargar(int? archivoID)
-        {
-            ArchivoDTO archivo = infoAtestado.CargarArchivo(archivoID);
-            return File(archivo.Datos, archivo.TipoArchivo, archivo.Nombre);
-        }
 
         protected override void Dispose(bool disposing)
         {
@@ -398,9 +393,9 @@ namespace Atestados.UI.Controllers
             int counter = 0;
 
             // Retornar 100 si no hay autores.
-            if(size == 0)
+            if (size == 0)
                 return Json(new
-                {p = 100});
+                { p = 100 });
 
             // Iterar para sumar el porcentaje total de todos los autores.
             foreach (AutorDTO autor in autores)
@@ -409,7 +404,7 @@ namespace Atestados.UI.Controllers
             counter = 100 - counter;
 
             return Json(new
-                {p = counter});
+            { p = counter });
         }
 
         // Calcular los porcentajes equitativos.
@@ -422,6 +417,22 @@ namespace Atestados.UI.Controllers
                 autor.Porcentaje = perc;
 
             Session["Autores"] = autores;
+        }
+
+        [HttpPost]
+        public JsonResult checkFuncionario(UsuarioDTO funcionarioMail)
+        {
+
+            var email = funcionarioMail.Email;
+
+            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
+
+            if (usuario == null)
+                return Json(new
+                { usuario = false });
+            else
+                return Json(new
+                { usuario = true });
         }
 
         [HttpPost]
@@ -438,7 +449,7 @@ namespace Atestados.UI.Controllers
                 Email = autorData.Email,
                 PersonaID = autorData.PersonaID,
                 esFuncionario = autorData.esFuncionario,
-                porcEquitativo  = autorData.porcEquitativo
+                porcEquitativo = autorData.porcEquitativo
             };
 
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
@@ -468,7 +479,7 @@ namespace Atestados.UI.Controllers
                 Porcentaje = autorData.Porcentaje,
                 Email = autorData.Email,
                 esFuncionario = autorData.esFuncionario,
-                porcEquitativo  = autorData.porcEquitativo
+                porcEquitativo = autorData.porcEquitativo
             };
 
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
@@ -480,7 +491,6 @@ namespace Atestados.UI.Controllers
             return PartialView("_AutoresTabla");
         }
 
-
         [HttpPost]
         public ActionResult borrarAutor(AutorDTO autorData)
         {
@@ -488,31 +498,21 @@ namespace Atestados.UI.Controllers
 
             List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
 
-            autores.RemoveAll(a => a.numAutor== id);
-            
+            autores.RemoveAll(a => a.numAutor == id);
+
             Session["Autores"] = autores;
 
             return PartialView("_AutoresTabla");
         }
 
-        [HttpPost]
-        public JsonResult checkFuncionario(UsuarioDTO funcionarioMail)
+        [HttpGet]
+        public void enviarArchCont(int num)
         {
-
-            var email = funcionarioMail.Email;
-
-            UsuarioDTO usuario = infoGeneral.UsuarioPorEmail(email);
-
-            if (usuario == null)
-                return Json(new
-                {usuario = false});
-            else
-                return Json(new
-                {usuario = true});
+            archCont = num;
         }
 
         [HttpPost]
-        public JsonResult Cargar(HttpPostedFileBase archivo)
+        public ActionResult subirArchivo(HttpPostedFileBase archivo)
         {
             byte[] bytes;
             using (BinaryReader br = new BinaryReader(archivo.InputStream))
@@ -520,27 +520,52 @@ namespace Atestados.UI.Controllers
                 bytes = br.ReadBytes(archivo.ContentLength);
             }
 
-            if (Session["Archivos"] == null)
-            {
-                Session["Archivos"] = new List<ArchivoDTO>();
-            }
-
             ArchivoDTO ar = new ArchivoDTO
             {
+                numArchivo = archCont,
                 Nombre = Path.GetFileName(archivo.FileName),
                 TipoArchivo = archivo.ContentType,
                 Datos = bytes
             };
+
             List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
             archivos.Add(ar);
             Session["Archivos"] = archivos;
 
-            var jsonTest = JsonConvert.SerializeObject(ar);
-
-            return Json(new
-            {
-                archivoJson = jsonTest
-            });
+            return PartialView("_ArchivosTabla");
         }
+
+        [HttpGet]
+        public FileResult descargarArchivo(int numArch)
+        {
+            List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+            ArchivoDTO archivo = null;
+            foreach (ArchivoDTO arch in archivos)
+            {
+                if (arch.numArchivo == numArch)
+                {
+                    archivo = arch;
+                    break;
+                }
+
+            }
+            //ArchivoDTO archivo = infoAtestado.CargarArchivo(numArch);
+            return File(archivo.Datos, archivo.TipoArchivo, archivo.Nombre);
+        }
+
+        [HttpPost]
+        public ActionResult borrarArchivo(ArchivoDTO arch)
+        {
+            var numArch= arch.numArchivo;
+
+            List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+
+            archivos.RemoveAll(a => a.numArchivo == numArch);
+
+            Session["Archivos"] = archivos;
+
+            return PartialView("_ArchivosTabla");
+        }
+
     }
 }

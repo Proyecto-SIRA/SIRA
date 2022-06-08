@@ -3,6 +3,7 @@
 
 var per = 100;
 var autorCont = 0;
+var archCont = 0;
 var modal = document.getElementById('modalAutores');
 var checkbox = document.getElementById('AutoresEq');
 var hiddenCheck = document.getElementById('hiddenCheck');
@@ -17,6 +18,14 @@ function validPercentage(percentage) {
     return (per - percentage) >= 0 && percentage >= 0;
 }
 
+/*
+ * Si el checkbox de porcentaje equitativo se activa, este valor no se le pasa
+ * al controlador correctamente por estar dentro del modal. Por lo tanto, se
+ * agregó un checkbox adicional que está escondido en medio del formulario. Si
+ * el checkbox de autores equitativos se activa, entonces el checkbox escondido
+ * también. De esta forma el controlador recibe el valor del checkbox escondido
+ * y sí funciona la validación del formulario.
+ */
 hiddenCheck.onchange = function () {
     document.getElementById('porcentaje').disabled = this.checked;
     document.getElementById('porcentaje_funcionario').disabled = this.checked;
@@ -39,28 +48,6 @@ hiddenCheck.onchange = function () {
 //        }
 //    })
 
-$('#subirArchivo').submit(function (e) {
-    e.preventDefault();
-    var data = new FormData(this);
-    if (jQuery('#archivo').val().length != '') {
-        $('#archivo').val('');
-        $.ajax({
-            url: `${baseUrl}/Cargar`,
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            success: function (data) {
-                var archivo = JSON.parse(data.archivoJson)
-                if (data != null) {
-                    $("#tablaArchivos").append('<tr><td>' + archivo.Nombre + '</td></tr>')
-                    //$("#tablaArchivos").append('<tr><td>' + archivo.Nombre + '</td><td><a>Descargar</a> | <a>Borrar</a></td></tr>')
-                }
-            }
-        })
-    }
-})
 
 // Agregar funcionarios como autores al libro.
 $('#funcionarioAgregar').click(function () {
@@ -264,5 +251,71 @@ $('#autoresTabla').on('click', '.remove', function () {
             }
     });
     }
+});
+
+// Subir el archivo.
+$('#subirArchivo').submit(function (e) {
+    e.preventDefault();
+    var data = new FormData(this);
+    if (jQuery('#archivo').val().length != '') {
+        // Primero se le manda el número de archivo al controlador.
+        $.ajax({
+            type: 'GET',
+            url: `${baseUrl}/enviarArchCont`,
+            dataType: 'json',
+            async: false,
+            cache: false,
+            data: { 'num': ++archCont },
+        });
+        // Luego se le manda el archivo al controlador.
+        $.ajax({
+            url: `${baseUrl}/subirArchivo`,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function (result) {
+                $('#archivo').val('');
+                $("#archivosDiv").html(result);
+            }
+        });
+    }
+})
+
+// Descargar un archivo.
+$('#archivosDiv').on('click', '.dload', function () {
+
+    // Encontrar el número de archivo.
+    var $row = $(this).closest("tr");  
+    var $text = $row.find(".numArch").text();
+
+    //Descargar el archivo
+    window.location = `${baseUrl}/descargarArchivo?numArch=` + $text;
+});
+
+// Borrar arhcivos de la tabla.
+$('#archivosDiv').on('click', '.rm-archivo', function () {
+
+    // Encontrar el número de autor que 
+    var $row = $(this).closest("tr");  
+    var $text = $row.find(".numArch").text();
+
+    // Crear el objeto que se le pasa al controlador.
+    var arch = new Object()
+    arch.numArchivo = $text;
+
+    $.ajax({
+        type: 'POST',
+        url: `${baseUrl}/borrarArchivo`,
+        async: false,
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'html',
+        data: JSON.stringify(arch),
+        success: function (result) {
+            $("#archivosDiv").html(result);
+        }
+    });
+    
 });
 
