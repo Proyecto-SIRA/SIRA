@@ -7,8 +7,6 @@
 
 @using Atestados.Objetos.Dtos;
 
-@{double porcentaje = 100;}
-
 <style>
     textarea {
         padding: 0;
@@ -28,13 +26,8 @@
     }
 </style>
 
-    <a href="javascript:void(0);" class="btn btn-secondary" onclick="history.go(-1);">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
-        </svg>
-        Regresar
-    </a>
-        <h2 class="mt-4">Editar un artículo</h2>
+@RenderPage("~/Views/Shared/BotonRegresar.cshtml")
+<h2 class="mt-4">Editar un artículo</h2>
 <div class="container-fluid">
     <div class="row">
         <h2>Artículo</h2>
@@ -48,7 +41,7 @@
                 @Html.HiddenFor(model => model.AtestadoID)
                 <div class="form-horizontal">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
@@ -56,7 +49,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         <label for="Enlace" class="control-label col-md-2">DOI</label>
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.Enlace, new { htmlAttributes = new { @class = "form-control" } })
@@ -64,7 +57,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         <b class="control-label col-md-2">Revista</b>
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.InfoEditorial.Editorial, new { htmlAttributes = new { @class = "form-control" } })
@@ -72,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         <b class="control-label col-md-2">Año</b>
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Fecha.FechaFinal, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
@@ -80,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         <label for="Nombre" class="control-label col-md-2">Página web</label>
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.InfoEditorial.Website, new { htmlAttributes = new { @class = "form-control" } })
@@ -88,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         @Html.LabelFor(model => model.Pais, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.DropDownList("PaisID", null, htmlAttributes: new { @class = "form-control" })
@@ -96,7 +89,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-1">
                         @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.TextAreaFor(model => model.Observaciones, new { htmlAttributes = new { @class = "form-control" } })
@@ -104,39 +97,22 @@
                         </div>
                     </div>
 
-                    <h3>Autores</h3>
-
-                    <div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Porcentaje</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaAutores">
-                                @foreach (AutorDTO autor in ViewBag.Autores)
-                                {
-                                    porcentaje -= autor.Porcentaje;
-                                    <tr>
-                                        <td>@autor.Nombre</td>
-                                        <td>@autor.Porcentaje</td>
-                                        <td><a class="btn btn-primary btn-sm" onclick="Borrar()">Borrar</a></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>         
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="btn btn-primary" onclick="AbrirModal()">Modificar autores</div>
-                        </div>
+                    <div class="form-group mb-1">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAutores">
+                            Modificar autores
+                        </button>
+                        @Html.ValidationMessageFor(model => model.AutoresCheck, "", new { @class = "text-danger" })
+                    </div>
+                    <div hidden>
+                        @*Checkbox oculto porque si está dentro del modal, no devuelve el estado correctamente.*@
+                        @Html.CheckBoxFor(model => model.AutoresEq)
+                        @Html.CheckBoxFor(model => model.AutoresCheck)
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
+                    <br />
+
+                    <div class="form-group mb-1">
+                        <div class="col-md-offset-2 col-md-10 mt-2">
                             <input type="submit" value="Guardar" class="btn btn-success" id="submit" />
                         </div>
                     </div>
@@ -146,38 +122,19 @@
         <div class="col-lg-4">
             <div class="form-horizontal">
                 <form id="subirArchivo">
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <div class="col-md-10">
-                            <input type="file" name="archivo" class="btn btn-default" id="archivo" />
+                            <input type="file" name="archivo" class="" id="archivo" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input type="submit" class="btn btn-default" value="Subir Archivo" form="subirArchivo" />
+                            <input type="submit" class="btn btn-primary" value="Subir Archivo" form="subirArchivo" />
                         </div>
                     </div>
                 </form>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaArchivos">
-                        @foreach (ArchivoDTO item in Session["Archivos"] as List<ArchivoDTO>)
-                        {
-                            <tr>
-                                <td>
-                                    @item.Nombre
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @Html.Partial("_ArchivosTabla")
             </div>
         </div>
     </div>
@@ -185,10 +142,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
-                        Artículos agregados
-                    </th>
-                    <th></th>
+                    <th>Artículos agregados</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -225,7 +180,7 @@
     </div>
 </div>
 
-<div id="autoresModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div id="modalAutores" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -233,26 +188,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Porcentaje</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaAutores">
-                        @foreach (AutorDTO autor in ViewBag.Autores)
-                        {
-                            porcentaje -= autor.Porcentaje;
-                            <tr>
-                                <td>@autor.Nombre</td>
-                                <td>@autor.Porcentaje</td>
-                                @*<td><a>Borrar</a></td>*@
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @Html.Partial("_AutoresTabla")
+                <h3>Autor externo</h3>
                 <table class="table">
                     <tr>
                         <td><input class="form-control" type="text" placeholder="Nombre" id="nombre" /></td>
@@ -263,6 +200,14 @@
                         <td><input class="form-control" type="email" placeholder="Correo electrónico" id="email" /></td>
                         <td><input class="form-control" type="number" placeholder="Porcentaje" id="porcentaje" /></td>
                         <td><button type="button" class="btn btn-primary" id="autorAgregar">Agregar</button></td>
+                    </tr>
+                </table>
+                <h3>Funcionario del Tec</h3>
+                <table class="table">
+                    <tr>
+                        <td><input class="form-control" type="email" placeholder="Correo electrónico" id="email_funcionario" runat="server" /></td>
+                        <td><input class="form-control" type="number" placeholder="Porcentaje" id="porcentaje_funcionario" /></td>
+                        <td><button type="button" class="btn btn-primary" id="funcionarioAgregar">Agregar</button></td>
                     </tr>
                 </table>
             </div>
@@ -279,71 +224,12 @@
     </div>
 </div>
 
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
 <script type="text/javascript">
-
-
-    function AbrirModal() {
-        $("#autoresModal").modal()
-    }
-
-    function isEmail(email) {
-        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,6})+$/;
-        return regex.test(email);
-    }
-
-    var per = @porcentaje;
-
-    function validPercentage(percentage) {
-        return (per - percentage) >= 0 && percentage >= 0;
-    }
-
-    $('#autorAgregar').click(function () {
-        var autor = new Object()
-        autor.Nombre = $('#nombre').val()
-        autor.PrimerApellido = $('#apellido1').val()
-        autor.SegundoApellido = $('#apellido2').val()
-        autor.Email = $('#email').val()
-        autor.Porcentaje = $('#porcentaje').val()
-
-        if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
-            $.ajax({
-                type: 'POST',
-                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td><td><a>Borrar</a></td></td></tr>')
-                    }
-                }
-            })
-        }
-    })
-
-    $('#subirArchivo').submit(function (e) {
-        e.preventDefault();
-        var data = new FormData(this);
-        if (jQuery('#archivo').val().length != '') {
-            $('#archivo').val('');
-            $.ajax({
-                url: '@Variables.BaseUrl/Articulo/Cargar',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function (data) {
-                    var archivo = JSON.parse(data.archivoJson)
-                    if (data != null) {
-                        $("#tablaArchivos").append('<tr><td>' + archivo.Nombre + '</td><td><a>Descargar</a> | <a>Borrar</a></td></tr>')
-                    }
-                }
-            })
-        }
-    })
-
+    // Esta variable debe estar en todas las vistas de atestados.
+    var baseUrl = "@Variables.BaseUrl/Atestados";
+    var editMode = true;
 </script>
+@Scripts.Render("~/bundles/atestados_shared")

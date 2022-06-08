@@ -99,29 +99,19 @@
         <div class="col-lg-4">
             <div class="form-horizontal">
                 <form id="subirArchivo">
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <div class="col-md-10">
-                            <input type="file" name="archivo" class="btn btn-default" id="archivo" />
+                            <input type="file" name="archivo" id="archivo" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input type="submit" class="btn btn-default" value="Subir Archivo" form="subirArchivo" />
+                            <input type="submit" class="btn btn-primary" value="Subir Archivo" form="subirArchivo" />
                         </div>
                     </div>
                 </form>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaArchivos"> </tbody>
-                </table>
+                @Html.Partial("_ArchivosTabla")
             </div>
         </div>
     </div>
@@ -177,17 +167,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Porcentaje</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaAutores">
-                    </tbody>
-                </table>
+                @Html.Partial("_AutoresTabla")
                 <h3>Autor externo</h3>
                 <table class="table">
                     <tr>
@@ -225,230 +205,9 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
-@{InformacionGeneral infoGeneral = new InformacionGeneral();}
-
-    var per = 100;
-    var modal = document.getElementById('modalAutores');
-    var checkbox = document.getElementById('AutoresEq');
-    var hiddenCheck = document.getElementById('hiddenCheck');
-    var autoresCheck = document.getElementById('AutoresCheck');
-
-    function isEmail(email) {
-        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,6})+$/;
-        return regex.test(email);
-    }
-
-    function validPercentage(percentage) {
-        return (per - percentage) >= 0 && percentage >= 0;
-    }
-
-    hiddenCheck.onchange = function () {
-        document.getElementById('porcentaje').disabled = this.checked;
-        document.getElementById('porcentaje_funcionario').disabled = this.checked;
-        checkbox.checked = this.checked;
-    };
-
-    // Agregar autores a la tabla de autores.
-    $.ajax({
-            type: 'POST',
-            url: '@Variables.BaseUrl/Articulo/getAutores',
-            async: false,
-            contentType: 'application/json; charset=utf-8',
-            success: function (response) {
-                console.log(response);
-                response.forEach(function (autor) {
-                    per -= parseInt(autor.Porcentaje);
-                    $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.Porcentaje + '</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                });
-            }
-        })
-
-    // Agregar funcionarios como autores al libro.
-    $('#funcionarioAgregar').click(function () {
-        var usuario = new Object();
-        usuario.Email = $('#email_funcionario').val();
-
-        var funcionario = null;
-
-        $.ajax({
-            type: 'POST',
-            url: '@Variables.BaseUrl/Funcionario/UsuarioPorEmail',
-            async: false,
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(usuario),
-            success: function (response) {
-                funcionario = JSON.parse(response.usuario)
-            }
-        })
-        console.log($('#email_funcionario').val());
-        console.log($('#porcentaje_funcionario').val());
-        console.log(funcionario);
-
-        if (!funcionario) {
-            console.log("XD");
-            alert("Funcionario no encontrado");
-        } else {
-            var autor = new Object()
-            autoresCheck.checked = true;
-            autor.Nombre = funcionario.Nombre
-            autor.PrimerApellido = funcionario.PrimerApellido
-            autor.SegundoApellido = funcionario.SegundoApellido
-            autor.Email = funcionario.Email
-            autor.esFuncionario = true
-            autor.PersonaID = funcionario.UsuarioID
-            if (checkbox.checked) {
-                autor.Porcentaje = 'Equitativo';
-            } else if ($('#porcentaje_funcionario').val() == "") {
-                alert("Debe ingresar un porcentaje");
-                return;
-            } else {
-                autor.Porcentaje = $('#porcentaje_funcionario').val()
-            }
-
-
-            if (autor != null && isEmail(autor.Email) && checkbox.checked) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                    async: false,
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: JSON.stringify(autor),
-                    success: function (response) {
-                        var autores = JSON.parse(response.personaJson)
-                        if (response != null) {
-                            per -= parseInt(autor.Porcentaje);
-                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                        }
-                    }
-                })
-            }
-            else if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                    async: false,
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: JSON.stringify(autor),
-                    success: function (response) {
-                        var autores = JSON.parse(response.personaJson)
-                        if (response != null) {
-                            per -= parseInt(autor.Porcentaje);
-                            $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                        }
-                    }
-                })
-            }
-        }
-
-    });
-
-    // Agregar un agente externo como autor.
-    $('#autorAgregar').click(function () {
-        var autor = new Object()
-        autor.Nombre = $('#nombre').val()
-        autor.PrimerApellido = $('#apellido1').val()
-        autor.SegundoApellido = $('#apellido2').val()
-        autor.Email = $('#email').val()
-        autor.esFuncionario = false
-        if (checkbox.checked) {
-            autor.Porcentaje = 'Equitativo';
-        } else {
-            autor.Porcentaje = $('#porcentaje').val()
-        }
-
-
-        if (autor != null && isEmail(autor.Email) && checkbox.checked) {
-            autoresCheck.checked = true;
-            $.ajax({
-                type: 'POST',
-                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                    }
-                }
-            })
-        }
-        else if (autor != null && isEmail(autor.Email) && validPercentage(parseInt(autor.Porcentaje))) {
-            autoresCheck.checked = true;
-            $.ajax({
-                type: 'POST',
-                url: '@Variables.BaseUrl/Articulo/AgregarAutor',
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    var autores = JSON.parse(response.personaJson)
-                    if (response != null) {
-                        per -= parseInt(autor.Porcentaje);
-                        $("#tablaAutores").append('<tr><td>' + autores.Nombre + '</td><td>' + autores.Porcentaje + '</td> <td><a id="borrar" email="' + autores.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-                    }
-                }
-            })
-        }
-
-
-    })
-
-    $('#tablaAutores').on('click', '.remove', function () {
-
-        var autor = new Object()
-        autor.Email = $(this).attr('email');
-        var child = $(this).closest('tr').nextAll();
-        child.each(function () {
-            var id = $(this).attr('id');
-            var idx = $(this).children('.row-index').children('p');
-            var dig = parseInt(id.substring(1));
-            idx.html(`Row ${dig - 1}`);
-            $(this).attr('id', `R${dig - 1}`);
-        });
-        console.log($(this).attr('email'));
-        $(this).closest('tr').remove();
-
-        $.ajax({
-                type: 'POST',
-                url: '@Variables.BaseUrl/Articulo/borrarAutor',
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(autor),
-                success: function (response) {
-                    console.log("autor eliminado");
-                }
-            })
-
-    });
-
-    $('#subirArchivo').submit(function (e) {
-        e.preventDefault();
-        var data = new FormData(this);
-        if (jQuery('#archivo').val().length != '') {
-            $('#archivo').val('');
-            $.ajax({
-                url: '@Variables.BaseUrl/Articulo/Cargar',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function (data) {
-                    var archivo = JSON.parse(data.archivoJson)
-                    if (data != null) {
-                        $("#tablaArchivos").append('<tr><td>' + archivo.Nombre + '</td><td><a>Descargar</a> | <a>Borrar</a></td></tr>')
-                    }
-                }
-            })
-        }
-    })
-
+    @{InformacionGeneral infoGeneral = new InformacionGeneral();}
+    // Esta variable debe estar en todas las vistas de atestados.
+    var baseUrl = "@Variables.BaseUrl/Atestados";
+    var editMode = false;
 </script>
+@Scripts.Render("~/bundles/atestados_shared")

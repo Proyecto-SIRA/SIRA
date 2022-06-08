@@ -195,7 +195,6 @@ namespace Atestados.UI.Controllers.Atestados
                 Atestado atestado_mapped = AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado);
                 infoAtestado.EditarAtestado(atestado_mapped);
 
-
                 // Agregar archivos
                 AtestadoShared.obj.editarArchivos(archivosOld ,archivos, infoAtestado, atestado_mapped);
 
@@ -213,6 +212,7 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.AtestadoID = new SelectList(db.Fecha, "FechaID", "FechaID", atestado.AtestadoID);
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial", atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
+            ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             return View(atestado);
         }
 

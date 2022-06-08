@@ -430,7 +430,6 @@
     <Content Include="Views\Comision\VerPuntos.cshtml" />
     <Content Include="Views\Shared\_AutoresTabla.cshtml" />
     <Content Include="Views\Shared\_ArchivosTabla.cshtml" />
-    <Content Include="Views\Shared\_ArchivosTablaVer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
