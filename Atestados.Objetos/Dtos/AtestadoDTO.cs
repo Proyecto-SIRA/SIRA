@@ -10,6 +10,8 @@ namespace Atestados.Objetos.Dtos
 {
     public class AtestadoDTO
     {
+        public bool AutoresCheck { get; set; }
+        public bool AutoresEq { get; set; }
         public int AtestadoID { get; set; }
         [Required]
         [StringLength(250)]

@@ -9,6 +9,11 @@ var checkbox = document.getElementById('AutoresEq');
 var hiddenCheck = document.getElementById('hiddenCheck');
 var autoresCheck = document.getElementById('AutoresCheck');
 
+// Si se está editando un atestado, suponer que cumple con el check de autores.
+if (editMode) {
+    autoresCheck.checked = true;
+}
+
 function isEmail(e) {
     var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
     return String(e).search(filter) != -1;

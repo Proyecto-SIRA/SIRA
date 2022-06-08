@@ -868,12 +868,23 @@ namespace Atestados.Negocios.Negocios
             db.SaveChanges();
         }
 
-        public void BorrarAtestadoXPersona(int id)
+        // Borra las personas asociadas a un atestado por medio de atestadoID.
+        public void BorrarAtestadoXPersona(int atestadoID)
         {
-            AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(id);
-            db.AtestadoXPersona.Remove(atestadoXPersona);
+            var personasXAtestado = db.AtestadoXPersona.Where(x => x.AtestadoID == atestadoID);
+            foreach (var persona in personasXAtestado)
+            {
+                db.AtestadoXPersona.Remove(persona);
+            }
             db.SaveChanges();
         }
+        // Old version
+        //public void BorrarAtestadoXPersona(int id)
+        //{
+        //    AtestadoXPersona atestadoXPersona = db.AtestadoXPersona.Find(id);
+        //    db.AtestadoXPersona.Remove(atestadoXPersona);
+        //    db.SaveChanges();
+        //}
         #endregion
 
         #region DominioIdioma

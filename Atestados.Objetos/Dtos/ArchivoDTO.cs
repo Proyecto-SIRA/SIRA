@@ -15,6 +15,29 @@ namespace Atestados.Objetos.Dtos
         public byte[] Datos { get; set; }
         public string TipoArchivo { get; set; }
         public int AtestadoID { get; set; }
+        public ArchivoDTO() { }
+
+        public ArchivoDTO(int numArchivo, int archivoID, bool obligatorio, string nombre, byte[] datos, string tipoArchivo, int atestadoID)
+        {
+            this.numArchivo = numArchivo;
+            ArchivoID = archivoID;
+            Obligatorio = obligatorio;
+            Nombre = nombre;
+            Datos = datos;
+            TipoArchivo = tipoArchivo;
+            AtestadoID = atestadoID;
+        }
+
+        public ArchivoDTO(ArchivoDTO archOld)
+        {
+            numArchivo = archOld.numArchivo;
+            ArchivoID = archOld.ArchivoID;
+            Obligatorio = archOld.Obligatorio;
+            Nombre = archOld.Nombre;
+            Datos = archOld.Datos;
+            TipoArchivo = archOld.TipoArchivo;
+            AtestadoID = archOld.AtestadoID;
+        }
 
     }
 }

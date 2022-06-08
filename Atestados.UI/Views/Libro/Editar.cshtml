@@ -7,8 +7,6 @@
 
 @using Atestados.Objetos.Dtos;
 
-@{double porcentaje = 100;}
-
 <style>
     textarea {
         padding: 0;
@@ -97,11 +95,15 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAutores">
-                                Modificar autores
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAutores">
+                            Modificar autores
+                        </button>
+                        @Html.ValidationMessageFor(model => model.AutoresCheck, "", new { @class = "text-danger" })
+                    </div>
+                    <div hidden>
+                        @*Checkbox oculto porque si está dentro del modal, no devuelve el estado correctamente.*@
+                        @Html.CheckBoxFor(model => model.AutoresEq)
+                        @Html.CheckBoxFor(model => model.AutoresCheck)
                     </div>
 
                     <br />
@@ -117,42 +119,19 @@
         <div class="col-lg-4">
             <div class="form-horizontal">
                 <form id="subirArchivo">
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <div class="col-md-10">
-                            <input type="file" name="archivo" class="btn btn-default" id="archivo" />
+                            <input type="file" name="archivo" class="" id="archivo" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input type="submit" class="btn btn-default" value="Subir Archivo" form="subirArchivo" />
+                            <input type="submit" class="btn btn-primary" value="Subir Archivo" form="subirArchivo" />
                         </div>
                     </div>
                 </form>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaArchivos">
-                        @foreach (ArchivoDTO item in Session["Archivos"] as List<ArchivoDTO>)
-                        {
-                            <tr>
-                                <td>
-                                    @item.Nombre
-                                </td>
-                                @*<td>
-                                        <a>Destargar</a> |
-                                        <a>Borrar</a>
-                                    </td>*@
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @Html.Partial("_ArchivosTabla")
             </div>
         </div>
     </div>
@@ -160,10 +139,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
-                        Libros agregados
-                    </th>
-                    <th></th>
+                    <th>Libros agregados</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -208,28 +185,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Porcentaje</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaAutores">
-                        @foreach (AutorDTO autor in ViewBag.Autores)
-                        {
-                            porcentaje -= autor.Porcentaje;
-                            <tr>
-                                <td>@autor.Nombre</td>
-                                <td>@autor.PrimerApellido @autor.SegundoApellido</td>
-                                <td>@autor.Porcentaje%</td>
-                                <td><a class="btn btn-danger btn-sm" onclick="Borrar()">Borrar</a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @Html.Partial("_AutoresTabla")
                 <h3>Autor externo</h3>
                 <table class="table">
                     <tr>
@@ -268,8 +224,8 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
-    var per = @porcentaje;
     // Esta variable debe estar en todas las vistas de atestados.
     var baseUrl = "@Variables.BaseUrl/Atestados";
+    var editMode = true;
 </script>
-@Scripts.Render("~/bundles/atestados-editar")
+@Scripts.Render("~/bundles/atestados_shared")

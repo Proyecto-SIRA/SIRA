@@ -20,6 +20,7 @@ namespace Atestados.UI.Controllers.Atestados
         private InformacionAtestado infoAtestado = new InformacionAtestado();
         private InformacionGeneral infoGeneral = new InformacionGeneral();
         private readonly string Rubro = "libro";
+        public static List<ArchivoDTO> archivosOld = null;
 
         // GET: Libros
         public ActionResult Index()
@@ -100,7 +101,7 @@ namespace Atestados.UI.Controllers.Atestados
                 AtestadoShared.obj.guardarArchivos(archivos, infoAtestado, atestado_mapped);
 
                 // Agregar autores
-                AtestadoShared.obj.guardarAutores(autores, infoGeneral, infoAtestado, atestado, atestado_mapped);
+                AtestadoShared.obj.guardarAutores(autores, infoGeneral, infoAtestado, atestado.AutoresEq, atestado_mapped);
 
                 // Limpiar las variables de sesión que contienen a los archivos y autores.
                 Session["Archivos"] = new List<ArchivoDTO>();
@@ -136,10 +137,33 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", atestado.PaisID);
             ViewBag.AtestadoID = new SelectList(db.Fecha, "FechaID", "FechaID", atestado.AtestadoID);
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial", atestado.AtestadoID);
-            ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
+            // Guardar el estado de los archivos previos a su edición.
+            archivosOld = new List<ArchivoDTO>();
+            List<ArchivoDTO> tmpList = infoAtestado.CargarArchivosDeAtestado(id);
+            tmpList.ForEach((item) => { archivosOld.Add(new ArchivoDTO(item)); });
             Session["Archivos"] = infoAtestado.CargarArchivosDeAtestado(id);
+            Session["Autores"] = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
+            indexarListas();
             return View(atestado_mapped);
+        }
+
+        // Indexar las listas de autores y archivos con números.
+        private void indexarListas()
+        {
+            int cont = 1;
+            List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
+            List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+
+            foreach (ArchivoDTO archivo in archivos)
+                archivo.numArchivo = cont++;
+
+            cont = 1;
+            foreach (AutorDTO autor in autores)
+                autor.numAutor = cont++;
+
+            Session["Archivos"] = archivos;
+            Session["Autores"] = autores;
         }
 
         // POST: Libro/Editar
@@ -147,9 +171,12 @@ namespace Atestados.UI.Controllers.Atestados
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Editar([Bind(Include = "Lugar,CantidadHoras,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,Fecha,DominioIdioma,Persona,Rubro,Pais,InfoEditorial,Archivo")] AtestadoDTO atestado)
+        public ActionResult Editar([Bind(Include = "Lugar,CantidadHoras,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,Fecha,DominioIdioma,Persona,Rubro,Pais,InfoEditorial,Archivo,AutoresEq,AutoresCheck")] AtestadoDTO atestado)
         {
-            if (ModelState.IsValid)
+            // Check manual para determinar si hay al menos un autor ingresado.
+            if (!atestado.AutoresCheck)
+                ModelState.AddModelError("AutoresCheck", "El libro debe tener al menos un autor.");
+            else if (ModelState.IsValid)
             {
                 List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
@@ -165,28 +192,19 @@ namespace Atestados.UI.Controllers.Atestados
                 atestado.Archivos = infoAtestado.CargarArchivosDeAtestado(atestado.AtestadoID);
                 atestado.AtestadoXPersona = AutoMapper.Mapper.Map<List<AtestadoXPersona>, List<AtestadoXPersonaDTO>>(infoAtestado.CargarAtestadoXPersonasdeAtestado(atestado.AtestadoID));
                 atestado.NumeroAutores = autores.Count();
-                infoAtestado.EditarAtestado(AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado));
+                Atestado atestado_mapped = AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado);
+                infoAtestado.EditarAtestado(atestado_mapped);
 
-                foreach (ArchivoDTO archivo in archivos)
-                {
-                    Archivo ar = AutoMapper.Mapper.Map<ArchivoDTO, Archivo>(archivo);
-                    ar.AtestadoID = atestado.AtestadoID;
-                    infoAtestado.GuardarArchivo(ar);
-                }
-                foreach (AutorDTO autor in autores)
-                {
-                    Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
-                    infoGeneral.GuardarPersona(persona);
-                    infoAtestado.GuardarAtestadoXPersona(new AtestadoXPersona()
-                    {
-                        AtestadoID = atestado.AtestadoID,
-                        PersonaID = persona.PersonaID,
-                        Porcentaje = autor.Porcentaje
-                    });
-                }
+
+                // Agregar archivos
+                AtestadoShared.obj.editarArchivos(archivosOld ,archivos, infoAtestado, atestado_mapped);
+
+                // Agregar autores
+                AtestadoShared.obj.editarAutores(autores, infoGeneral, infoAtestado, atestado.AutoresEq, atestado_mapped);
 
                 Session["Archivos"] = new List<ArchivoDTO>();
                 Session["Autores"] = new List<AutorDTO>();
+                archivosOld = new List<ArchivoDTO>();
 
                 return RedirectToAction("Crear");
             }
@@ -195,7 +213,6 @@ namespace Atestados.UI.Controllers.Atestados
             ViewBag.AtestadoID = new SelectList(db.Fecha, "FechaID", "FechaID", atestado.AtestadoID);
             ViewBag.AtestadoID = new SelectList(db.InfoEditorial, "InfoEditorialID", "Editorial", atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
-            ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             return View(atestado);
         }
 
