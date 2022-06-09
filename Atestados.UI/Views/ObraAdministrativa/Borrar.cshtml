@@ -5,12 +5,12 @@
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
 }
 
-<h2>Borrar</h2>
+@RenderPage("~/Views/Shared/BotonRegresar.cshtml")
+<h2 class="mt-4">Borrar un atestado</h2>
 
-<h3>¿Está seguro/a que desea borrar este atestado?</h3>
 <div class="container-fluid">
     <div class="row">
-        <h2>Obra administrativa de desarrollo</h2>
+        <h3>¿Está seguro/a que desea borrar esta obra administrativa de desarrollo?</h3>
         <hr />
     </div>
     <div class="row w-100">
@@ -23,14 +23,6 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Nombre)
-                </dd>
-
-                <dt>
-                    Número de autores
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.NumeroAutores)
                 </dd>
 
                 <dt>
@@ -118,7 +110,7 @@
                                     @item.Nombre
                                 </td>
                                 <td>
-                                    @item.PrimerApellido
+                                    @item.PrimerApellido @item.SegundoApellido
                                 </td>
                                 <td>
                                     @item.Email
@@ -138,7 +130,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Borrar" class="btn btn-default" />
+            <input type="submit" value="Borrar" class="btn btn-danger" />
         </div>
     }
 </div>

@@ -10,7 +10,7 @@
 <div class="container-fluid">
     @RenderPage("~/Views/Shared/BotonRegresar.cshtml")
     <div class="mt-4">
-        <h2>Ver una obra administrativa de desarrollo</h2>
+        <h2>Ver un proyecto de investigación y extensión</h2>
     </div>
     <hr />
     <div class="row w-100">
@@ -36,15 +36,23 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.Enlace)
+                    Código
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Enlace)
+                    @Html.DisplayFor(model => model.Codigo)
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.Fecha)
+                    Fecha de inicio
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha.FechaInicio)
+                </dd>
+
+                <dt>
+                    Fecha de finalización
                 </dt>
 
                 <dd>
@@ -52,11 +60,11 @@
                 </dd>
 
                 <dt>
-                    Curso
+                    @Html.DisplayNameFor(model => model.Enlace)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.CatalogoTipo)
+                    @Html.DisplayFor(model => model.Enlace)
                 </dd>
 
                 <dt>
@@ -93,12 +101,9 @@
                     </tbody>
                 </table>
             </div>
-            <div id="nota">
-                <h4>Nota ponderada:</h4>
-            </div>
-            @Html.Partial("Autores")
         </div>
     </div>
+
     <div class="row">
         @Html.Partial("Links", Model)
     </div>
@@ -115,12 +120,13 @@
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         data: JSON.stringify({ AtestadoID: id }),
-        success: function (response) {                
+        success: function (response) {
             if (response != null) {
                 $("#nota").append('<p>' + response +'</p>')
             }
-                
+
         }
     })
 
 </script>
+

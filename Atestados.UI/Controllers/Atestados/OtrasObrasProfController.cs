@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -14,21 +11,35 @@ using Newtonsoft.Json;
 
 namespace Atestados.UI.Controllers.Atestados
 {
-    public class ObraDidacticaController : Controller
+    public class OtrasObrasProfController : Controller
     {
         private AtestadosEntities db = new AtestadosEntities();
         private InformacionAtestado infoAtestado = new InformacionAtestado();
         private InformacionGeneral infoGeneral = new InformacionGeneral();
-        private string Rubro = "Obra didáctica"; // esta como otras obras profesionales
-        public static List<ArchivoDTO> archivosOld = null;
+        private string Rubro = "Otras obras profesionales"; // esta como otras obras profesionales
+        private static List<ArchivoDTO> archivosOld = null;
+        public static List<string> tiposObras = new List<string>(){
+            "Diseño y desarrollo de mecanismos especializados",
+            "Desarrollo de servicios profesionales especializados",
+            "Propuesta de creación o modificación significativa de opciones académicas",
+            "Diseño y desarrollo de laboratorios especializados",
+            "Estudios especializados que permitan el desarrollo de nuevas actividades",
+            "Libros sin consejo editorial",
+            "Material audiovisual especializado",
+            "Material bibliográfico especializado",
+            "Publicaciones electrónicas especializadas",
+            "Juego de páginas Web publicadas por la Institución",
+            "Obra artística galardonada",
+            "Otros"
+        };
 
-        // GET: Ponencia
+        // GET: OtrasObrasProf
         public ActionResult Index()
         {
             return View(infoAtestado.CargarAtestadosDeTipo(infoAtestado.ObtenerIDdeRubro(Rubro)));
         }
 
-        // GET: ObraDidactica/Ver
+        // GET: OtrasObrasProf/Ver
         public ActionResult Ver(int? id)
         {
             // Validar los datos ingresados.
@@ -47,50 +58,51 @@ namespace Atestados.UI.Controllers.Atestados
             return View(atestado);
         }
 
-        // GET: ObraDidactica/Crear
+        // GET: OtrasObrasProf/Crear
         public ActionResult Crear()
         {
             AtestadoDTO atestado = new AtestadoDTO();
             atestado.FechaFinal = DateTime.Now;
             atestado.FechaInicio = DateTime.Now;
             atestado.NumeroAutores = 1;
-
             ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", infoAtestado.ObtenerIDdePais("costa rica"));
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
+            ViewBag.TiposObras = tiposObras.Select(x => 
+            new SelectListItem()
+            {
+                Text = x.ToString(),
+                Value = x.ToString()
+            });
 
             // Limpiar las listas de archivos y autores por si tienen basura.
-            Session["Autores"] = new List<AutorDTO>();
+            Session["Autores"] = new List<AutorDTO>(); 
             Session["Archivos"] = new List<ArchivoDTO>();
 
             return View(atestado);
         }
 
-        // POST: Ponencia/Creaar
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: OtrasObrasProf/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Crear([Bind(Include = "AtestadoID,Nombre,NumeroAutores,Observaciones,HoraCreacion,Enviado,FechaFinal,Descargado,CantidadHoras,Lugar,CatalogoTipo,Enlace,PaisID,PersonaID,RubroID,AutoresEq,AutoresCheck")] AtestadoDTO atestado)
         {
-            // Check manual para determinar si hay al menos un autor ingresado.
             if (!atestado.AutoresCheck)
                 ModelState.AddModelError("AutoresCheck", "El libro debe tener al menos un autor.");
             else
             if (ModelState.IsValid)
             {
-                List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
+                List<AutorDTO> autores = (List <AutorDTO>)Session["Autores"];
                 List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
 
                 // Obtener el id del usuario que está agregando el atestado.
                 atestado.PersonaID = (int)Session["UsuarioID"];
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
-                atestado.PaisID = infoAtestado.ObtenerIDdePais("costa rica");
                 atestado.NumeroAutores = autores.Count();
+                atestado.PaisID = infoAtestado.ObtenerIDdePais("costa rica"); // Costa Rica
                 // Mappear el atestado una vez que está completo.
                 // Esta operación es muy frágil, y podría llevar a errores de llaves en la BD.
                 Atestado atestado_mapped = AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado);
                 infoAtestado.GuardarAtestado(atestado_mapped);
-                // Obtener y guardar información adicional del atestado.
                 atestado.AtestadoID = atestado_mapped.AtestadoID;
                 Fecha fecha = AutoMapper.Mapper.Map<AtestadoDTO, Fecha>(atestado);
                 infoAtestado.GuardarFecha(fecha);
@@ -112,7 +124,7 @@ namespace Atestados.UI.Controllers.Atestados
             return View(atestado);
         }
 
-        // GET: ObraDidactica/Editar
+        // GET: OtrasObrasProf/Editar
         public ActionResult Editar(int? id)
         {
             if (id == null)
@@ -132,8 +144,15 @@ namespace Atestados.UI.Controllers.Atestados
             AtestadoDTO atestado_mapped = AutoMapper.Mapper.Map<Atestado, AtestadoDTO>(atestado);
 
             // Cargar y poner los datos adicionales del formulario en la vista.
-            ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", atestado.PaisID);
+            ViewBag.Autores = infoAtestado.CargarAutoresAtestado(atestado.AtestadoID);
             ViewBag.Atestados = infoAtestado.CargarAtestadosDePersonaPorTipo(infoAtestado.ObtenerIDdeRubro(Rubro), (int)Session["UsuarioID"]);
+            ViewBag.PaisID = new SelectList(db.Pais, "PaisID", "Nombre", atestado.PaisID);
+            ViewBag.TiposObras = tiposObras.Select(x => 
+            new SelectListItem()
+            {
+                Text = x.ToString(),
+                Value = x.ToString()
+            });
             // Guardar el estado de los archivos previos a su edición.
             archivosOld = new List<ArchivoDTO>();
             List<ArchivoDTO> tmpList = infoAtestado.CargarArchivosDeAtestado(id);
@@ -162,9 +181,8 @@ namespace Atestados.UI.Controllers.Atestados
             Session["Autores"] = autores;
         }
 
-        // POST: ObraDidactica/Editar
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
+        // POST: OtrasObrasProf/Editar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Editar([Bind(Include = "Lugar,CantidadHoras,Archivos,CatalogoTipo,Archivos,AtestadoID,AtestadoXPersona,Editorial,Enlace,HoraCreacion,Nombre,NumeroAutores,Observaciones,PaisID,Persona,PersonaID,RubroID,Website,Fecha,DominioIdioma,Persona,Rubro,Pais,InfoEditorial,Archivo,AutoresEq,AutoresCheck")] AtestadoDTO atestado)
@@ -177,16 +195,15 @@ namespace Atestados.UI.Controllers.Atestados
                 List<ArchivoDTO> archivos = (List<ArchivoDTO>)Session["Archivos"];
                 List<AutorDTO> autores = (List<AutorDTO>)Session["Autores"];
 
-                atestado.PersonaID = (int)Session["UsuarioID"];
+                atestado.PersonaID = (int)Session["UsuarioID"]; // cambiar por sesion
                 atestado.RubroID = infoAtestado.ObtenerIDdeRubro(Rubro);
-                atestado.PaisID = infoAtestado.ObtenerIDdePais("costa rica");
+                atestado.PaisID = infoAtestado.ObtenerIDdePais("costa rica"); // Costa Rica
                 atestado.Fecha.FechaID = atestado.AtestadoID;
                 atestado.Fecha.FechaInicio = DateTime.Now;
                 infoAtestado.EditarFecha(AutoMapper.Mapper.Map<FechaDTO, Fecha>(atestado.Fecha));
                 atestado.HoraCreacion = DateTime.Now;
                 atestado.Archivos = infoAtestado.CargarArchivosDeAtestado(atestado.AtestadoID);
                 atestado.AtestadoXPersona = AutoMapper.Mapper.Map<List<AtestadoXPersona>, List<AtestadoXPersonaDTO>>(infoAtestado.CargarAtestadoXPersonasdeAtestado(atestado.AtestadoID));
-                atestado.NumeroAutores = autores.Count();
                 Atestado atestado_mapped = AutoMapper.Mapper.Map<AtestadoDTO, Atestado>(atestado);
                 infoAtestado.EditarAtestado(atestado_mapped);
 

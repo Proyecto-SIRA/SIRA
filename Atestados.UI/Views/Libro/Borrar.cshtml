@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
 }
 
+@RenderPage("~/Views/Shared/BotonRegresar.cshtml")
 <h2 class="mt-4">Borrar un atestado</h2>
 
 <div class="container-fluid mt-4">
@@ -133,7 +134,7 @@
                                     @item.Nombre
                                 </td>
                                 <td>
-                                    @item.PrimerApellido
+                                    @item.PrimerApellido @item.SegundoApellido
                                 </td>
                                 <td>
                                     @item.Email

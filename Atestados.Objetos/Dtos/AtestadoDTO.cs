@@ -10,12 +10,13 @@ namespace Atestados.Objetos.Dtos
 {
     public class AtestadoDTO
     {
+        public bool AutoresCheck { get; set; }
+        public bool AutoresEq { get; set; }
         public int AtestadoID { get; set; }
         [Required]
         [StringLength(250)]
         public string Nombre { get; set; }
         [DisplayName("Número de autores")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe tener más de un autor.")]
         public int NumeroAutores { get; set; }
         [StringLength(1000)]
         public string Observaciones { get; set; }
@@ -48,9 +49,7 @@ namespace Atestados.Objetos.Dtos
         public DominioIdiomaDTO DominioIdioma { get; set; }
         public FechaDTO Fecha { get; set; }
         public InfoEditorialDTO InfoEditorial { get; set; }
-
         public bool MarcarEnviado { get; set; }
         public bool MarcarDescargado { get; set; }
-
     }
 }

@@ -1,31 +1,22 @@
-﻿@model Atestados.Objetos.Dtos.AtestadoDTO
+﻿@model Atestados.Datos.Modelo.Atestado
 
 @{
-    ViewBag.Title = "Ver";
+    ViewBag.Title = "Borrar";
     Layout = "~/Views/Shared/_LayoutFuncionario.cshtml";
 }
 
-@using Atestados.Objetos.Dtos;
+@RenderPage("~/Views/Shared/BotonRegresar.cshtml")
+<h2 class="mt-4">Borrar un atestado</h2>
 
 <div class="container-fluid">
     <div class="row">
-        <h2>Proyecto de investigación y extensión</h2>
+        <h3>¿Está seguro/a que desea borrar este proyecto de investigación y extensión?</h3>
         <hr />
     </div>
     <div class="row w-100">
         <div class="col-lg-6">
             <!-- columna izquierda -->
             <dl class="dl-horizontal">
-                <dt>
-                    Funcionario
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Persona.Nombre)
-                    @Html.DisplayFor(model => model.Persona.PrimerApellido)
-                    @Html.DisplayFor(model => model.Persona.SegundoApellido)
-                </dd>
-
                 <dt>
                     @Html.DisplayNameFor(model => model.Nombre)
                 </dt>
@@ -47,7 +38,7 @@
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.FechaInicio)
+                    @Html.DisplayFor(model => model.Fecha.FechaInicio)
                 </dd>
 
                 <dt>
@@ -89,7 +80,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Archivos)
+                        @foreach (var item in Model.Archivo)
                         {
                             <tr>
                                 <td>
@@ -102,8 +93,12 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        @Html.Partial("Links", Model)
-    </div>
-</div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
+        <div class="form-actions no-color">
+            <input type="submit" value="Borrar" class="btn btn-danger" />
+        </div>
+    }
+</div>

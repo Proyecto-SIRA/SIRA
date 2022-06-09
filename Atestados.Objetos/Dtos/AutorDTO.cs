@@ -9,6 +9,7 @@ namespace Atestados.Objetos.Dtos
 {
     public class AutorDTO
     {
+        public int numAutor { get; set; }
         public int AtestadoID { get; set; }
         public int PersonaID { get; set; }
         public string Nombre { get; set; }
@@ -22,6 +23,7 @@ namespace Atestados.Objetos.Dtos
         [StringLength(250)]
         public string Departamento { get; set; }
         public bool esFuncionario { get; set; }
+        public bool porcEquitativo { get; set; }
 
     }
 }

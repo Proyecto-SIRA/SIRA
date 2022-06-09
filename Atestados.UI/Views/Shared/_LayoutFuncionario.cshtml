@@ -6,7 +6,6 @@
 
     @Styles.Render("~/Content/css")
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-    <link href="~/Views/css/Atestado.css" rel="stylesheet" type="text/css" />
 
     <style>
 
@@ -48,9 +47,10 @@
                     @RenderPage("~/Views/Shared/Sidebar.cshtml");
                 }
                 <div class="col nav-padding">
+                    @* No todas las páginas necesitan un botón de regresar. 
                     <div class="container-fluid">
                         @RenderPage("~/Views/Shared/BotonRegresar.cshtml")
-                    </div>
+                    </div>*@
                     @RenderBody()
                 </div>
             </div>

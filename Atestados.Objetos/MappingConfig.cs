@@ -578,7 +578,7 @@ namespace Atestados.Objetos
                     opt => opt.MapFrom(src => src.AtestadoID))
                 .ForMember(dest => dest.FechaFinal,
                     opt => opt.MapFrom(src => src.FechaFinal))
-                .ForMember(dest => dest.FechaFinal,
+                .ForMember(dest => dest.FechaInicio,
                     opt => opt.MapFrom(src => src.FechaInicio));
                 #endregion
 

@@ -9,10 +9,11 @@
 
 <div class="container-fluid">
 
+    @RenderPage("~/Views/Shared/BotonRegresar.cshtml")
     <div class="mt-4">
         <h2>Ver un Libro</h2>
     </div>
-        <hr />
+    <hr />
     <div class="row w-100">
         <div class="col-lg-6">
             <!-- columna izquierda -->
@@ -24,6 +25,7 @@
                 <dd>
                     @Html.DisplayFor(model => model.Persona.Nombre)
                     @Html.DisplayFor(model => model.Persona.PrimerApellido)
+                    @Html.DisplayFor(model => model.Persona.SegundoApellido)
                 </dd>
 
                 <dt>
@@ -122,7 +124,6 @@
             @Html.Partial("Autores")
         </div>
     </div>
-
 
     <div class="row">
         @Html.Partial("Links", Model)
