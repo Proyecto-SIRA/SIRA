@@ -46,7 +46,7 @@ namespace Atestados.UI.Controllers.Atestados
 
             foreach (AutorDTO autor in autores)
             {
-                // En caso de no ser un funcionario, agregarlo como autor externo.
+                // En caso de no ser un funcionario, agregarlo como Autor externo al Tec.
                 if (!autor.esFuncionario)
                 {
                     Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);
@@ -123,7 +123,7 @@ namespace Atestados.UI.Controllers.Atestados
 
             foreach (AutorDTO autor in autores)
             {
-                // En caso de no ser un funcionario, agregarlo como autor externo.
+                // En caso de no ser un funcionario, agregarlo como Autor externo al Tec.
                 if (!autor.esFuncionario)
                 {
                     Persona persona = AutoMapper.Mapper.Map<AutorDTO, Persona>(autor);

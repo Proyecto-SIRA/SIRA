@@ -488,7 +488,7 @@ namespace Atestados.UI.Controllers
         }
 
         [HttpPost]
-        // Agregar un autor externo.
+        // Agregar un Autor externo al Tec.
         public ActionResult agregarAutor(AutorDTO autorData)
         {
             AutorDTO autor = new AutorDTO()
