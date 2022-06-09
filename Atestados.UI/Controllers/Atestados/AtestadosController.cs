@@ -240,7 +240,6 @@ namespace Atestados.UI.Controllers
             Session["idUsuario"] = usuario.UsuarioID;
             Session["autoresAtestado"] = infoAtestado.ObtenerAutores((int)id);
 
-
             List<EvaluaciónXAtestado> e = infoAtestado.ObtenerEvaluacionXAtestadoRevisor((int)id, usuario.UsuarioID);
 
             ViewBag.Revisor = infoGeneral.CargarPersona(usuario.UsuarioID);
@@ -248,9 +247,14 @@ namespace Atestados.UI.Controllers
 
             if (e != null)
             {
+                ViewBag.Evaluaciones = e;
                 //EvaluacionXAtestadoDTO edto = AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(e);
                 //ViewBag.Evaluacion = edto;
                 //return View(evaluacion);
+                //foreach (EvaluaciónXAtestado evaluacion in e)
+                //{
+                //    ViewBag.Evaluaciones.a
+                //}
             }
 
             AtestadoDTO atestado = infoAtestado.CargarAtestado(id);
@@ -336,6 +340,42 @@ namespace Atestados.UI.Controllers
                 return RedirectToAction("Ver", controlador, new { id = (int)Session["idAtestado"] });
             }
             return View(evaluacion);
+        }
+
+        //POST: Atestados/ObtenerEvaluaciones
+        public ActionResult ObtenerEvaluaciones()
+        {
+
+
+            var idAtestado = (int)Session["idAtestado"];
+            var idRevisor = (int)Session["idUsuario"];
+
+            List<EvaluaciónXAtestado> e = infoAtestado.ObtenerEvaluacionXAtestadoRevisor(idAtestado, idRevisor);
+
+            List<EvaluacionXAtestadoDTO> evaluaciones = new List<EvaluacionXAtestadoDTO>();
+
+            foreach(EvaluaciónXAtestado evaluacion in e)
+            {
+                evaluaciones.Add(AutoMapper.Mapper.Map<EvaluaciónXAtestado, EvaluacionXAtestadoDTO>(evaluacion));
+            }
+
+            if (evaluaciones == null)
+            {
+                return Json(new
+                {
+                    evaluaciones = false
+                });
+            }
+
+            var json = JsonConvert.SerializeObject(evaluaciones);
+
+            return Json(new
+            {
+                evaluaciones = evaluaciones
+            });
+
+
+            
         }
 
         // POST: Atestados/ObtenerAutores

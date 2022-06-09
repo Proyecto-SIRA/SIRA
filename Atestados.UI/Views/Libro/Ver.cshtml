@@ -144,7 +144,7 @@
         data: JSON.stringify({ AtestadoID: id }),
         success: function (response) {                
             if (response != null) {
-                $("#nota").append('<p>' + response +'</p>')
+                $("#nota").append('<p>' + response.toFixed(2) +'</p>')
             }
                 
         }
