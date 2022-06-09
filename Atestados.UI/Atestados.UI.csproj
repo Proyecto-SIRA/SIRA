@@ -204,7 +204,7 @@
     <Compile Include="Controllers\Atestados\ObraAdministrativaController.cs" />
     <Compile Include="Controllers\Atestados\ObraDidacticaController.cs" />
     <Compile Include="Controllers\Atestados\PonenciaController.cs" />
-    <Compile Include="Controllers\Atestados\ProyectoController.cs" />
+    <Compile Include="Controllers\Atestados\ProyectosInvExController.cs" />
     <Compile Include="Controllers\ComisionController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -387,10 +387,8 @@
     <Content Include="Views\Atestados\Crear.cshtml" />
     <Content Include="Views\Atestados\Ver.cshtml" />
     <Content Include="Views\Ponencia\Crear.cshtml" />
-    <Content Include="Views\Proyecto\Crear.cshtml" />
     <Content Include="Views\Shared\_LayoutGeneral.cshtml" />
     <Content Include="Views\Ponencia\Ver.cshtml" />
-    <Content Include="Views\Proyecto\Ver.cshtml" />
     <Content Include="Views\ObraAdministrativa\Crear.cshtml" />
     <Content Include="Views\ObraAdministrativa\Ver.cshtml" />
     <Content Include="Views\Articulo\Editar.cshtml" />
@@ -402,7 +400,6 @@
     <Content Include="Views\ObraAdministrativa\Editar.cshtml" />
     <Content Include="Views\ObraDidactica\Editar.cshtml" />
     <Content Include="Views\Ponencia\Editar.cshtml" />
-    <Content Include="Views\Proyecto\Editar.cshtml" />
     <Content Include="Views\Articulo\Borrar.cshtml" />
     <Content Include="Views\Atestados\Borrar.cshtml" />
     <Content Include="Views\Capacitacion\Borrar.cshtml" />
@@ -412,7 +409,6 @@
     <Content Include="Views\ObraAdministrativa\Borrar.cshtml" />
     <Content Include="Views\ObraDidactica\Borrar.cshtml" />
     <Content Include="Views\Ponencia\Borrar.cshtml" />
-    <Content Include="Views\Proyecto\Borrar.cshtml" />
     <Content Include="Views\Home\Registrar.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Administrador\Index.cshtml" />
@@ -430,6 +426,10 @@
     <Content Include="Views\Comision\VerPuntos.cshtml" />
     <Content Include="Views\Shared\_AutoresTabla.cshtml" />
     <Content Include="Views\Shared\_ArchivosTabla.cshtml" />
+    <Content Include="Views\ProyectosInvEx\Borrar.cshtml" />
+    <Content Include="Views\ProyectosInvEx\Ver.cshtml" />
+    <Content Include="Views\ProyectosInvEx\Crear.cshtml" />
+    <Content Include="Views\ProyectosInvEx\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

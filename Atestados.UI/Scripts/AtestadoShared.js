@@ -1,18 +1,37 @@
 ﻿// Este archivo contiene todos los métodos JS y AJAX para agregar y eliminar
 // autores y archivos cuando se está realizando CRUD a un atestado.
 
-var per = 100;
-var autorCont = 0;
 var archCont = 0;
-var modal = document.getElementById('modalAutores');
-var checkbox = document.getElementById('AutoresEq');
-var hiddenCheck = document.getElementById('hiddenCheck');
-var autoresCheck = document.getElementById('AutoresCheck');
 
-// Si se está editando un atestado, suponer que cumple con el check de autores.
-if (editMode) {
-    autoresCheck.checked = true;
+// Declarar las variables utilizadas por el modal de autores solo si es necesario.
+if (hasAutores) {
+    var autorCont = 0;
+    var per = 100;
+    var modal = document.getElementById('modalAutores');
+    var checkbox = document.getElementById('AutoresEq');
+    var hiddenCheck = document.getElementById('hiddenCheck');
+    var autoresCheck = document.getElementById('AutoresCheck');
+
+    /*
+     * Si el checkbox de porcentaje equitativo se activa, este valor no se le pasa
+     * al controlador correctamente por estar dentro del modal. Por lo tanto, se
+     * agregó un checkbox adicional que está escondido en medio del formulario. Si
+     * el checkbox de autores equitativos se activa, entonces el checkbox escondido
+     * también. De esta forma el controlador recibe el valor del checkbox escondido
+     * y sí funciona la validación del formulario.
+     */
+    hiddenCheck.onchange = function () {
+        document.getElementById('porcentaje').disabled = this.checked;
+        document.getElementById('porcentaje_funcionario').disabled = this.checked;
+        checkbox.checked = this.checked;
+    };
+
+    // Si se está editando un atestado, suponer que cumple con el check de autores.
+    if (editMode) {
+        autoresCheck.checked = true;
+    }
 }
+
 
 function isEmail(e) {
     var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
@@ -22,37 +41,6 @@ function isEmail(e) {
 function validPercentage(percentage) {
     return (per - percentage) >= 0 && percentage >= 0;
 }
-
-/*
- * Si el checkbox de porcentaje equitativo se activa, este valor no se le pasa
- * al controlador correctamente por estar dentro del modal. Por lo tanto, se
- * agregó un checkbox adicional que está escondido en medio del formulario. Si
- * el checkbox de autores equitativos se activa, entonces el checkbox escondido
- * también. De esta forma el controlador recibe el valor del checkbox escondido
- * y sí funciona la validación del formulario.
- */
-hiddenCheck.onchange = function () {
-    document.getElementById('porcentaje').disabled = this.checked;
-    document.getElementById('porcentaje_funcionario').disabled = this.checked;
-    checkbox.checked = this.checked;
-};
-
-// Agregar autores a la tabla de autores.
-//$.ajax({
-//        type: 'POST',
-//        url: `${baseUrl}/getAutores`,
-//        async: false,
-//        contentType: 'application/json; charset=utf-8',
-//        success: function (response) {
-//            console.log(response);
-//            if (response.length > 0) autoresCheck.checked = true;
-//            response.forEach(function (autor) {
-//                per -= parseInt(autor.Porcentaje);
-//                $("#tablaAutores").append('<tr><td>' + autor.Nombre + '</td><td>' + autor.PrimerApellido + ' ' + autor.SegundoApellido + '</td><td>' + autor.Porcentaje + '%</td> <td><a id="borrar" email="' + autor.Email + '" class="btn btn-danger remove">Borrar</a></td></td></tr>')
-//            });
-//        }
-//    })
-
 
 // Agregar funcionarios como autores al libro.
 $('#funcionarioAgregar').click(function () {
