@@ -15,16 +15,24 @@
         <h2>Ver Persona</h2>
         <hr />
     </div>
+    <h4>Progreso en categoría actual</h4>
+    <progress id="progreso" max="@puntosXRubroDTOs[0].PuntosMaximosPasoActual" value="@puntosXRubroDTOs[0].PuntosPasoActual" style="width: 50%; height: 30px"> 70% </progress>
+    <br />
     <p>Nombre: @Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</p>
     <p>Categoría actual: @tipoCategoria.Nombre</p>
     <p>Tiempo servido: @Model.TiempoServido años</p>
-    @if (tipoCategoria.Nombre != "Cuarta") { 
+    @if (tipoCategoria.Nombre != "Cuarta")
+    {
         <p>
-            Tiempo requerido para pasar a la siguiente categoría: 
-            @if (tipoCategoria.Nombre == "Sin Categoría") { @Puntos.TiempoPasoCategoria.SIN_CATEGORIA }
-            @if (tipoCategoria.Nombre == "Primera") { @Puntos.TiempoPasoCategoria.PRIMERA }
-            @if (tipoCategoria.Nombre == "Segunda") { @Puntos.TiempoPasoCategoria.SEGUNDA }
-            @if (tipoCategoria.Nombre == "Tercera") { @Puntos.TiempoPasoCategoria.TERCERA }
+            Tiempo requerido para pasar a la siguiente categoría:
+            @if (tipoCategoria.Nombre == "Sin Categoría")
+            {@Puntos.TiempoPasoCategoria.SIN_CATEGORIA}
+            @if (tipoCategoria.Nombre == "Primera")
+            {@Puntos.TiempoPasoCategoria.PRIMERA}
+            @if (tipoCategoria.Nombre == "Segunda")
+            {@Puntos.TiempoPasoCategoria.SEGUNDA}
+            @if (tipoCategoria.Nombre == "Tercera")
+            {@Puntos.TiempoPasoCategoria.TERCERA}
             años
         </p>
     }
