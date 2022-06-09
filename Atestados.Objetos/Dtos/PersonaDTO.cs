@@ -40,6 +40,8 @@ namespace Atestados.Objetos.Dtos
                     return "Articulo";
                 case 5:
                     return "ObraDidactica";
+                case 6:
+                    return "ObraAdministrativa";
                 case 34:
                     return "Idioma";
                 default:
