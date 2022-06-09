@@ -203,6 +203,7 @@
     <Compile Include="Controllers\Atestados\LibroController.cs" />
     <Compile Include="Controllers\Atestados\ObraAdministrativaController.cs" />
     <Compile Include="Controllers\Atestados\ObraDidacticaController.cs" />
+    <Compile Include="Controllers\Atestados\OtrasObrasProfController.cs" />
     <Compile Include="Controllers\Atestados\PonenciaController.cs" />
     <Compile Include="Controllers\Atestados\ProyectosInvExController.cs" />
     <Compile Include="Controllers\ComisionController.cs" />
@@ -430,6 +431,10 @@
     <Content Include="Views\ProyectosInvEx\Ver.cshtml" />
     <Content Include="Views\ProyectosInvEx\Crear.cshtml" />
     <Content Include="Views\ProyectosInvEx\Editar.cshtml" />
+    <Content Include="Views\OtrasObrasProf\Borrar.cshtml" />
+    <Content Include="Views\OtrasObrasProf\Crear.cshtml" />
+    <Content Include="Views\OtrasObrasProf\Editar.cshtml" />
+    <Content Include="Views\OtrasObrasProf\Ver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

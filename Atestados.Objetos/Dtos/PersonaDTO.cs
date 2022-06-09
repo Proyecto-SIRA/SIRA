@@ -42,6 +42,8 @@ namespace Atestados.Objetos.Dtos
                     return "ObraDidactica";
                 case 6:
                     return "ObraAdministrativa";
+                case 7:
+                    return "OtrasObrasProf";
                 case 9:
                     return "ProyectosInvEx";
                 case 34:
