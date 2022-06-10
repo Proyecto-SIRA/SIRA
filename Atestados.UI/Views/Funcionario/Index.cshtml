@@ -33,7 +33,7 @@
                             <input type="checkbox" id="seleccionarTodos" />
                         </th>
                         <th scope="col">
-                            ID
+                            Identificador
                         </th>
                         <th scope="col">
                             Rubro
@@ -52,7 +52,8 @@
                                 @Html.CheckBoxFor(m => m.PorEnviar[i].MarcarEnviado)
                             </td>
                             <td scope="col">
-                                @Html.TextBoxFor(m => m.PorEnviar[i].AtestadoID, new { @readonly = "readonly" })
+                                @Html.DisplayFor(m => m.PorEnviar[i].AtestadoID)
+                                
                             </td>
                             <td scope="col">
                                 @Html.DisplayFor(model => model.PorEnviar[i].Rubro.Nombre)
