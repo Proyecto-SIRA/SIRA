@@ -52,8 +52,8 @@
                                 @Html.CheckBoxFor(m => m.PorEnviar[i].MarcarEnviado)
                             </td>
                             <td scope="col">
-                                @Html.DisplayFor(m => m.PorEnviar[i].AtestadoID)
-                                
+                                @Html.TextBoxFor(m => m.PorEnviar[i].AtestadoID, new { @readonly = "readonly", @style = "border: none"})
+
                             </td>
                             <td scope="col">
                                 @Html.DisplayFor(model => model.PorEnviar[i].Rubro.Nombre)
